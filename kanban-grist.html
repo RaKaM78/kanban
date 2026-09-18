@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kanban Grist</title>
+<script src="https://docs.getgrist.com/grist-plugin-api.js"></script>
+<style>
+:root{ --bg:#eef1f5; --ink:#2b2b2b; --muted:#6b7280; --col-bg:#dfe3ea; --col-header:#c9ced8; --accent:#4f7cff; --shadow:0 3px 8px rgba(0,0,0,.18); }
+*{box-sizing:border-box;}
+html,body{height:100%;margin:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);overflow:hidden;}
+#app{display:flex;flex-direction:column;height:100vh;}
+#toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:8px 12px;background:#fff;border-bottom:1px solid #d7dae0;}
+#toolbar h1{font-size:15px;margin:0 auto 0 0;color:#333;font-weight:600;}
+#syncIndicator{font-size:11px;color:#888;}
+#syncIndicator.hidden{display:none;}
+.btn{border:none;border-radius:8px;padding:7px 12px;font-size:13px;cursor:pointer;background:var(--accent);color:#fff;font-weight:500;white-space:nowrap;}
+.btn.secondary{background:#eceff3;color:#333;}
+.btn.danger{background:#fff;color:#c0392b;border:1px solid #f0c4c0;}
+.btn.danger:hover{background:#fdf1f0;}
+.btn.active{background:#33508f;color:#fff;}
+.btn:active{transform:translateY(1px);}
+#filtersBar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:7px 12px;background:#fff;border-bottom:1px solid #d7dae0;}
+#filtersBar input[type=search],#filtersBar select{font-size:12.5px;padding:5px 8px;border:1px solid #d7dae0;border-radius:7px;background:#fff;}
+#filtersBar input[type=search]{flex:1;min-width:110px;}
+#board{flex:1;display:flex;align-items:flex-start;gap:12px;padding:14px;overflow:auto;height:100%;}
+#board.stacked{flex-direction:column;overflow-x:hidden;}
+#board.stacked .lane{flex:none;width:100%;max-height:none;}
+#board.stacked .lane.collapsed{width:100%;flex:none;height:auto;}
+#board.stacked .lane.collapsed .lane-header{flex-direction:row;height:auto;}
+#board.stacked .lane.collapsed .lane-title{writing-mode:horizontal-tb;transform:none;margin:0;}
+#board.stacked .lane-body{max-height:44vh;}
+.lane{background:var(--col-bg);border-radius:12px;display:flex;flex-direction:column;flex:0 0 280px;max-height:100%;transition:flex-basis .15s;}
+.lane.collapsed{flex:0 0 46px;width:46px;overflow:hidden;}
+.lane-header{display:flex;align-items:center;gap:6px;padding:10px;background:var(--col-header);border-radius:12px 12px 0 0;cursor:pointer;user-select:none;}
+.lane.collapsed .lane-header{flex-direction:column;border-radius:12px;height:100%;padding:10px 6px;}
+.lane-color-dot{width:10px;height:10px;border-radius:50%;flex:none;}
+.lane-title{font-weight:600;font-size:13px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.lane.collapsed .lane-title{writing-mode:vertical-rl;transform:rotate(180deg);flex:1;margin:6px 0;}
+.lane-count{background:#fff;border-radius:999px;font-size:11px;padding:1px 7px;font-weight:700;color:#444;}
+.lane-collapse-btn{background:none;border:none;cursor:pointer;font-size:13px;color:#555;padding:2px 4px;}
+.lane-body{flex:1;overflow-y:auto;padding:8px;display:flex;flex-direction:column;gap:10px;min-height:40px;}
+.lane-body.drag-over{background:rgba(79,124,255,.12);}
+.lane-add-card{margin:0 8px 10px;border:1px dashed #b7bcc6;background:none;border-radius:8px;padding:6px;font-size:12px;color:#666;cursor:pointer;}
+.card{border-radius:4px;padding:10px 10px 8px;cursor:grab;box-shadow:var(--shadow);font-size:12.5px;position:relative;font-family:'Segoe Print','Bradley Hand',cursive,'Segoe UI',sans-serif;}
+.card.dragging{opacity:.4;}
+.card::before{content:'';position:absolute;top:-6px;left:50%;transform:translateX(-50%) rotate(-3deg);width:34px;height:14px;background:rgba(255,255,255,.55);border:1px solid rgba(0,0,0,.05);}
+.card-desc{font-weight:600;font-size:13.5px;min-height:18px;outline:none;word-break:break-word;margin-bottom:6px;}
+.card-desc:focus{background:rgba(255,255,255,.5);border-radius:4px;}
+.card-meta-row{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-bottom:5px;}
+.badge{display:inline-block;border-radius:999px;padding:1px 7px;font-size:10.5px;font-weight:700;color:#fff;white-space:nowrap;}
+.chip{background:rgba(255,255,255,.6);border-radius:999px;padding:1px 6px;font-size:10.5px;color:#333;text-decoration:none;}
+.card input[type=date]{font-family:inherit;font-size:11px;border:none;background:rgba(255,255,255,.55);border-radius:5px;padding:2px 3px;cursor:pointer;color:#222;}
+.deadline-row{display:flex;align-items:center;gap:4px;font-size:11px;color:#3a3a3a;}
+.deadline-row.overdue{color:#b3261e;font-weight:700;}
+.card-ref{font-size:10px;color:#555;margin-top:2px;}
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;z-index:50;}
+.overlay.hidden{display:none;}
+.modal{background:#fff;border-radius:12px;width:520px;max-width:92vw;max-height:88vh;overflow-y:auto;padding:18px 20px;box-shadow:0 10px 30px rgba(0,0,0,.3);}
+.modal h2{margin:0 0 14px;font-size:16px;}
+.field{margin-bottom:12px;}
+.field label{display:block;font-size:11.5px;color:var(--muted);margin-bottom:3px;font-weight:600;}
+.field textarea,.field input,.field select{width:100%;padding:7px 8px;border:1px solid #d7dae0;border-radius:7px;font-size:13px;font-family:inherit;}
+.field textarea{min-height:60px;resize:vertical;}
+.field-row{display:flex;gap:10px;}
+.field-row .field{flex:1;}
+.modal-footer{display:flex;justify-content:space-between;margin-top:16px;gap:8px;}
+.meta-readonly{font-size:11px;color:var(--muted);margin-top:10px;border-top:1px solid #eee;padding-top:8px;white-space:pre-line;}
+.meta-readonly.scroll{max-height:80px;overflow-y:auto;}
+.checklist-item{display:flex;align-items:center;gap:6px;margin-bottom:4px;}
+.checklist-item input[type=text]{flex:1;padding:5px 6px;font-size:12.5px;border:1px solid #ddd;border-radius:6px;}
+.lane-config-row{display:flex;align-items:center;gap:6px;padding:6px;border:1px solid #eee;border-radius:8px;margin-bottom:6px;flex-wrap:wrap;}
+.lane-config-row input[type=text]{flex:1;min-width:70px;padding:5px 6px;border:1px solid #ddd;border-radius:6px;font-size:12px;}
+.lane-config-row input[type=color]{width:30px;height:26px;border:none;padding:0;background:none;}
+.lane-config-row select{font-size:11px;padding:3px 4px;border:1px solid #ddd;border-radius:6px;}
+.icon-btn{background:none;border:none;cursor:pointer;font-size:15px;color:#666;padding:2px 5px;}
+.warning-banner{background:#fff4e5;color:#8a5a00;border:1px solid #f3d19e;border-radius:8px;padding:8px 10px;margin-bottom:8px;font-size:12px;}
+#confetti-canvas{position:fixed;inset:0;pointer-events:none;z-index:99;}
+.hidden{display:none !important;}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="toolbar">
+    <h1>??? Kanban</h1>
+    <span id="syncIndicator" class="hidden">? Sync…</span>
+    <button class="btn secondary" id="btnToggleView" title="Basculer vue colonnes / liste">??</button>
+    <button class="btn secondary" id="btnExportCsv">?? Export CSV</button>
+    <button class="btn secondary" id="btnSettings">?? Colonnes</button>
+    <button class="btn" id="btnNewCard">+ Nouvelle tâche</button>
+  </div>
+  <div id="filtersBar">
+    <input type="search" id="fSearch" placeholder="?? Rechercher…">
+    <select id="fAssignee"><option value="">Assigné à : tous</option></select>
+    <select id="fPriorite"><option value="">Priorité : toutes</option></select>
+    <select id="fType"><option value="">Type : tous</option></select>
+  </div>
+  <div id="board"></div>
+</div>
+<div class="overlay hidden" id="taskOverlay"><div class="modal" id="taskModal"></div></div>
+<div class="overlay hidden" id="settingsOverlay"><div class="modal" id="settingsModal"></div></div>
+<canvas id="confetti-canvas"></canvas>
+
+<script>
+/* ===== CONFIG (données statiques) ===== */
+const REQUIRED_COLUMNS = [
+  { name:"Description", type:"Text" },
+  { name:"Priorite", title:"Priorité", type:"Choice" },
+  { name:"Deadline", type:"DateTime", optional:true },
+  { name:"Statut", type:"Choice" },
+  { name:"AssigneA", title:"Assigné à", type:"ChoiceList", optional:true },
+  { name:"RefProjet", title:"Référence du Projet", type:"Text", optional:true },
+  { name:"Type", type:"Choice", optional:true },
+  { name:"Notes", type:"Text", optional:true },
+  { name:"Responsable", type:"ChoiceList", optional:true },
+  { name:"CreePar", title:"Créé par", type:"ChoiceList", optional:true },
+  { name:"CreeLe", title:"Créé le", type:"DateTime", optional:true },
+  { name:"DerniereMaj", title:"Dernière mise à jour", type:"DateTime", optional:true },
+  { name:"Historique", title:"Historique des changements", type:"Text", optional:true },
+  { name:"Ordre", title:"Ordre (tri manuel)", type:"Numeric", optional:true },
+  { name:"Checklist", title:"Sous-tâches (JSON)", type:"Text", optional:true },
+];
+const PRIORITY_COLORS = {
+  Urgent:{bg:"#ffd3d3",badge:"#c0392b"}, Haute:{bg:"#ffe3bd",badge:"#d9822b"},
+  Moyenne:{bg:"#fff6b8",badge:"#c9a400"}, Basse:{bg:"#d9f5d6",badge:"#3a9d4c"},
+  __default:{bg:"#f3f0e6",badge:"#8a8a8a"},
+};
+// Effets déclenchables quand une tâche arrive dans une colonne. "confetti" a un rendu
+// dédié (canvas) ; "custom" utilise un émoji libre (lane.customEmoji) ; les autres sont
+// des émojis prédéfinis animés (voir launchEmojiBurst).
+const EFFECTS = {
+  none:     { label: "Aucun" },
+  confetti: { label: "?? Confettis" },
+  clap:     { label: "???? Applaudissements", emoji: "????" },
+  boom:     { label: "?? Boom", emoji: "??" },
+  sparkles: { label: "? Étincelles", emoji: "?" },
+  party:    { label: "?? Fête", emoji: "??" },
+  fire:     { label: "?? Feu", emoji: "??" },
+  rocket:   { label: "?? Fusée", emoji: "??" },
+  custom:   { label: "??? Personnalisé…" },
+};
+const cid = () => "c" + Math.random().toString(36).slice(2, 9);
+const defaultColumnsConfig = () => [
+  { id:cid(), label:"À faire",    statut:"À faire",    color:"#8a8f98", sortByDeadline:true,  effect:"none",     collapsedByDefault:false },
+  { id:cid(), label:"En cours",   statut:"En cours",   color:"#4f7cff", sortByDeadline:true,  effect:"none",     collapsedByDefault:false },
+  { id:cid(), label:"En attente", statut:"En attente", color:"#d9822b", sortByDeadline:true,  effect:"none",     collapsedByDefault:false },
+  { id:cid(), label:"Terminé",    statut:"Terminé",    color:"#3a9d4c", sortByDeadline:false, effect:"confetti", collapsedByDefault:false },
+  { id:cid(), label:"Annulé",     statut:"Annulé",     color:"#b3261e", sortByDeadline:false, effect:"none",     collapsedByDefault:true  },
+];
+// Compatibilité avec les configs déjà enregistrées (ancien champ booléen `confetti`)
+const normalizeColumnsConfig = cfg => cfg.map(l => ({ ...l, effect: l.effect ?? (l.confetti ? "confetti" : "none") }));
+
+/* ===== DOMAINE (logique pure, aucune dépendance DOM/Grist) ===== */
+const gristDateToJS = v => v == null || v === "" ? null : (typeof v === "number" ? new Date(v*1000) : (isNaN(new Date(v)) ? null : new Date(v)));
+const jsDateToGristEpoch = s => s ? Math.floor(new Date(s+"T00:00:00Z").getTime()/1000) : null;
+const nowEpoch = () => Math.floor(Date.now()/1000);
+const fmtDate = d => d ? d.toLocaleDateString("fr-FR",{day:"2-digit",month:"2-digit",year:"2-digit"}) : "";
+const fmtDateTime = d => d ? d.toLocaleString("fr-FR",{day:"2-digit",month:"2-digit",year:"2-digit",hour:"2-digit",minute:"2-digit"}) : "";
+const toDateInputValue = d => d ? `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}` : "";
+const decodeChoiceList = v => Array.isArray(v) ? (v[0]==="L" ? v.slice(1) : v) : (typeof v==="string" && v ? v.split(",").map(s=>s.trim()).filter(Boolean) : []);
+const encodeChoiceList = arr => ["L", ...arr];
+const priorityStyle = p => PRIORITY_COLORS[p] || PRIORITY_COLORS.__default;
+const seededRotation = id => {
+  const n = typeof id==="number" ? id : String(id).split("").reduce((a,c)=>a+c.charCodeAt(0),0);
+  return ((n % 9) - 4) * 0.8;
+};
+const parseChecklist = raw => { try{ const a = JSON.parse(raw||"[]"); return Array.isArray(a) ? a : []; }catch{ return []; } };
+const checklistProgress = raw => { const items = parseChecklist(raw); return items.length ? { done: items.filter(i=>i.done).length, total: items.length } : null; };
+// Règle métier : tri par deadline sur les colonnes actives ; sur les colonnes non
+// triées par deadline, on respecte l'ordre manuel (glisser-déposer) dès qu'il existe,
+// sinon on retombe sur un tri par dernière mise à jour décroissante.
+function tasksForLane(records, lane){
+  const list = records.filter(r => (r.Statut||"") === lane.statut);
+  if (lane.sortByDeadline){
+    list.sort((a,b) => (gristDateToJS(a.Deadline) ?? Infinity) - (gristDateToJS(b.Deadline) ?? Infinity));
+  } else if (list.some(r => r.Ordre != null)){
+    list.sort((a,b) => (a.Ordre ?? Infinity) - (b.Ordre ?? Infinity));
+  } else {
+    list.sort((a,b) => (gristDateToJS(b.DerniereMaj)||0) - (gristDateToJS(a.DerniereMaj)||0));
+  }
+  return list;
+}
+const defaultTaskFields = statut => ({ Description:"Nouvelle tâche", Priorite:"Moyenne", Statut:statut, CreeLe:nowEpoch(), DerniereMaj:nowEpoch() });
+
+/* ===== INFRASTRUCTURE (seules fonctions qui touchent `grist`/`localStorage`) ===== */
+let gristAvailable = true;
+let colMappings = null; // { NomLogique: "vrai_id_colonne_grist", ... }
+
+function initGrist({ onRecordsChange, onOptionsChange, onUnavailable }){
+  try{
+    grist.ready({ columns: REQUIRED_COLUMNS, allowSelectBy: true, requiredAccess: "full" });
+    grist.onRecords((records, mappings) => {
+      colMappings = mappings;
+      onRecordsChange(records.map(r => ({ ...grist.mapColumnNames(r, mappings), id: r.id })));
+    });
+    grist.onOptions(options => onOptionsChange(options && options.kanbanColumns));
+  }catch(e){
+    gristAvailable = false;
+    console.warn("Grist indisponible, mode démo local.", e);
+    onUnavailable?.(e);
+  }
+}
+// Traduit { NomLogique: valeur } -> { vrai_id_colonne: valeur } grâce aux mappings
+// fournis par Grist (nos noms "Description", "CreeLe", etc. ne sont pas forcément
+// les vrais identifiants de colonnes de la table de l'utilisateur). Une colonne
+// optionnelle non mappée par l'utilisateur est simplement omise (au lieu d'envoyer
+// un identifiant invalide, qui provoquerait une erreur côté Grist).
+function toRealFields(fields){
+  if (!colMappings) return fields;
+  const out = {};
+  for (const [key, value] of Object.entries(fields)){
+    const realKey = colMappings[key];
+    if (realKey) out[realKey] = value;
+  }
+  return out;
+}
+async function updateTaskFields(rowId, fields){
+  const payload = { ...fields, DerniereMaj: nowEpoch() };
+  if (!gristAvailable) throw new Error("Grist indisponible");
+  await grist.selectedTable.update({ id: rowId, fields: toRealFields(payload) });
+}
+async function createTask(fields){
+  if (!gristAvailable) throw new Error("Grist indisponible");
+  return grist.selectedTable.create({ fields: toRealFields(fields) });
+}
+async function deleteTask(rowId){
+  if (!gristAvailable) throw new Error("Grist indisponible");
+  await grist.selectedTable.destroy(rowId);
+}
+const LS_KEY = "kanban_columns_fallback";
+const loadLocalColumns = () => { try{ return JSON.parse(localStorage.getItem(LS_KEY)); }catch{ return null; } };
+const saveLocalColumns = cfg => { try{ localStorage.setItem(LS_KEY, JSON.stringify(cfg)); }catch{} };
+function saveColumnsConfig(cfg){
+  saveLocalColumns(cfg);
+  if (gristAvailable){ try{ grist.setOption("kanbanColumns", cfg); }catch(e){ console.error(e); } }
+}
+
+/* ===== ÉTAT (store observable) ===== */
+const state = {
+  records:[], columnsConfig:null, collapsed:new Set(), editingId:null,
+  filters:{ search:"", assignee:"", priorite:"", type:"" },
+};
+const listeners = [];
+const subscribe = fn => listeners.push(fn);
+const notify = () => listeners.forEach(fn => fn());
+function setRecords(records){ state.records = records; notify(); }
+function setColumnsConfig(cfg){
+  state.columnsConfig = normalizeColumnsConfig(cfg);
+  state.columnsConfig.forEach(c => c.collapsedByDefault && state.collapsed.add(c.id));
+  notify();
+}
+function patchRecordLocally(id, fields){ Object.assign(state.records.find(r=>r.id===id) || {}, fields); }
+function filteredRecords(){
+  const f = state.filters;
+  return state.records.filter(r => {
+    if (f.search){
+      const q = f.search.toLowerCase();
+      if (!`${r.Description||""} ${r.Notes||""}`.toLowerCase().includes(q)) return false;
+    }
+    if (f.priorite && r.Priorite !== f.priorite) return false;
+    if (f.type && r.Type !== f.type) return false;
+    if (f.assignee && !decodeChoiceList(r.AssigneA).includes(f.assignee)) return false;
+    return true;
+  });
+}
+
+/* ===== UI (rendu + interactions) ===== */
+const escapeHtml = str => String(str ?? "").replace(/[&<>"']/g, s => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[s]));
+const fieldRow = (label, html) => `<div class="field"><label>${label}</label>${html}</div>`;
+function showToast(msg){
+  let t = document.getElementById("toast");
+  if (!t){
+    t = document.createElement("div");
+    t.id = "toast";
+    t.style.cssText = "position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#c0392b;color:#fff;padding:9px 16px;border-radius:8px;font-size:12.5px;z-index:200;box-shadow:0 4px 12px rgba(0,0,0,.3);transition:opacity .3s;max-width:80vw;text-align:center;";
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = "1";
+  clearTimeout(t._timeout);
+  t._timeout = setTimeout(() => { t.style.opacity = "0"; }, 4500);
+}
+// Point d'écriture générique : factorise essai/erreur/toast/indicateur de synchronisation
+// pour toutes les écritures Grist (créer, modifier, supprimer, réordonner...).
+let pendingWrites = 0;
+function updateSyncIndicator(){ document.getElementById("syncIndicator").classList.toggle("hidden", pendingWrites === 0); }
+async function writeToGrist(action, errorMsg){
+  pendingWrites++; updateSyncIndicator();
+  try{ return await action(); }
+  catch(e){ console.error(errorMsg, e); showToast(`?? ${errorMsg}`); return undefined; }
+  finally{ pendingWrites--; updateSyncIndicator(); }
+}
+
+function launchConfetti(x, y){
+  const canvas = document.getElementById("confetti-canvas");
+  canvas.width = innerWidth; canvas.height = innerHeight;
+  const ctx = canvas.getContext("2d");
+  const colors = ["#ff595e","#ffca3a","#8ac926","#1982c4","#6a4c93"];
+  const LIFE = 300; // ~5s à 60 images/seconde
+  const particles = Array.from({length:90}, () => ({
+    x, y, vx:(Math.random()-.5)*4, vy:Math.random()*-6-3, size:Math.random()*6+4,
+    color: colors[Math.random()*colors.length|0], rot:Math.random()*360, vr:(Math.random()-.5)*6, life:0,
+  }));
+  (function step(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    let alive = false;
+    for (const p of particles){
+      p.vy += .05; p.vx *= .995; p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.life++;
+      if (p.life < LIFE){
+        alive = true;
+        const fade = p.life > LIFE-50 ? (LIFE-p.life)/50 : 1;
+        ctx.save(); ctx.globalAlpha = fade; ctx.translate(p.x,p.y); ctx.rotate(p.rot*Math.PI/180);
+        ctx.fillStyle = p.color; ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size*.6); ctx.restore();
+      }
+    }
+    if (alive) requestAnimationFrame(step); else ctx.clearRect(0,0,canvas.width,canvas.height);
+  })();
+}
+// Effet générique : fait "exploser" un émoji en plusieurs exemplaires depuis (x,y),
+// via l'API Web Animations (pas de canvas, pas de feuille de style à injecter).
+function launchEmojiBurst(emoji, x, y){
+  for (let i = 0; i < 16; i++){
+    const el = document.createElement("div");
+    el.textContent = emoji;
+    el.style.cssText = `position:fixed;left:${x}px;top:${y}px;font-size:${18+Math.random()*18}px;pointer-events:none;z-index:100;`;
+    document.body.appendChild(el);
+    const angle = Math.random()*Math.PI*2, dist = 70+Math.random()*160;
+    const dx = Math.cos(angle)*dist, dy = Math.sin(angle)*dist - 60;
+    const rot = (Math.random()-.5)*180;
+    const duration = 4500+Math.random()*1000; // ~5s
+    const anim = el.animate([
+      { transform:"translate(0,0) rotate(0deg) scale(.6)", opacity:1, offset:0 },
+      { transform:`translate(${dx*.6}px,${dy*.6}px) rotate(${rot*.6}deg) scale(1)`, opacity:1, offset:.6 },
+      { transform:`translate(${dx}px,${dy}px) rotate(${rot}deg) scale(1.15)`, opacity:0, offset:1 },
+    ], { duration, easing:"ease-out", fill:"forwards" });
+    anim.onfinish = () => el.remove();
+  }
+}
+function launchEffect(lane, x, y){
+  const effect = lane?.effect;
+  if (!effect || effect === "none") return;
+  if (effect === "confetti") return launchConfetti(x, y);
+  if (effect === "custom") return lane.customEmoji && launchEmojiBurst(lane.customEmoji, x, y);
+  const def = EFFECTS[effect];
+  if (def?.emoji) launchEmojiBurst(def.emoji, x, y);
+}
+
+/* -- Filtres -- */
+function fillSelect(id, placeholder, values){
+  const sel = document.getElementById(id);
+  const current = sel.value;
+  sel.innerHTML = `<option value="">${placeholder}</option>` + values.map(v => `<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`).join("");
+  if (values.includes(current)) sel.value = current;
+}
+function refreshFilterOptions(){
+  const assignees = new Set(), types = new Set();
+  state.records.forEach(r => { decodeChoiceList(r.AssigneA).forEach(a => assignees.add(a)); if (r.Type) types.add(r.Type); });
+  fillSelect("fAssignee", "Assigné à : tous", [...assignees].sort());
+  fillSelect("fType", "Type : tous", [...types].sort());
+}
+function initFiltersBar(){
+  const priorities = Object.keys(PRIORITY_COLORS).filter(k => k !== "__default");
+  fillSelect("fPriorite", "Priorité : toutes", priorities);
+  document.getElementById("fSearch").addEventListener("input", e => { state.filters.search = e.target.value; renderBoard(); });
+  document.getElementById("fAssignee").addEventListener("change", e => { state.filters.assignee = e.target.value; renderBoard(); });
+  document.getElementById("fPriorite").addEventListener("change", e => { state.filters.priorite = e.target.value; renderBoard(); });
+  document.getElementById("fType").addEventListener("change", e => { state.filters.type = e.target.value; renderBoard(); });
+}
+
+/* -- Export CSV -- */
+const csvEscape = v => { v = String(v ?? ""); return /[",\n]/.test(v) ? '"' + v.replace(/"/g,'""') + '"' : v; };
+function csvValue(r, col){
+  if (["AssigneA","Responsable","CreePar"].includes(col)) return decodeChoiceList(r[col]).join("; ");
+  if (["Deadline","CreeLe","DerniereMaj"].includes(col)) return fmtDate(gristDateToJS(r[col]));
+  return r[col] ?? "";
+}
+function exportCsv(){
+  const cols = ["Description","Priorite","Statut","Deadline","AssigneA","RefProjet","Type","Responsable","CreePar","CreeLe","DerniereMaj","Notes"];
+  const rows = filteredRecords();
+  const csv = [cols.join(","), ...rows.map(r => cols.map(c => csvEscape(csvValue(r,c))).join(","))].join("\r\n");
+  const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = `kanban-export-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* -- Rendu du tableau -- */
+function renderBoard(){
+  refreshFilterOptions();
+  const board = document.getElementById("board");
+  if (!state.columnsConfig){ board.innerHTML = '<p style="padding:20px;color:#888">Chargement…</p>'; return; }
+  const records = filteredRecords();
+  board.innerHTML = state.columnsConfig.map(lane => {
+    const tasks = tasksForLane(records, lane);
+    const collapsed = state.collapsed.has(lane.id);
+    return `
+      <div class="lane${collapsed ? " collapsed" : ""}" data-lane-id="${lane.id}">
+        <div class="lane-header" data-toggle="${lane.id}">
+          <span class="lane-color-dot" style="background:${lane.color}"></span>
+          <span class="lane-title">${escapeHtml(lane.label)}</span>
+          <span class="lane-count">${tasks.length}</span>
+          <button class="lane-collapse-btn">${collapsed ? "?" : "?"}</button>
+        </div>
+        <div class="lane-body" data-drop-lane="${lane.id}">${tasks.map(t => renderCard(t, lane)).join("")}</div>
+        <button class="lane-add-card" data-add-lane="${lane.id}">+ Ajouter une carte</button>
+      </div>`;
+  }).join("");
+}
+
+function renderCard(t, lane){
+  const pStyle = priorityStyle(t.Priorite);
+  const deadline = gristDateToJS(t.Deadline);
+  const overdue = deadline && deadline < new Date() && lane.sortByDeadline;
+  const assignees = decodeChoiceList(t.AssigneA);
+  const cl = checklistProgress(t.Checklist);
+  return `
+    <div class="card" draggable="true" data-id="${t.id}" style="background:${pStyle.bg};transform:rotate(${seededRotation(t.id).toFixed(2)}deg)">
+      <div class="card-meta-row">
+        <span class="badge" style="background:${pStyle.badge}">${escapeHtml(t.Priorite||"—")}</span>
+        ${t.Type ? `<span class="chip">${escapeHtml(t.Type)}</span>` : ""}
+        ${cl ? `<span class="chip">? ${cl.done}/${cl.total}</span>` : ""}
+      </div>
+      <div class="card-desc" contenteditable="true" data-field="Description" data-id="${t.id}">${escapeHtml(t.Description||"")}</div>
+      ${assignees.length ? `<div class="card-meta-row">${assignees.map(a=>`<span class="chip">?? ${escapeHtml(a)}</span>`).join("")}</div>` : ""}
+      <div class="deadline-row ${overdue ? "overdue" : ""}">?? <input type="date" data-field="Deadline" data-id="${t.id}" value="${toDateInputValue(deadline)}"></div>
+      ${t.RefProjet ? `<div class="card-ref">Réf: ${escapeHtml(t.RefProjet)}</div>` : ""}
+    </div>`;
+}
+
+async function handleAddCard(laneId){
+  const lane = state.columnsConfig.find(l => l.id === laneId);
+  if (!lane) return;
+  const fields = defaultTaskFields(lane.statut);
+  // Affichage immédiat, avant même la confirmation de Grist.
+  const tempId = -Date.now();
+  state.records.push({ id: tempId, ...fields });
+  notify();
+  const result = await writeToGrist(() => createTask(fields), "Tâche non enregistrée dans Grist — vérifiez l'autorisation d'accès du widget.");
+  const realId = result?.id ?? (Array.isArray(result) ? result[0]?.id : undefined);
+  if (realId){
+    const rec = state.records.find(r => r.id === tempId);
+    if (rec) rec.id = realId; // évite qu'une édition immédiate cible le mauvais id
+  }
+}
+
+/* -- Édition inline de la description, avec sauvegarde différée (debounce) -- */
+const descSaveTimers = new Map();
+function flushDescriptionSave(id, val){
+  clearTimeout(descSaveTimers.get(id));
+  descSaveTimers.delete(id);
+  writeToGrist(() => updateTaskFields(id, { Description: val }), "Description non enregistrée dans Grist.");
+  patchRecordLocally(id, { Description: val });
+}
+function scheduleDescriptionSave(id, val){
+  clearTimeout(descSaveTimers.get(id));
+  descSaveTimers.set(id, setTimeout(() => flushDescriptionSave(id, val), 500));
+}
+
+function getDragAfterElement(container, y){
+  const cards = [...container.querySelectorAll(".card:not(.dragging)")];
+  return cards.reduce((closest, child) => {
+    const box = child.getBoundingClientRect();
+    const offset = y - box.top - box.height/2;
+    return (offset < 0 && offset > closest.offset) ? { offset, element: child } : closest;
+  }, { offset: -Infinity, element: null }).element;
+}
+
+// Délégation d'événements : posée UNE FOIS sur #board, jamais ré-attachée au rendu.
+let dragFromLaneId = null;
+function initBoardEvents(){
+  const board = document.getElementById("board");
+
+  board.addEventListener("click", e => {
+    const toggle = e.target.closest("[data-toggle]");
+    if (toggle){ const id = toggle.dataset.toggle; state.collapsed.has(id) ? state.collapsed.delete(id) : state.collapsed.add(id); return notify(); }
+    const addBtn = e.target.closest("[data-add-lane]");
+    if (addBtn) return handleAddCard(addBtn.dataset.addLane);
+    if (e.target.closest("[data-field]")) return; // édition inline / lien pièce jointe : ne pas ouvrir la popup
+    const card = e.target.closest(".card");
+    if (card) openTaskModal(Number(card.dataset.id));
+  });
+
+  board.addEventListener("input", e => {
+    const el = e.target.closest('[data-field="Description"]');
+    if (el) scheduleDescriptionSave(Number(el.dataset.id), el.textContent.trim());
+  });
+  board.addEventListener("focusout", e => {
+    const el = e.target.closest('[data-field="Description"]');
+    if (el) flushDescriptionSave(Number(el.dataset.id), el.textContent.trim());
+  });
+  board.addEventListener("keydown", e => {
+    if (e.key === "Enter" && e.target.closest('[data-field="Description"]')){ e.preventDefault(); e.target.blur(); }
+  });
+
+  board.addEventListener("change", e => {
+    const el = e.target.closest('input[data-field="Deadline"]');
+    if (!el) return;
+    const id = Number(el.dataset.id), epoch = jsDateToGristEpoch(el.value);
+    writeToGrist(() => updateTaskFields(id, { Deadline: epoch }), "Deadline non enregistrée dans Grist.");
+    patchRecordLocally(id, { Deadline: epoch });
+    notify();
+  });
+
+  board.addEventListener("dragstart", e => {
+    const card = e.target.closest(".card");
+    if (!card) return;
+    card.classList.add("dragging");
+    dragFromLaneId = card.closest(".lane")?.dataset.laneId || null;
+    e.dataTransfer.setData("text/plain", card.dataset.id);
+    e.dataTransfer.effectAllowed = "move";
+  });
+  board.addEventListener("dragend", e => { e.target.closest(".card")?.classList.remove("dragging"); dragFromLaneId = null; });
+  board.addEventListener("dragover", e => {
+    const zone = e.target.closest("[data-drop-lane]");
+    if (!zone) return;
+    e.preventDefault();
+    zone.classList.add("drag-over");
+    // Réordonnancement visuel en direct, uniquement à l'intérieur de la colonne d'origine.
+    if (zone.dataset.dropLane === dragFromLaneId){
+      const dragging = document.querySelector(".card.dragging");
+      if (dragging){
+        const after = getDragAfterElement(zone, e.clientY);
+        after ? zone.insertBefore(dragging, after) : zone.appendChild(dragging);
+      }
+    }
+  });
+  board.addEventListener("dragleave", e => e.target.closest("[data-drop-lane]")?.classList.remove("drag-over"));
+  board.addEventListener("drop", e => {
+    const zone = e.target.closest("[data-drop-lane]");
+    if (!zone) return;
+    e.preventDefault();
+    zone.classList.remove("drag-over");
+    const id = Number(e.dataTransfer.getData("text/plain"));
+    const lane = state.columnsConfig.find(l => l.id === zone.dataset.dropLane);
+    const rec = state.records.find(r => r.id === id);
+    if (!lane || !rec){ dragFromLaneId = null; return; }
+    const sameLane = zone.dataset.dropLane === dragFromLaneId;
+    const wasDifferent = rec.Statut !== lane.statut;
+
+    if (sameLane){
+      // Ré-assigne un "Ordre" séquentiel selon la position visuelle finale dans la colonne.
+      [...zone.querySelectorAll(".card")].forEach((cardEl, i) => {
+        const cardId = Number(cardEl.dataset.id);
+        const r = state.records.find(x => x.id === cardId);
+        const newOrder = (i+1)*10;
+        if (r && r.Ordre !== newOrder){
+          r.Ordre = newOrder;
+          writeToGrist(() => updateTaskFields(cardId, { Ordre: newOrder }), "Ordre non enregistré dans Grist.");
+        }
+      });
+    } else {
+      const maxOrder = state.records.filter(r => r.Statut === lane.statut).reduce((m,r) => Math.max(m, r.Ordre||0), 0);
+      const histLine = `${fmtDateTime(new Date())} : ${rec.Statut || "—"} ? ${lane.statut}`;
+      const fields = { Statut: lane.statut, Ordre: maxOrder+10, Historique: (rec.Historique ? rec.Historique+"\n" : "")+histLine };
+      writeToGrist(() => updateTaskFields(id, fields), "Déplacement non enregistré dans Grist.");
+      Object.assign(rec, fields);
+    }
+    notify();
+    if (wasDifferent) launchEffect(lane, innerWidth/2, innerHeight/2);
+    dragFromLaneId = null;
+  });
+}
+
+/* -- Popup détail tâche -- */
+let modalChecklist = [];
+function checklistItemsHtml(items){
+  return `<div id="checklist-items">${items.map((it,i) => `
+    <div class="checklist-item" data-idx="${i}">
+      <input type="checkbox" data-chk="done" ${it.done?"checked":""}>
+      <input type="text" data-chk="text" value="${escapeHtml(it.text||"")}" placeholder="Sous-tâche…">
+      <button type="button" class="icon-btn" data-chk="del">?</button>
+    </div>`).join("")}</div>`;
+}
+function refreshChecklistUI(){
+  document.getElementById("checklist-items").outerHTML = checklistItemsHtml(modalChecklist);
+}
+function initTaskModalEvents(){
+  const modal = document.getElementById("taskModal");
+  modal.addEventListener("click", e => {
+    if (e.target.closest("#checklist-add")){ modalChecklist.push({ text:"", done:false }); refreshChecklistUI(); return; }
+    const del = e.target.closest('[data-chk="del"]');
+    if (del){ modalChecklist.splice(Number(del.closest(".checklist-item").dataset.idx), 1); refreshChecklistUI(); }
+  });
+  modal.addEventListener("input", e => {
+    const txt = e.target.closest('[data-chk="text"]');
+    if (txt) modalChecklist[Number(txt.closest(".checklist-item").dataset.idx)].text = txt.value;
+  });
+  modal.addEventListener("change", e => {
+    const chk = e.target.closest('[data-chk="done"]');
+    if (chk) modalChecklist[Number(chk.closest(".checklist-item").dataset.idx)].done = chk.checked;
+  });
+}
+
+function openTaskModal(id){
+  const t = state.records.find(r => r.id === id);
+  if (!t) return;
+  state.editingId = id;
+  modalChecklist = parseChecklist(t.Checklist);
+  const statutOptions = [...new Set(state.columnsConfig.map(l => l.statut))];
+  const priorities = Object.keys(PRIORITY_COLORS).filter(k => k !== "__default");
+  const opts = (values, current) => values.map(v => `<option value="${escapeHtml(v)}" ${v===current?"selected":""}>${escapeHtml(v)}</option>`).join("");
+
+  document.getElementById("taskModal").innerHTML = `
+    <h2>Détail de la tâche</h2>
+    ${fieldRow("Description", `<textarea id="m-desc">${escapeHtml(t.Description||"")}</textarea>`)}
+    <div class="field-row">
+      ${fieldRow("Priorité", `<select id="m-priorite">${opts(priorities, t.Priorite)}</select>`)}
+      ${fieldRow("Statut", `<select id="m-statut">${opts(statutOptions, t.Statut)}</select>`)}
+    </div>
+    <div class="field-row">
+      ${fieldRow("Deadline", `<input type="date" id="m-deadline" value="${toDateInputValue(gristDateToJS(t.Deadline))}">`)}
+      ${fieldRow("Type", `<input type="text" id="m-type" value="${escapeHtml(t.Type||"")}">`)}
+    </div>
+    ${fieldRow("Référence du Projet", `<input type="text" id="m-ref" value="${escapeHtml(t.RefProjet||"")}">`)}
+    <div class="field-row">
+      ${fieldRow("Assigné à (virgules)", `<input type="text" id="m-assigne" value="${escapeHtml(decodeChoiceList(t.AssigneA).join(", "))}">`)}
+      ${fieldRow("Responsable (virgules)", `<input type="text" id="m-resp" value="${escapeHtml(decodeChoiceList(t.Responsable).join(", "))}">`)}
+    </div>
+    ${fieldRow("Notes", `<textarea id="m-notes">${escapeHtml(t.Notes||"")}</textarea>`)}
+    <div class="field">
+      <label>Sous-tâches</label>
+      ${checklistItemsHtml(modalChecklist)}
+      <button type="button" class="btn secondary" id="checklist-add" style="margin-top:4px;">+ Sous-tâche</button>
+    </div>
+    <div class="meta-readonly">
+      Créé par : ${escapeHtml(decodeChoiceList(t.CreePar).join(", ")) || "—"} ·
+      Créé le : ${fmtDate(gristDateToJS(t.CreeLe)) || "—"} ·
+      Dernière mise à jour : ${fmtDate(gristDateToJS(t.DerniereMaj)) || "—"}
+    </div>
+    <div class="meta-readonly scroll">${escapeHtml(t.Historique || "Aucun changement de statut enregistré.")}</div>
+    <div class="modal-footer">
+      <button class="btn danger" id="m-delete">??? Supprimer</button>
+      <div style="display:flex;gap:8px;">
+        <button class="btn secondary" id="m-close">Fermer</button>
+        <button class="btn" id="m-save">Enregistrer</button>
+      </div>
+    </div>`;
+  document.getElementById("taskOverlay").classList.remove("hidden");
+  document.getElementById("m-close").onclick = closeTaskModal;
+  document.getElementById("m-save").onclick = saveTaskModal;
+  document.getElementById("m-delete").onclick = () => deleteTaskModal(id);
+}
+function closeTaskModal(){ document.getElementById("taskOverlay").classList.add("hidden"); state.editingId = null; }
+
+async function deleteTaskModal(id){
+  const t = state.records.find(r => r.id === id);
+  if (!confirm(`Supprimer définitivement la tâche "${t?.Description || "sans titre"}" ?`)) return;
+  await writeToGrist(() => deleteTask(id), "Suppression non enregistrée dans Grist.");
+  state.records = state.records.filter(r => r.id !== id);
+  closeTaskModal();
+  notify();
+}
+
+async function saveTaskModal(){
+  const id = state.editingId, t = state.records.find(r => r.id === id);
+  const val = sel => document.getElementById(sel).value.trim();
+  const newStatut = document.getElementById("m-statut").value;
+  const laneForNewStatut = state.columnsConfig.find(l => l.statut === newStatut);
+  const wasDifferentStatut = t && t.Statut !== newStatut;
+  const historique = wasDifferentStatut
+    ? (t.Historique ? t.Historique+"\n" : "") + `${fmtDateTime(new Date())} : ${t.Statut || "—"} ? ${newStatut}`
+    : (t.Historique || "");
+
+  const fields = {
+    Description: val("m-desc"), Priorite: document.getElementById("m-priorite").value, Statut: newStatut,
+    Deadline: jsDateToGristEpoch(document.getElementById("m-deadline").value),
+    Type: val("m-type"), RefProjet: val("m-ref"),
+    AssigneA: encodeChoiceList(val("m-assigne").split(",").map(s=>s.trim()).filter(Boolean)),
+    Responsable: encodeChoiceList(val("m-resp").split(",").map(s=>s.trim()).filter(Boolean)),
+    Notes: val("m-notes"),
+    Checklist: JSON.stringify(modalChecklist.filter(it => it.text.trim() !== "")),
+    Historique: historique,
+  };
+  await writeToGrist(() => updateTaskFields(id, fields), "Modifications non enregistrées dans Grist.");
+  patchRecordLocally(id, fields);
+  closeTaskModal();
+  notify();
+  if (wasDifferentStatut) launchEffect(laneForNewStatut, innerWidth/2, innerHeight/2);
+}
+
+/* -- Popup configuration des colonnes -- */
+let settingsWorkingCopy = [];
+function openSettingsModal(){
+  settingsWorkingCopy = state.columnsConfig.map(l => ({ ...l }));
+  renderSettingsModal();
+  document.getElementById("settingsOverlay").classList.remove("hidden");
+}
+const closeSettingsModal = () => document.getElementById("settingsOverlay").classList.add("hidden");
+
+function renderSettingsModal(){
+  const cfg = settingsWorkingCopy;
+  const statutCounts = {};
+  cfg.forEach(l => { statutCounts[l.statut] = (statutCounts[l.statut]||0)+1; });
+  const dupStatuts = Object.entries(statutCounts).filter(([,n]) => n>1).map(([s]) => s);
+
+  document.getElementById("settingsModal").innerHTML = `
+    <h2>Colonnes du tableau</h2>
+    ${dupStatuts.length ? `<div class="warning-banner">?? Statut${dupStatuts.length>1?"s":""} utilisé${dupStatuts.length>1?"s":""} par plusieurs colonnes : <strong>${dupStatuts.map(escapeHtml).join(", ")}</strong> — les tâches concernées n'apparaîtront que dans une seule des colonnes.</div>` : ""}
+    <div id="lane-config-list">
+      ${cfg.map((l,i) => `
+        <div class="lane-config-row" data-idx="${i}">
+          <button class="icon-btn" data-move="up" ${i===0?'disabled style="opacity:.3"':""}>?</button>
+          <button class="icon-btn" data-move="down" ${i===cfg.length-1?'disabled style="opacity:.3"':""}>?</button>
+          <input type="color" data-cfg="color" value="${l.color}">
+          <input type="text" data-cfg="label" value="${escapeHtml(l.label)}" placeholder="Nom">
+          <input type="text" data-cfg="statut" value="${escapeHtml(l.statut)}" placeholder="Statut lié" style="width:110px">
+          <label style="font-size:10px;display:flex;gap:2px;align-items:center;"><input type="checkbox" data-cfg="sortByDeadline" ${l.sortByDeadline?"checked":""}>Tri deadline</label>
+          <select data-cfg="effect" title="Effet à l'arrivée dans cette colonne">
+            ${Object.entries(EFFECTS).map(([key,def]) => `<option value="${key}" ${l.effect===key?"selected":""}>${def.label}</option>`).join("")}
+          </select>
+          ${l.effect === "custom" ? `<input type="text" data-cfg="customEmoji" value="${escapeHtml(l.customEmoji||"")}" maxlength="4" style="width:44px;text-align:center;flex:none;" placeholder="??">` : ""}
+          <button class="icon-btn" data-del="1">???</button>
+        </div>`).join("")}
+    </div>
+    <button class="btn secondary" id="lane-add" style="margin-top:6px;">+ Ajouter une colonne</button>
+    <div class="modal-footer">
+      <button class="btn secondary" id="s-close">Annuler</button>
+      <button class="btn" id="s-save">Enregistrer</button>
+    </div>`;
+
+  document.getElementById("lane-add").onclick = () => {
+    cfg.push({ id:cid(), label:"Nouvelle colonne", statut:"Nouveau statut", color:"#999999", sortByDeadline:true, effect:"none", collapsedByDefault:false });
+    renderSettingsModal();
+  };
+  document.getElementById("lane-config-list").addEventListener("click", e => {
+    const row = e.target.closest(".lane-config-row");
+    if (!row) return;
+    const idx = Number(row.dataset.idx);
+    if (e.target.closest("[data-move]")){
+      const j = idx + (e.target.dataset.move === "up" ? -1 : 1);
+      if (j >= 0 && j < cfg.length){ [cfg[idx],cfg[j]] = [cfg[j],cfg[idx]]; renderSettingsModal(); }
+    } else if (e.target.closest("[data-del]")){ cfg.splice(idx,1); renderSettingsModal(); }
+  });
+  const onFieldChange = e => {
+    const row = e.target.closest(".lane-config-row");
+    if (!row || !e.target.dataset.cfg) return;
+    const idx = Number(row.dataset.idx), key = e.target.dataset.cfg;
+    cfg[idx][key] = e.target.type === "checkbox" ? e.target.checked : e.target.value;
+    if (key === "effect") renderSettingsModal(); // affiche/masque le champ emoji personnalisé et re-vérifie les doublons
+  };
+  document.getElementById("lane-config-list").addEventListener("input", onFieldChange);
+  document.getElementById("lane-config-list").addEventListener("change", onFieldChange);
+  document.getElementById("s-close").onclick = closeSettingsModal;
+  document.getElementById("s-save").onclick = () => { setColumnsConfig(settingsWorkingCopy); saveColumnsConfig(settingsWorkingCopy); closeSettingsModal(); };
+}
+
+/* ===== COMPOSITION ROOT ===== */
+subscribe(renderBoard);
+initBoardEvents();
+initTaskModalEvents();
+initFiltersBar();
+initGrist({
+  onRecordsChange: setRecords,
+  onOptionsChange: kanbanColumns => setColumnsConfig(kanbanColumns || loadLocalColumns() || defaultColumnsConfig()),
+  onUnavailable: () => { setColumnsConfig(loadLocalColumns() || defaultColumnsConfig()); setRecords([]); },
+});
+document.getElementById("btnSettings").onclick = openSettingsModal;
+document.getElementById("btnNewCard").onclick = () => state.columnsConfig?.[0] && handleAddCard(state.columnsConfig[0].id);
+document.getElementById("btnExportCsv").onclick = exportCsv;
+const board = document.getElementById("board");
+if (localStorage.getItem("kanban_view_mode") === "stacked") board.classList.add("stacked");
+document.getElementById("btnToggleView").onclick = () => {
+  const stacked = board.classList.toggle("stacked");
+  localStorage.setItem("kanban_view_mode", stacked ? "stacked" : "columns");
+};
+</script>
+</body>
+</html>
+
