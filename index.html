@@ -8,17 +8,22 @@
 <style>
 :root{ --bg:#eef1f5; --ink:#2b2b2b; --muted:#6b7280; --col-bg:#dfe3ea; --col-header:#c9ced8; --accent:#4f7cff; --shadow:0 3px 8px rgba(0,0,0,.18); --surface:#fff; --border:#d7dae0; }
 #fSearch,#fAssignee,#fPriorite,#fType{color:#000000;}
-@media (prefers-color-scheme: dark){
-  :root{ --bg:#181a1f; --ink:#e8e8ea; --muted:#9aa0ab; --col-bg:#242731; --col-header:#2e323e; --accent:#5c86ff; --shadow:0 3px 10px rgba(0,0,0,.5); --surface:#20222a; --border:#333744; }
-  .card{box-shadow:var(--shadow);}
-  .modal,#wbCanvasWrap,.kpi-card,.dash-module{background:var(--surface);color:var(--ink);}
-  .field textarea,.field input,.field select,.sub-toolbar input[type=search],.sub-toolbar select,.lane-config-row input[type=text]{background:var(--surface);color:var(--ink);border-color:var(--border);}
-  #fSearch,#fAssignee,#fPriorite,#fType{color:var(--ink);}
-  #toolbar,.sub-toolbar{background:var(--surface);border-color:var(--border);}
-  .btn.secondary{background:#2c2f3a;color:var(--ink);}
-  .lane-count,#wbCanvasWrap{background:var(--surface);}
-  .cal-day{background:var(--surface);color:var(--ink);}
-}
+:root[data-theme="dark"]{ --bg:#181a1f; --ink:#e8e8ea; --muted:#9aa0ab; --col-bg:#242731; --col-header:#2e323e; --accent:#5c86ff; --shadow:0 3px 10px rgba(0,0,0,.5); --surface:#20222a; --border:#333744; }
+:root[data-theme="dark"] .card{box-shadow:var(--shadow);}
+:root[data-theme="dark"] .modal,:root[data-theme="dark"] #wbCanvasWrap,:root[data-theme="dark"] .kpi-card,:root[data-theme="dark"] .dash-module{background:var(--surface);color:var(--ink);}
+:root[data-theme="dark"] .field textarea,:root[data-theme="dark"] .field input,:root[data-theme="dark"] .field select,:root[data-theme="dark"] .sub-toolbar input[type=search],:root[data-theme="dark"] .sub-toolbar select,:root[data-theme="dark"] .lane-config-row input[type=text]{background:var(--surface);color:var(--ink);border-color:var(--border);}
+:root[data-theme="dark"] #fSearch,:root[data-theme="dark"] #fAssignee,:root[data-theme="dark"] #fPriorite,:root[data-theme="dark"] #fType{color:var(--ink);}
+:root[data-theme="dark"] #toolbar,:root[data-theme="dark"] .sub-toolbar{background:var(--surface);border-color:var(--border);}
+:root[data-theme="dark"] .btn.secondary{background:#2c2f3a;color:var(--ink);}
+:root[data-theme="dark"] .lane-count,:root[data-theme="dark"] #wbCanvasWrap{background:var(--surface);}
+:root[data-theme="dark"] .cal-day{background:var(--surface);color:var(--ink);}
+:root[data-theme="dark"] .stat-card{background:var(--surface);}
+:root[data-theme="dark"] #tasksTable th{background:var(--surface);}
+:root[data-theme="dark"] #tasksTable tr:hover{background:#262a33;}
+:root[data-theme="dark"] #tasksTable td{border-color:var(--border);}
+:root[data-theme="dark"] #ganttOuter,:root[data-theme="dark"] .gantt-corner,:root[data-theme="dark"] .gantt-label,:root[data-theme="dark"] .gantt-header-row{background:var(--surface);color:var(--ink);border-color:var(--border);}
+:root[data-theme="dark"] .alerts-panel{background:var(--surface);color:var(--ink);}
+:root[data-theme="dark"] .alerts-item:hover{background:#2c2f3a;}
 *{box-sizing:border-box;}
 html,body{height:100%;margin:0;}
 body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);overflow:hidden;}
@@ -34,9 +39,18 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .tab-btn.active{background:var(--accent);color:#fff;}
 #syncIndicator{font-size:11px;color:#888;}
 #syncIndicator.hidden{display:none;}
+.alerts-badge{position:absolute;top:-3px;right:-3px;background:#c0392b;color:#fff;border-radius:999px;font-size:9px;min-width:14px;height:14px;line-height:14px;text-align:center;padding:0 2px;font-weight:700;}
+.alerts-badge.hidden{display:none;}
+.alerts-panel{position:absolute;top:100%;right:0;margin-top:6px;width:280px;max-height:320px;overflow-y:auto;background:#fff;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.2);z-index:60;padding:6px;}
+.alerts-panel.hidden{display:none;}
+.alerts-header{font-weight:700;font-size:12px;padding:6px 8px;color:var(--muted);}
+.alerts-item{padding:7px 8px;border-radius:7px;font-size:12px;cursor:pointer;display:flex;justify-content:space-between;gap:8px;}
+.alerts-item:hover{background:#f5f6f9;}
+.alerts-date{color:#c0392b;font-weight:700;white-space:nowrap;}
+.alerts-empty{padding:16px 8px;text-align:center;color:var(--muted);font-size:12px;}
 
-.btn{border:none;border-radius:8px;padding:7px 12px;font-size:13px;cursor:pointer;background:var(--accent);color:#fff;font-weight:500;white-space:nowrap;}
-.btn.secondary{background:#eceff3;color:#333;}
+.btn{border:none;border-radius:10px;padding:7px 12px;font-size:13px;cursor:pointer;background:var(--accent);color:#fff;font-weight:500;white-space:nowrap;box-shadow:0 1px 3px rgba(0,0,0,.15);}
+.btn.secondary{background:#eceff3;color:#333;box-shadow:none;}
 .btn.danger{background:#fff;color:#c0392b;border:1px solid #f0c4c0;}
 .btn.danger:hover{background:#fdf1f0;}
 .btn.active{background:#33508f;color:#fff;}
@@ -48,6 +62,17 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .sub-toolbar input[type=search]{flex:1;min-width:110px;}
 #bulkBar{background:#eef3ff;}
 #bulkBar.hidden{display:none;}
+#globalStats{display:flex;gap:10px;overflow-x:auto;}
+.stat-card{background:#fff;border-radius:10px;padding:6px 14px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.10);min-width:70px;flex:none;}
+.stat-value{font-size:18px;font-weight:800;}
+.stat-label{font-size:10px;color:var(--muted);margin-top:1px;white-space:nowrap;}
+#tasksTable{width:100%;border-collapse:collapse;font-size:12.5px;}
+#tasksTable th{text-align:left;font-size:11px;color:var(--muted);padding:6px 8px;border-bottom:2px solid #eee;position:sticky;top:0;background:#fff;}
+#tasksTable td{padding:6px 8px;border-bottom:1px solid #f0f0f0;vertical-align:middle;}
+#tasksTable select,#tasksTable input[type=date]{font-size:12px;padding:3px 4px;border:1px solid #ddd;border-radius:5px;}
+#tasksTable [contenteditable]{outline:none;padding:2px;border-radius:4px;}
+#tasksTable [contenteditable]:focus{background:#f5f7ff;}
+#tasksTable tr:hover{background:#fafbfe;}
 
 .view{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0;}
 
@@ -71,9 +96,10 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .lane-body{flex:1;overflow-y:auto;padding:8px;display:flex;flex-direction:column;gap:10px;min-height:40px;}
 .lane-body.drag-over{background:rgba(79,124,255,.12);}
 .lane-add-card{margin:0 8px 10px;border:1px dashed #b7bcc6;background:none;border-radius:8px;padding:6px;font-size:12px;color:#666;cursor:pointer;}
-.card{border-radius:4px;padding:10px 10px 8px;cursor:grab;box-shadow:var(--shadow);font-size:12.5px;position:relative;font-family:'Segoe Print','Bradley Hand',cursive,'Segoe UI',sans-serif;}
+.card{border-radius:8px;padding:10px 10px 8px;cursor:grab;box-shadow:0 2px 6px rgba(0,0,0,.10), 0 1px 2px rgba(0,0,0,.06);font-size:12.5px;position:relative;font-family:'Segoe Print','Bradley Hand',cursive,'Segoe UI',sans-serif;border-left:4px solid transparent;}
 .card.dragging{opacity:.4;}
-.card::before{content:'';position:absolute;top:-6px;left:50%;transform:translateX(-50%) rotate(-3deg);width:34px;height:14px;background:rgba(255,255,255,.55);border:1px solid rgba(0,0,0,.05);}
+.card::before{content:'';position:absolute;top:-5px;left:50%;transform:translateX(-50%) rotate(-2deg);width:30px;height:12px;background:rgba(255,255,255,.45);border-radius:1px;}
+.card-blocked{background:rgba(192,57,43,.13);color:#8a2a20;font-size:10.5px;border-radius:6px;padding:3px 6px;margin-bottom:5px;font-weight:600;}
 .card-select-box{position:absolute;top:6px;left:6px;width:16px;height:16px;z-index:2;}
 .select-mode-card{padding-left:26px;}
 .card-desc{font-weight:600;font-size:13.5px;min-height:18px;outline:none;word-break:break-word;margin-bottom:6px;}
@@ -128,6 +154,23 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .cal-task-ghost{cursor:pointer;font-weight:600;}
 .cal-more{font-size:10px;color:var(--muted);}
 .cal-week .cal-day{min-height:220px;}
+
+/* Gantt */
+#ganttOuter{flex:1;overflow:auto;position:relative;background:#fff;}
+#ganttContent{display:inline-block;min-width:100%;}
+.gantt-header-row{display:flex;position:sticky;top:0;z-index:3;background:#fff;}
+.gantt-corner{position:sticky;left:0;z-index:4;background:#fff;border-right:1px solid #e5e5e5;border-bottom:1px solid #e5e5e5;min-width:190px;max-width:190px;padding:6px 8px;font-size:11px;font-weight:700;color:var(--muted);display:flex;align-items:center;}
+.gantt-header-dates{display:flex;flex-direction:column;border-bottom:1px solid #e5e5e5;}
+.gantt-header-months{display:flex;font-size:10.5px;color:var(--muted);border-bottom:1px solid #f0f0f0;}
+.gantt-header-months>div{padding:2px 4px;border-right:1px solid #f0f0f0;white-space:nowrap;overflow:hidden;text-transform:capitalize;box-sizing:border-box;}
+.gantt-header-days{display:flex;font-size:9.5px;color:#999;}
+.gantt-header-days>div{text-align:center;border-right:1px solid #f5f5f5;flex:none;box-sizing:border-box;}
+.gantt-row{display:flex;border-bottom:1px solid #f0f0f0;}
+.gantt-label{position:sticky;left:0;z-index:2;background:#fff;min-width:190px;max-width:190px;padding:6px 8px;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-right:1px solid #e5e5e5;cursor:pointer;display:flex;align-items:center;height:34px;box-sizing:border-box;}
+.gantt-track{position:relative;height:34px;flex:none;}
+.gantt-bar{position:absolute;top:6px;height:22px;border-radius:5px;cursor:pointer;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.25);border:1px solid rgba(0,0,0,.08);}
+.gantt-bar-fill{height:100%;opacity:.9;}
+.gantt-today-line{position:absolute;top:0;bottom:0;width:2px;background:#c0392b;z-index:1;}
 
 /* Whiteboard */
 .wb-swatch{width:22px;height:22px;border-radius:50%;border:2px solid transparent;cursor:pointer;padding:0;}
@@ -185,11 +228,20 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
     <div id="tabBar" role="tablist">
       <button class="tab-btn" data-tab="dashboard" role="tab">📊 Tableau de bord</button>
       <button class="tab-btn active" data-tab="kanban" role="tab" aria-selected="true">🗂️ Kanban</button>
+      <button class="tab-btn" data-tab="table" role="tab">📋 Tableau</button>
+      <button class="tab-btn" data-tab="gantt" role="tab">📈 Gantt</button>
       <button class="tab-btn" data-tab="calendar" role="tab">📅 Calendrier</button>
       <button class="tab-btn" data-tab="whiteboard" role="tab">🖌️ Whiteboard</button>
     </div>
     <span id="syncIndicator" class="hidden">⏳ Sync…</span>
+    <div id="alertsWrap" style="position:relative;">
+      <button class="icon-btn" id="btnAlerts" title="Rappels" aria-label="Rappels">🔔<span id="alertsBadge" class="alerts-badge hidden"></span></button>
+      <div id="alertsPanel" class="alerts-panel hidden"></div>
+    </div>
+    <button class="icon-btn" id="btnThemeToggle" title="Basculer mode sombre/clair" aria-label="Basculer mode sombre/clair">🌙</button>
+    <button class="icon-btn" id="btnGlobalExportCsv" title="Exporter en CSV" aria-label="Exporter en CSV">⬇️</button>
   </div>
+  <div id="globalStats" class="sub-toolbar"></div>
 
   <!-- Onglet Tableau de bord -->
   <div id="view-dashboard" class="view hidden">
@@ -207,6 +259,8 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
       <select id="fAssignee" aria-label="Filtrer par assigné"><option value="">Assigné à : tous</option></select>
       <select id="fPriorite" aria-label="Filtrer par priorité"><option value="">Priorité : toutes</option></select>
       <select id="fType" aria-label="Filtrer par type"><option value="">Type : tous</option></select>
+      <select id="fSortBy" aria-label="Trier par"><option value="default">Trier : Par défaut</option><option value="priorite">Trier : Priorité</option><option value="deadline">Trier : Deadline</option></select>
+      <select id="fGroupBy" aria-label="Grouper par"><option value="statut">Grouper : Statut</option><option value="priorite">Grouper : Priorité</option><option value="type">Grouper : Type</option></select>
       <button class="btn secondary" id="btnToggleView" title="Basculer vue colonnes / liste">📱</button>
       <button class="btn secondary" id="btnSelectMode" title="Sélection multiple">☑️</button>
       <button class="btn secondary" id="btnTemplates" title="Modèles de tâches">📑 Modèles</button>
@@ -221,6 +275,39 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
       <button class="btn secondary" id="bulkCancel">Annuler</button>
     </div>
     <div id="board"></div>
+  </div>
+
+  <!-- Onglet Vue Tableau -->
+  <div id="view-table" class="view hidden">
+    <div class="sub-toolbar">
+      <span style="font-size:12px;color:var(--muted);">Édition directe dans les cellules — les filtres du Kanban s'appliquent aussi ici.</span>
+    </div>
+    <div style="flex:1;overflow:auto;padding:10px;">
+      <table id="tasksTable">
+        <thead>
+          <tr>
+            <th>Tâche</th><th>Statut</th><th>Priorité</th><th>Assigné à</th><th>Type</th><th>Échéance</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tasksTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Onglet Gantt -->
+  <div id="view-gantt" class="view hidden">
+    <div class="sub-toolbar">
+      <button class="icon-btn" id="ganttPrev" aria-label="Défiler vers la gauche">◀</button>
+      <button class="btn secondary" id="ganttToday">Aujourd'hui</button>
+      <button class="icon-btn" id="ganttNext" aria-label="Défiler vers la droite">▶</button>
+      <span id="ganttLabel" style="font-size:12px;color:var(--muted);"></span>
+      <select id="ganttZoom" aria-label="Niveau de zoom">
+        <option value="day">Jours</option>
+        <option value="week">Semaines</option>
+        <option value="month">Mois</option>
+      </select>
+    </div>
+    <div id="ganttOuter"><div id="ganttContent"></div></div>
   </div>
 
   <!-- Onglet Calendrier -->
@@ -287,6 +374,8 @@ const REQUIRED_COLUMNS = [
   { name:"Ordre", title:"Ordre (tri manuel)", type:"Numeric", optional:true },
   { name:"Checklist", title:"Sous-tâches (JSON)", type:"Text", optional:true },
   { name:"Recurrence", title:"Récurrence", type:"Choice", optional:true },
+  { name:"BloquePar", title:"Bloqué par (ids)", type:"Text", optional:true },
+  { name:"DateDebut", title:"Date de début", type:"Date", optional:true },
 ];
 const PRIORITY_COLORS = {
   Urgent:{bg:"#ffd3d3",badge:"#c0392b"}, Haute:{bg:"#ffe3bd",badge:"#d9822b"},
@@ -345,7 +434,7 @@ const encodeChoiceList = arr => ["L", ...arr];
 const priorityStyle = p => PRIORITY_COLORS[p] || PRIORITY_COLORS.__default;
 const seededRotation = id => {
   const n = typeof id==="number" ? id : String(id).split("").reduce((a,c)=>a+c.charCodeAt(0),0);
-  return ((n % 9) - 4) * 0.8;
+  return ((n % 9) - 4) * 0.5;
 };
 const parseChecklist = raw => { try{ const a = JSON.parse(raw||"[]"); return Array.isArray(a) ? a : []; }catch{ return []; } };
 const checklistProgress = raw => { const items = parseChecklist(raw); return items.length ? { done: items.filter(i=>i.done).length, total: items.length } : null; };
@@ -356,12 +445,49 @@ function addInterval(date, recurrence){
   else if (recurrence === "monthly") d.setMonth(d.getMonth()+1);
   return d;
 }
+// Regroupement dynamique du Kanban : par défaut les colonnes = vos Statuts configurés
+// (⚙️ Colonnes), mais on peut aussi regrouper à la volée par Priorité ou par Type.
+// laneMatchesTask/laneAssignFields abstraient cette différence pour le reste du code.
+const GROUP_PALETTE = ["#4f7cff","#e07856","#3a9d4c","#a05fd1","#c9a400","#2aa9a0","#c0567a","#6c7a89"];
+function getActiveLanes(){
+  if (!state.groupBy || state.groupBy === "statut") return state.columnsConfig || [];
+  const field = state.groupBy === "priorite" ? "Priorite" : "Type";
+  const values = new Set();
+  filteredRecords().forEach(r => values.add(r[field] || "(Aucun)"));
+  let ordered;
+  if (field === "Priorite"){
+    const order = ["Urgent","Haute","Moyenne","Basse","(Aucun)"];
+    ordered = order.filter(v => values.has(v));
+  } else {
+    ordered = [...values].sort((a,b) => a==="(Aucun)" ? 1 : (b==="(Aucun)" ? -1 : a.localeCompare(b,"fr")));
+  }
+  return ordered.map((v,i) => ({
+    id: `grp__${field}__${v}`, label: v, groupField: field, groupValue: v,
+    color: field==="Priorite" ? priorityStyle(v==="(Aucun)"?"":v).badge : GROUP_PALETTE[i%GROUP_PALETTE.length],
+    sortByDeadline:false, effect:"none",
+  }));
+}
+function laneMatchesTask(lane, t){
+  if (lane.groupField) return (t[lane.groupField] || "(Aucun)") === lane.groupValue;
+  return (t.Statut||"") === lane.statut;
+}
+function laneAssignFields(lane){
+  if (lane.groupField) return { [lane.groupField]: lane.groupValue === "(Aucun)" ? "" : lane.groupValue };
+  return { Statut: lane.statut };
+}
 // Règle métier : tri par deadline sur les colonnes actives ; sur les colonnes non
 // triées par deadline, on respecte l'ordre manuel (glisser-déposer) dès qu'il existe,
-// sinon on retombe sur un tri par dernière mise à jour décroissante.
+// sinon on retombe sur un tri par dernière mise à jour décroissante. Le sélecteur
+// "Trier par" (state.sortBy) permet de forcer un tri global (Priorité/Deadline).
 function tasksForLane(records, lane){
-  const list = records.filter(r => (r.Statut||"") === lane.statut);
-  if (lane.sortByDeadline){
+  const list = records.filter(r => laneMatchesTask(lane, r));
+  if (state.sortBy === "priorite"){
+    const order = ["Urgent","Haute","Moyenne","Basse"];
+    list.sort((a,b) => order.indexOf(a.Priorite) - order.indexOf(b.Priorite));
+    return list;
+  }
+  const effectiveSortByDeadline = state.sortBy === "deadline" ? true : lane.sortByDeadline;
+  if (effectiveSortByDeadline){
     list.sort((a,b) => (gristDateToJS(a.Deadline) ?? Infinity) - (gristDateToJS(b.Deadline) ?? Infinity));
   } else if (list.some(r => r.Ordre != null)){
     list.sort((a,b) => (a.Ordre ?? Infinity) - (b.Ordre ?? Infinity));
@@ -434,6 +560,7 @@ function saveTemplates(list){ templatesStore.save(list); if (gristAvailable){ tr
 const state = {
   records:[], columnsConfig:null, dashboardLayout:null, taskTemplates:null, collapsed:new Set(), editingId:null,
   filters:{ search:"", assignee:"", priorite:"", type:"" },
+  sortBy:"default", groupBy:"statut",
 };
 const listeners = [];
 const subscribe = fn => listeners.push(fn);
@@ -576,6 +703,16 @@ async function maybeSpawnRecurrence(sourceTask, newCategory){
   if (realId){ const rec = state.records.find(r => r.id === tempId); if (rec) rec.id = realId; }
 }
 
+/* -- Dépendances "Bloqué par" : résout les tâches bloquantes encore actives -- */
+function activeBlockers(t){
+  const ids = (t.BloquePar||"").split(",").map(s=>s.trim()).filter(Boolean).map(Number);
+  if (!ids.length) return [];
+  return ids.map(bid => state.records.find(r=>r.id===bid)).filter(Boolean).filter(b => {
+    const lane = state.columnsConfig?.find(l=>l.statut===b.Statut);
+    return lane?.dashCategory !== "done" && lane?.dashCategory !== "cancelled";
+  });
+}
+
 /* -- Filtres (partagés par Kanban, Calendrier et Tableau de bord) -- */
 function fillSelect(id, placeholder, values){
   const sel = document.getElementById(id);
@@ -596,15 +733,78 @@ function initFiltersBar(){
   document.getElementById("fAssignee").addEventListener("change", e => { state.filters.assignee = e.target.value; notify(); });
   document.getElementById("fPriorite").addEventListener("change", e => { state.filters.priorite = e.target.value; notify(); });
   document.getElementById("fType").addEventListener("change", e => { state.filters.type = e.target.value; notify(); });
+  document.getElementById("fSortBy").addEventListener("change", e => { state.sortBy = e.target.value; notify(); });
+  document.getElementById("fGroupBy").addEventListener("change", e => { state.groupBy = e.target.value; notify(); });
 }
 
 /* -- Badge "en retard" dans la barre du haut -- */
+function getOverdueTasks(){
+  const now = new Date();
+  return state.records.filter(r => {
+    const lane = state.columnsConfig?.find(l => l.statut === r.Statut);
+    if (lane?.dashCategory === "done" || lane?.dashCategory === "cancelled") return false;
+    const d = gristDateToJS(r.Deadline);
+    return d && d < now;
+  }).sort((a,b) => gristDateToJS(a.Deadline) - gristDateToJS(b.Deadline));
+}
+function refreshAlertsBadge(){
+  const list = state.columnsConfig ? getOverdueTasks() : [];
+  const badge = document.getElementById("alertsBadge");
+  badge.textContent = list.length || "";
+  badge.classList.toggle("hidden", !list.length);
+}
+function renderAlertsPanel(){
+  const list = getOverdueTasks();
+  document.getElementById("alertsPanel").innerHTML = `
+    <div class="alerts-header">🔔 Alertes</div>
+    ${list.length ? list.map(t => `<div class="alerts-item" data-alert-task="${t.id}"><span>⚠️ ${escapeHtml(t.Description||"(sans titre)")}</span><span class="alerts-date">${fmtDate(gristDateToJS(t.Deadline))}</span></div>`).join("") : `<div class="alerts-empty">Aucune alerte</div>`}
+  `;
+}
+function initAlerts(){
+  document.getElementById("btnAlerts").addEventListener("click", e => {
+    e.stopPropagation();
+    const panel = document.getElementById("alertsPanel");
+    const opening = panel.classList.contains("hidden");
+    panel.classList.toggle("hidden");
+    if (opening) renderAlertsPanel();
+  });
+  document.getElementById("alertsPanel").addEventListener("click", e => {
+    const item = e.target.closest("[data-alert-task]");
+    if (item){ document.getElementById("alertsPanel").classList.add("hidden"); openTaskModal(Number(item.dataset.alertTask)); }
+  });
+  document.addEventListener("click", e => {
+    if (!e.target.closest("#alertsWrap")) document.getElementById("alertsPanel").classList.add("hidden");
+  });
+}
+
+/* -- Mode sombre / clair (bascule manuelle, mémorisée) -- */
+function getInitialTheme(){
+  const stored = localStorage.getItem("kanban_theme");
+  if (stored === "light" || stored === "dark") return stored;
+  return matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+let currentTheme = getInitialTheme();
+function applyTheme(theme){
+  currentTheme = theme;
+  document.documentElement.dataset.theme = theme;
+  document.getElementById("btnThemeToggle").textContent = theme === "dark" ? "☀️" : "🌙";
+}
+function initThemeToggle(){
+  applyTheme(currentTheme);
+  document.getElementById("btnThemeToggle").onclick = () => {
+    const next = currentTheme === "dark" ? "light" : "dark";
+    localStorage.setItem("kanban_theme", next);
+    applyTheme(next);
+  };
+}
+
 function refreshOverdueBadge(){
   const badge = document.getElementById("overdueBadge");
-  if (!state.columnsConfig){ badge.classList.add("hidden"); return; }
+  if (!state.columnsConfig){ badge.classList.add("hidden"); refreshAlertsBadge(); return; }
   const stats = computeDashboardStats(state.records);
   if (stats.overdue > 0){ badge.textContent = `⚠️ ${stats.overdue} en retard`; badge.classList.remove("hidden"); }
   else badge.classList.add("hidden");
+  refreshAlertsBadge();
 }
 
 /* -- Export CSV / Impression (partagés) -- */
@@ -652,12 +852,13 @@ function renderBoard(){
   const board = document.getElementById("board");
   if (!state.columnsConfig){ board.innerHTML = '<p style="padding:20px;color:#888">Chargement…</p>'; return; }
   const records = filteredRecords();
-  board.innerHTML = state.columnsConfig.map(lane => {
+  const lanes = getActiveLanes();
+  board.innerHTML = lanes.map(lane => {
     const tasks = tasksForLane(records, lane);
     const collapsed = state.collapsed.has(lane.id);
     return `
       <div class="lane${collapsed ? " collapsed" : ""}" data-lane-id="${lane.id}">
-        <div class="lane-header" data-toggle="${lane.id}">
+        <div class="lane-header" data-toggle="${lane.id}" style="border-bottom:3px solid ${lane.color}">
           <span class="lane-color-dot" style="background:${lane.color}"></span>
           <span class="lane-title">${escapeHtml(lane.label)}</span>
           <span class="lane-count">${tasks.length}</span>
@@ -668,18 +869,34 @@ function renderBoard(){
       </div>`;
   }).join("");
   updateBulkBar();
+  renderGlobalStats();
+}
+function renderGlobalStats(){
+  const el = document.getElementById("globalStats");
+  if (!el) return;
+  if (!state.columnsConfig){ el.innerHTML = ""; return; }
+  const records = filteredRecords();
+  const lanes = getActiveLanes();
+  const counts = lanes.map(l => ({ label:l.label, color:l.color, count: tasksForLane(records, l).length }));
+  el.innerHTML = `
+    <div class="stat-card"><div class="stat-value">${records.length}</div><div class="stat-label">Total</div></div>
+    ${counts.map(c => `<div class="stat-card"><div class="stat-value" style="color:${c.color}">${c.count}</div><div class="stat-label">${escapeHtml(c.label)}</div></div>`).join("")}
+  `;
 }
 
 function renderCard(t, lane){
   const pStyle = priorityStyle(t.Priorite);
   const deadline = gristDateToJS(t.Deadline);
-  const overdue = deadline && deadline < new Date() && lane.sortByDeadline;
+  const realLane = state.columnsConfig?.find(l => l.statut === t.Statut);
+  const overdue = deadline && deadline < new Date() && realLane?.dashCategory !== "done" && realLane?.dashCategory !== "cancelled";
   const assignees = decodeChoiceList(t.AssigneA);
   const cl = checklistProgress(t.Checklist);
   const selected = selectedTaskIds.has(t.id);
+  const blockers = activeBlockers(t);
   return `
-    <div class="card${selectMode?" select-mode-card":""}" tabindex="0" role="button" aria-label="Tâche : ${escapeHtml(t.Description||"sans titre")}" draggable="${selectMode?"false":"true"}" data-id="${t.id}" style="background:${pStyle.bg};transform:rotate(${seededRotation(t.id).toFixed(2)}deg)">
+    <div class="card${selectMode?" select-mode-card":""}" tabindex="0" role="button" aria-label="Tâche : ${escapeHtml(t.Description||"sans titre")}" draggable="${selectMode?"false":"true"}" data-id="${t.id}" style="background:${pStyle.bg};border-left-color:${lane.color};transform:rotate(${seededRotation(t.id).toFixed(2)}deg)">
       ${selectMode ? `<input type="checkbox" class="card-select-box" data-select-task="${t.id}" ${selected?"checked":""} aria-label="Sélectionner cette tâche">` : ""}
+      ${blockers.length ? `<div class="card-blocked">🔒 Bloqué par : ${blockers.map(b=>escapeHtml(b.Description||`#${b.id}`)).join(", ")}</div>` : ""}
       <div class="card-meta-row">
         <span class="badge" style="background:${pStyle.badge}">${escapeHtml(t.Priorite||"—")}</span>
         ${t.Type ? `<span class="chip">${escapeHtml(t.Type)}</span>` : ""}
@@ -694,9 +911,11 @@ function renderCard(t, lane){
 }
 
 async function handleAddCard(laneId, extraFields){
-  const lane = state.columnsConfig.find(l => l.id === laneId);
+  const lane = getActiveLanes().find(l => l.id === laneId);
   if (!lane) return;
-  const fields = { ...defaultTaskFields(lane.statut), ...(extraFields||{}) };
+  const baseStatut = lane.groupField ? state.columnsConfig[0]?.statut : lane.statut;
+  if (!baseStatut) return;
+  const fields = { ...defaultTaskFields(baseStatut), ...laneAssignFields(lane), ...(extraFields||{}) };
   const tempId = -Date.now();
   state.records.push({ id: tempId, ...fields });
   notify();
@@ -806,11 +1025,11 @@ function initBoardEvents(){
     e.preventDefault();
     zone.classList.remove("drag-over");
     const id = Number(e.dataTransfer.getData("text/plain"));
-    const lane = state.columnsConfig.find(l => l.id === zone.dataset.dropLane);
+    const lane = getActiveLanes().find(l => l.id === zone.dataset.dropLane);
     const rec = state.records.find(r => r.id === id);
     if (!lane || !rec){ dragFromLaneId = null; return; }
     const sameLane = zone.dataset.dropLane === dragFromLaneId;
-    const wasDifferent = rec.Statut !== lane.statut;
+    const wasDifferent = !laneMatchesTask(lane, rec);
     const prevFields = { Statut: rec.Statut, Ordre: rec.Ordre, Historique: rec.Historique };
 
     if (sameLane){
@@ -823,6 +1042,11 @@ function initBoardEvents(){
           writeToGrist(() => updateTaskFields(cardId, { Ordre: newOrder }), "Ordre non enregistré dans Grist.");
         }
       });
+    } else if (lane.groupField){
+      const maxOrder = state.records.filter(r => laneMatchesTask(lane, r)).reduce((m,r) => Math.max(m, r.Ordre||0), 0);
+      const fields = { ...laneAssignFields(lane), Ordre: maxOrder+10 };
+      writeToGrist(() => updateTaskFields(id, fields), "Déplacement non enregistré dans Grist.");
+      Object.assign(rec, fields);
     } else {
       const maxOrder = state.records.filter(r => r.Statut === lane.statut).reduce((m,r) => Math.max(m, r.Ordre||0), 0);
       const histLine = `${fmtDateTime(new Date())} : ${rec.Statut || "—"} → ${lane.statut}`;
@@ -837,7 +1061,7 @@ function initBoardEvents(){
       maybeSpawnRecurrence(rec, lane.dashCategory);
     }
     notify();
-    if (wasDifferent) launchEffect(lane, innerWidth/2, innerHeight/2);
+    if (wasDifferent && !lane.groupField) launchEffect(lane, innerWidth/2, innerHeight/2);
     dragFromLaneId = null;
   });
 }
@@ -951,6 +1175,13 @@ function openTaskModal(id){
       <button type="button" class="icon-btn" data-add-person="${selectId}" title="Ajouter">➕</button>
     </div>`;
 
+  const blockerOptions = state.records.filter(r => r.id !== id);
+  const currentBlockers = (t.BloquePar||"").split(",").map(s=>s.trim()).filter(Boolean);
+  const blockerSelectHtml = blockerOptions.length ? `
+    <select id="m-bloquepar" multiple size="4">
+      ${blockerOptions.map(o => `<option value="${o.id}" ${currentBlockers.includes(String(o.id))?"selected":""}>${escapeHtml(o.Description||`Tâche #${o.id}`)}</option>`).join("")}
+    </select>` : `<p style="font-size:12px;color:var(--muted);margin:0;">Aucune autre tâche disponible.</p>`;
+
   document.getElementById("taskModal").innerHTML = `
     <h2>Détail de la tâche</h2>
     ${fieldRow("Description", `<textarea id="m-desc">${escapeHtml(t.Description||"")}</textarea>`)}
@@ -959,18 +1190,22 @@ function openTaskModal(id){
       ${fieldRow("Statut", `<select id="m-statut">${opts(statutOptions, t.Statut)}</select>`)}
     </div>
     <div class="field-row">
+      ${fieldRow("Date de début", `<input type="date" id="m-datedebut" value="${toDateInputValue(gristDateToJS(t.DateDebut))}">`)}
       ${fieldRow("Deadline", `<input type="date" id="m-deadline" value="${toDateInputValue(gristDateToJS(t.Deadline))}">`)}
+    </div>
+    <div class="field-row">
       ${fieldRow("Type", `<select id="m-type"><option value="">—</option>${opts(typeOptions, t.Type)}</select>`)}
+      ${fieldRow("Récurrence", `<select id="m-recurrence">${recOpts}</select>`)}
     </div>
     <div class="field-row">
       ${fieldRow("Référence du Projet", `<input type="text" id="m-ref" value="${escapeHtml(t.RefProjet||"")}">`)}
-      ${fieldRow("Récurrence", `<select id="m-recurrence">${recOpts}</select>`)}
     </div>
     <div class="field-row">
       ${fieldRow("Assigné à", multiSelect("m-assigne", peopleList, currentAssignees))}
       ${fieldRow("Responsable", multiSelect("m-resp", peopleList, currentResp))}
     </div>
     ${fieldRow("Notes", `<textarea id="m-notes">${escapeHtml(t.Notes||"")}</textarea>`)}
+    ${fieldRow("🔒 Bloqué par (autres tâches)", blockerSelectHtml)}
     <div class="field">
       <label>Sous-tâches</label>
       ${checklistItemsHtml(modalChecklist)}
@@ -1055,12 +1290,14 @@ async function saveTaskModal(){
   const fields = {
     Description: val("m-desc"), Priorite: document.getElementById("m-priorite").value, Statut: newStatut,
     Deadline: jsDateToGristEpoch(document.getElementById("m-deadline").value),
+    DateDebut: jsDateToGristEpoch(document.getElementById("m-datedebut").value),
     Type: document.getElementById("m-type").value, RefProjet: val("m-ref"), Recurrence: document.getElementById("m-recurrence").value,
     AssigneA: encodeChoiceList([...document.getElementById("m-assigne").selectedOptions].map(o => o.value)),
     Responsable: encodeChoiceList([...document.getElementById("m-resp").selectedOptions].map(o => o.value)),
     Notes: val("m-notes"),
     Checklist: JSON.stringify(modalChecklist.filter(it => it.text.trim() !== "")),
     Historique: historique,
+    BloquePar: document.getElementById("m-bloquepar") ? [...document.getElementById("m-bloquepar").selectedOptions].map(o => o.value).join(",") : "",
   };
   await writeToGrist(() => updateTaskFields(id, fields), "Modifications non enregistrées dans Grist.");
   patchRecordLocally(id, fields);
@@ -1173,6 +1410,169 @@ function renderSettingsModal(){
   document.getElementById("lane-config-list").addEventListener("change", onFieldChange);
   document.getElementById("s-close").onclick = () => closeOverlay("settingsOverlay");
   document.getElementById("s-save").onclick = () => { setColumnsConfig(settingsWorkingCopy); saveColumnsConfig(settingsWorkingCopy); closeOverlay("settingsOverlay"); };
+}
+
+/* ===== ONGLET VUE TABLEAU ===== */
+function renderTableView(){
+  const tbody = document.getElementById("tasksTableBody");
+  let rows = filteredRecords();
+  if (state.sortBy === "priorite"){
+    const order = ["Urgent","Haute","Moyenne","Basse"];
+    rows = [...rows].sort((a,b) => order.indexOf(a.Priorite) - order.indexOf(b.Priorite));
+  } else if (state.sortBy === "deadline"){
+    rows = [...rows].sort((a,b) => (gristDateToJS(a.Deadline)??Infinity) - (gristDateToJS(b.Deadline)??Infinity));
+  }
+  const statutOptions = [...new Set((state.columnsConfig||[]).map(l=>l.statut))];
+  const priorities = Object.keys(PRIORITY_COLORS).filter(k=>k!=="__default");
+
+  tbody.innerHTML = rows.length ? rows.map(t => {
+    const lane = state.columnsConfig?.find(l=>l.statut===t.Statut);
+    const overdue = t.Deadline && gristDateToJS(t.Deadline) < new Date() && lane?.dashCategory!=="done" && lane?.dashCategory!=="cancelled";
+    return `<tr data-id="${t.id}">
+      <td><div contenteditable="true" data-tbl-field="Description" style="min-width:160px;">${escapeHtml(t.Description||"")}</div></td>
+      <td><select data-tbl-field="Statut">${statutOptions.map(s=>`<option value="${escapeHtml(s)}" ${s===t.Statut?"selected":""}>${escapeHtml(s)}</option>`).join("")}</select></td>
+      <td><select data-tbl-field="Priorite">${priorities.map(p=>`<option value="${p}" ${p===t.Priorite?"selected":""}>${p}</option>`).join("")}</select></td>
+      <td>${decodeChoiceList(t.AssigneA).map(a=>`<span class="chip">👤 ${escapeHtml(a)}</span>`).join(" ")||"—"}</td>
+      <td>${t.Type?escapeHtml(t.Type):"—"}</td>
+      <td><input type="date" data-tbl-field="Deadline" value="${toDateInputValue(gristDateToJS(t.Deadline))}" style="${overdue?'color:#c0392b;font-weight:700;':''}"></td>
+      <td><button class="icon-btn" data-tbl-open="1" title="Ouvrir">✏️</button><button class="icon-btn" data-tbl-del="1" title="Supprimer">🗑️</button></td>
+    </tr>`;
+  }).join("") : `<tr><td colspan="7" style="padding:20px;color:#888;text-align:center;">Aucune tâche.</td></tr>`;
+}
+function initTableView(){
+  const table = document.getElementById("tasksTable");
+  table.addEventListener("click", e => {
+    const row = e.target.closest("tr[data-id]");
+    if (!row) return;
+    const id = Number(row.dataset.id);
+    if (e.target.closest("[data-tbl-open]")) return openTaskModal(id);
+    if (e.target.closest("[data-tbl-del]")){
+      const t = state.records.find(r=>r.id===id);
+      if (!confirm(`Supprimer définitivement "${t?.Description||"cette tâche"}" ?`)) return;
+      writeToGrist(() => deleteTask(id), "Suppression non enregistrée dans Grist.");
+      state.records = state.records.filter(r=>r.id!==id);
+      notify();
+    }
+  });
+  table.addEventListener("change", e => {
+    const row = e.target.closest("tr[data-id]");
+    const field = e.target.dataset.tblField;
+    if (!row || !field) return;
+    const id = Number(row.dataset.id);
+    let value = e.target.value;
+    if (field === "Deadline") value = jsDateToGristEpoch(value);
+    writeToGrist(() => updateTaskFields(id, { [field]: value }), `${field} non enregistré dans Grist.`);
+    patchRecordLocally(id, { [field]: value });
+    notify();
+  });
+  table.addEventListener("focusout", e => {
+    const el = e.target.closest('[data-tbl-field="Description"]');
+    if (!el) return;
+    const id = Number(el.closest("tr").dataset.id);
+    const val = el.textContent.trim();
+    writeToGrist(() => updateTaskFields(id, { Description: val }), "Description non enregistrée dans Grist.");
+    patchRecordLocally(id, { Description: val });
+  });
+}
+
+/* ===== ONGLET GANTT ===== */
+const GANTT_DAY_WIDTH = { day:32, week:10, month:4 };
+let ganttZoom = "day";
+const addDays = (d, n) => { const r = new Date(d); r.setDate(r.getDate()+n); return r; };
+const daysBetween = (a, b) => Math.round((b-a)/86400000);
+
+function computeGanttRange(records){
+  const dates = [];
+  records.forEach(r => {
+    const start = gristDateToJS(r.DateDebut) || gristDateToJS(r.CreeLe);
+    const end = gristDateToJS(r.Deadline);
+    if (start) dates.push(start);
+    if (end) dates.push(end);
+  });
+  const today = new Date();
+  if (!dates.length) return { min: addDays(today,-7), max: addDays(today,30) };
+  let min = new Date(Math.min(...dates.map(d=>d.getTime()), today.getTime()));
+  let max = new Date(Math.max(...dates.map(d=>d.getTime()), today.getTime()));
+  return { min: addDays(min,-3), max: addDays(max,7) };
+}
+
+function renderGantt(){
+  const records = filteredRecords();
+  let rows = [...records];
+  if (state.sortBy === "priorite"){
+    const order = ["Urgent","Haute","Moyenne","Basse"];
+    rows.sort((a,b) => order.indexOf(a.Priorite) - order.indexOf(b.Priorite));
+  } else if (state.sortBy === "deadline"){
+    rows.sort((a,b) => (gristDateToJS(a.Deadline)??Infinity) - (gristDateToJS(b.Deadline)??Infinity));
+  }
+  const { min, max } = computeGanttRange(records);
+  const totalDays = Math.max(1, daysBetween(min, max));
+  const dayW = GANTT_DAY_WIDTH[ganttZoom];
+  const totalWidth = totalDays*dayW;
+  document.getElementById("ganttLabel").textContent = `${fmtDate(min)} → ${fmtDate(max)}`;
+
+  const headerMonths = [];
+  { let cur = new Date(min);
+    while (cur < max){
+      const nextMonth = new Date(cur.getFullYear(), cur.getMonth()+1, 1);
+      const segEnd = nextMonth < max ? nextMonth : max;
+      headerMonths.push({ label: cur.toLocaleDateString("fr-FR",{month:"long",year:"numeric"}), span: Math.max(1,daysBetween(cur, segEnd)) });
+      cur = segEnd;
+    }
+  }
+  const dayLabels = [];
+  { let cur = new Date(min); for (let i=0;i<totalDays;i++){ dayLabels.push(cur.getDate()); cur = addDays(cur,1); } }
+
+  const todayOffset = daysBetween(min, new Date());
+
+  const barsData = rows.map(t => {
+    const lane = state.columnsConfig?.find(l=>l.statut===t.Statut);
+    const start = gristDateToJS(t.DateDebut) || gristDateToJS(t.CreeLe) || min;
+    const end = gristDateToJS(t.Deadline) || addDays(start,1);
+    const left = Math.max(0, daysBetween(min, start)) * dayW;
+    const span = Math.max(1, daysBetween(start, end));
+    const width = Math.max(dayW, span*dayW);
+    const color = lane?.color || "#4f7cff";
+    const cl = checklistProgress(t.Checklist);
+    const progressPct = cl ? Math.round(cl.done/cl.total*100) : 0;
+    return { t, left, width, color, progressPct };
+  });
+
+  document.getElementById("ganttContent").innerHTML = `
+    <div class="gantt-header-row">
+      <div class="gantt-corner">Tâche (${rows.length})</div>
+      <div class="gantt-header-dates" style="width:${totalWidth}px;">
+        <div class="gantt-header-months">${headerMonths.map(m=>`<div style="width:${m.span*dayW}px;">${escapeHtml(m.label)}</div>`).join("")}</div>
+        <div class="gantt-header-days">${dayLabels.map(d=>`<div style="width:${dayW}px;">${dayW>=18?d:""}</div>`).join("")}</div>
+      </div>
+    </div>
+    ${barsData.length ? barsData.map(b => `
+      <div class="gantt-row">
+        <div class="gantt-label" data-gantt-task="${b.t.id}">${escapeHtml(b.t.Description||"(sans titre)")}</div>
+        <div class="gantt-track" style="width:${totalWidth}px;">
+          ${todayOffset>=0 && todayOffset<=totalDays ? `<div class="gantt-today-line" style="left:${todayOffset*dayW}px;"></div>` : ""}
+          <div class="gantt-bar" data-gantt-task="${b.t.id}" title="${escapeHtml(b.t.Description||"")}" style="left:${b.left}px;width:${b.width}px;background:${b.color}55;border-color:${b.color};">
+            <div class="gantt-bar-fill" style="width:${b.progressPct}%;background:${b.color};"></div>
+          </div>
+        </div>
+      </div>`).join("") : `<div class="gantt-row"><div class="gantt-label">Aucune tâche.</div><div class="gantt-track" style="width:${totalWidth}px;"></div></div>`}
+  `;
+}
+function initGantt(){
+  document.getElementById("ganttZoom").addEventListener("change", e => { ganttZoom = e.target.value; renderGantt(); });
+  document.getElementById("ganttPrev").onclick = () => document.getElementById("ganttOuter").scrollBy({ left:-200, behavior:"smooth" });
+  document.getElementById("ganttNext").onclick = () => document.getElementById("ganttOuter").scrollBy({ left:200, behavior:"smooth" });
+  document.getElementById("ganttToday").onclick = () => {
+    const records = filteredRecords();
+    const { min } = computeGanttRange(records);
+    const dayW = GANTT_DAY_WIDTH[ganttZoom];
+    const offset = daysBetween(min, new Date()) * dayW;
+    document.getElementById("ganttOuter").scrollTo({ left: Math.max(0, offset-150), behavior:"smooth" });
+  };
+  document.getElementById("ganttContent").addEventListener("click", e => {
+    const t = e.target.closest("[data-gantt-task]");
+    if (t) openTaskModal(Number(t.dataset.ganttTask));
+  });
 }
 
 /* ===== ONGLET CALENDRIER ===== */
@@ -1846,10 +2246,13 @@ function renderDashConfigModal(){
 let currentTab = "kanban";
 function renderTab(tab){
   if (tab === "kanban") renderBoard();
+  else if (tab === "table") renderTableView();
+  else if (tab === "gantt") renderGantt();
   else if (tab === "calendar") renderCalendar();
   else if (tab === "whiteboard"){ wbResizeCanvas(); renderWbOverlay(); }
   else if (tab === "dashboard") renderDashboard();
   refreshOverdueBadge();
+  renderGlobalStats();
 }
 function switchTab(tab){
   currentTab = tab;
@@ -1883,6 +2286,11 @@ initBulkBar();
 initTaskModalEvents();
 initFiltersBar();
 initCalendar();
+initTableView();
+initGantt();
+initAlerts();
+initThemeToggle();
+document.getElementById("btnGlobalExportCsv").onclick = exportCsv;
 initWhiteboard();
 initDashboard();
 updateWbToolbarUI();
