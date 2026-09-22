@@ -110,6 +110,2330 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .card input[type=date]{font-family:inherit;font-size:11px;border:none;background:rgba(255,255,255,.55);border-radius:5px;padding:2px 3px;cursor:pointer;color:#222;}
 .deadline-row{display:flex;align-items:center;gap:4px;font-size:11px;color:#3a3a3a;}
 .deadline-row.overdue{color:#b3261e;font-weight:700;}
+
+/* Modales */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:center;justify-content:center;z-index:50;}
+.overlay.hidden{display:none;}
+.modal{background:#fff;border-radius:12px;width:520px;max-width:92vw;max-height:88vh;overflow-y:auto;padding:18px 20px;box-shadow:0 10px 30px rgba(0,0,0,.3);}
+.modal h2{margin:0 0 14px;font-size:16px;}
+.field{margin-bottom:12px;}
+.field label{display:block;font-size:11.5px;color:var(--muted);margin-bottom:3px;font-weight:600;}
+.field textarea,.field input,.field select{width:100%;padding:7px 8px;border:1px solid #d7dae0;border-radius:7px;font-size:13px;font-family:inherit;}
+.field textarea{min-height:60px;resize:vertical;}
+.field-row{display:flex;gap:10px;}
+.field-row .field{flex:1;}
+.modal-footer{display:flex;justify-content:space-between;margin-top:16px;gap:8px;flex-wrap:wrap;}
+.meta-readonly{font-size:11px;color:var(--muted);margin-top:10px;border-top:1px solid #eee;padding-top:8px;white-space:pre-line;}
+.meta-readonly.scroll{max-height:80px;overflow-y:auto;}
+.checklist-item{display:flex;align-items:center;gap:6px;margin-bottom:4px;}
+.checklist-item input[type=text]{flex:1;padding:5px 6px;font-size:12.5px;border:1px solid #ddd;border-radius:6px;}
+.lane-config-row{display:flex;align-items:center;gap:6px;padding:6px;border:1px solid #eee;border-radius:8px;margin-bottom:6px;flex-wrap:wrap;}
+.lane-config-row input[type=text]{flex:1;min-width:70px;padding:5px 6px;border:1px solid #ddd;border-radius:6px;font-size:12px;}
+.lane-config-row input[type=color]{width:30px;height:26px;border:none;padding:0;background:none;}
+.lane-config-row select{font-size:11px;padding:3px 4px;border:1px solid #ddd;border-radius:6px;}
+.icon-btn{background:none;border:none;cursor:pointer;font-size:15px;color:#666;padding:2px 5px;}
+.warning-banner{background:#fff4e5;color:#8a5a00;border:1px solid #f3d19e;border-radius:8px;padding:8px 10px;margin-bottom:8px;font-size:12px;}
+#confetti-canvas{position:fixed;inset:0;pointer-events:none;z-index:99;}
+.hidden{display:none !important;}
+.tpl-row{display:flex;align-items:center;gap:8px;padding:6px;border:1px solid #eee;border-radius:8px;margin-bottom:6px;}
+.tpl-row span{flex:1;font-size:13px;}
+
+/* Calendrier */
+#calLabel{font-weight:600;font-size:14px;min-width:130px;text-align:center;}
+#calendarGrid{flex:1;overflow-y:auto;padding:10px;}
+.cal-weekdays{display:grid;grid-template-columns:repeat(7,1fr);font-size:11px;color:var(--muted);text-align:center;margin-bottom:4px;}
+.cal-days{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;}
+.cal-day{background:#fff;border-radius:8px;min-height:74px;padding:4px;font-size:11px;}
+.cal-day.muted{background:transparent;color:#bbb;}
+.cal-day.today{outline:2px solid var(--accent);}
+.cal-day.drag-over{outline:2px dashed var(--accent);}
+.cal-daynum{font-weight:600;font-size:11px;}
+.cal-day-tasks{display:flex;flex-direction:column;gap:2px;margin-top:3px;}
+.cal-task{color:#fff;border-radius:4px;padding:1px 4px;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:grab;}
+.cal-task-ghost{cursor:pointer;font-weight:600;}
+.cal-more{font-size:10px;color:var(--muted);}
+.cal-week .cal-day{min-height:220px;}
+
+/* Gantt */
+#ganttOuter{flex:1;overflow:auto;position:relative;background:#fff;}
+#ganttContent{display:inline-block;min-width:100%;}
+.gantt-header-row{display:flex;position:sticky;top:0;z-index:3;background:#fff;}
+.gantt-corner{position:sticky;left:0;z-index:4;background:#fff;border-right:1px solid #e5e5e5;border-bottom:1px solid #e5e5e5;min-width:190px;max-width:190px;padding:6px 8px;font-size:11px;font-weight:700;color:var(--muted);display:flex;align-items:center;}
+.gantt-header-dates{display:flex;flex-direction:column;border-bottom:1px solid #e5e5e5;}
+.gantt-header-months{display:flex;font-size:10.5px;color:var(--muted);border-bottom:1px solid #f0f0f0;}
+.gantt-header-months>div{padding:2px 4px;border-right:1px solid #f0f0f0;white-space:nowrap;overflow:hidden;text-transform:capitalize;box-sizing:border-box;}
+.gantt-header-days{display:flex;font-size:9.5px;color:#999;}
+.gantt-header-days>div{text-align:center;border-right:1px solid #f5f5f5;flex:none;box-sizing:border-box;}
+.gantt-row{display:flex;border-bottom:1px solid #f0f0f0;}
+.gantt-label{position:sticky;left:0;z-index:2;background:#fff;min-width:190px;max-width:190px;padding:6px 8px;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-right:1px solid #e5e5e5;cursor:pointer;display:flex;align-items:center;height:34px;box-sizing:border-box;}
+.gantt-track{position:relative;height:34px;flex:none;}
+.gantt-bar{position:absolute;top:6px;height:22px;border-radius:5px;cursor:pointer;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.25);border:1px solid rgba(0,0,0,.08);}
+.gantt-bar-fill{height:100%;opacity:.9;}
+.gantt-today-line{position:absolute;top:0;bottom:0;width:2px;background:#c0392b;z-index:1;}
+
+/* Whiteboard */
+.wb-swatch{width:22px;height:22px;border-radius:50%;border:2px solid transparent;cursor:pointer;padding:0;}
+.wb-swatch.active{border-color:#333;}
+.wb-tool.active{background:#dbe3f5;border-radius:8px;}
+#wbCanvasWrap{flex:1;position:relative;background:#fff;overflow:auto;}
+#wbZoomLayer{position:relative;transform-origin:0 0;}
+#wbCanvas{position:absolute;top:0;left:0;touch-action:none;}
+#wbOverlay{position:absolute;top:0;left:0;pointer-events:none;}
+.wb-el{position:absolute;box-sizing:border-box;pointer-events:auto;}
+.wb-el.selected{outline:2px dashed #4f7cff;outline-offset:2px;}
+.wb-shape-inner{width:100%;height:100%;box-sizing:border-box;background:transparent;pointer-events:none;}
+.wb-el[data-type="text"],.wb-el[data-type="sticky"]{display:flex;flex-direction:column;}
+.wb-draghandle{height:12px;flex:none;background:rgba(0,0,0,.08);border-radius:4px 4px 0 0;cursor:move;font-size:9px;text-align:center;line-height:12px;color:#777;user-select:none;}
+.wb-content{flex:1;min-height:0;width:100%;box-sizing:border-box;outline:none;overflow:auto;font-size:13px;padding:4px;cursor:text;background:transparent;}
+.wb-sticky-content{padding:8px;box-shadow:0 3px 8px rgba(0,0,0,.18);border-radius:0 0 4px 4px;font-family:'Segoe Print','Bradley Hand',cursive,'Segoe UI',sans-serif;}
+.wb-del,.wb-resize{position:absolute;display:none;align-items:center;justify-content:center;width:18px;height:18px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,.3);font-size:11px;cursor:pointer;z-index:5;}
+.wb-el.selected .wb-del,.wb-el.selected .wb-resize{display:flex;}
+.wb-del{top:-9px;right:-9px;color:#c0392b;}
+.wb-resize{bottom:-9px;right:-9px;cursor:nwse-resize;color:#555;}
+.wb-resize::after{content:'⤡';}
+#wbZoomLabel{font-size:11.5px;min-width:38px;text-align:center;}
+
+/* Tableau de bord */
+#dashboardGrid{flex:1;overflow-y:auto;padding:14px;display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;align-content:start;}
+.dash-module{background:#fff;border-radius:12px;padding:14px;box-shadow:var(--shadow);}
+.dash-module h3{margin:0 0 10px;font-size:13px;color:#444;}
+.dash-module.full{grid-column:1/-1;}
+.kpi-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(90px,1fr));gap:10px;}
+.kpi-card{background:#f7f8fa;border-radius:10px;padding:10px;text-align:center;}
+.kpi-value{font-size:22px;font-weight:800;}
+.kpi-label{font-size:10.5px;color:var(--muted);margin-top:2px;}
+.donut-wrap{display:flex;gap:14px;align-items:center;flex-wrap:wrap;}
+.donut-legend{font-size:11.5px;display:flex;flex-direction:column;gap:4px;}
+.donut-legend-dot{width:9px;height:9px;border-radius:50%;display:inline-block;margin-right:5px;}
+.bar-row{margin-bottom:6px;}
+.bar-track{background:#eee;border-radius:6px;overflow:hidden;height:10px;}
+.bar-fill{height:100%;}
+.dash-config-row{display:flex;align-items:center;gap:8px;padding:6px;border:1px solid #eee;border-radius:8px;margin-bottom:6px;}
+
+@media print{
+  #toolbar,.sub-toolbar,#confetti-canvas{display:none !important;}
+  #app,.view{overflow:visible !important;height:auto !important;}
+  #dashboardGrid{display:block !important;}
+  .dash-module{page-break-inside:avoid;margin-bottom:14px;box-shadow:none;border:1px solid #ddd;}
+  body{overflow:visible !important;}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="toolbar">
+    <h1>🗂️ Kanban</h1>
+    <span id="overdueBadge" class="hidden" title="Tâches en retard"></span>
+    <div id="tabBar" role="tablist">
+      <button class="tab-btn" data-tab="dashboard" role="tab">📊 Tableau de bord</button>
+      <button class="tab-btn active" data-tab="kanban" role="tab" aria-selected="true">🗂️ Kanban</button>
+      <button class="tab-btn" data-tab="table" role="tab">📋 Tableau</button>
+      <button class="tab-btn" data-tab="gantt" role="tab">📈 Gantt</button>
+      <button class="tab-btn" data-tab="calendar" role="tab">📅 Calendrier</button>
+      <button class="tab-btn" data-tab="whiteboard" role="tab">🖌️ Whiteboard</button>
+    </div>
+    <span id="syncIndicator" class="hidden">⏳ Sync…</span>
+    <div id="alertsWrap" style="position:relative;">
+      <button class="icon-btn" id="btnAlerts" title="Rappels" aria-label="Rappels">🔔<span id="alertsBadge" class="alerts-badge hidden"></span></button>
+      <div id="alertsPanel" class="alerts-panel hidden"></div>
+    </div>
+    <button class="icon-btn" id="btnThemeToggle" title="Basculer mode sombre/clair" aria-label="Basculer mode sombre/clair">🌙</button>
+    <button class="icon-btn" id="btnGlobalExportCsv" title="Exporter en CSV" aria-label="Exporter en CSV">⬇️</button>
+  </div>
+  <div id="globalStats" class="sub-toolbar"></div>
+
+  <!-- Onglet Tableau de bord -->
+  <div id="view-dashboard" class="view hidden">
+    <div class="sub-toolbar">
+      <button class="btn secondary" id="btnDashExport">⬇️ Export CSV</button>
+      <button class="btn secondary" id="btnDashPrint">🖨️ Imprimer / PDF</button>
+      <button class="btn secondary" id="btnDashConfig">⚙️ Personnaliser</button>
+    </div>
+    <div id="dashboardGrid"></div>
+  </div>
+
+  <div id="view-kanban" class="view">
+    <div class="sub-toolbar">
+      <input type="search" id="fSearch" placeholder="🔍 Rechercher…" aria-label="Rechercher une tâche">
+      <select id="fAssignee" aria-label="Filtrer par assigné"><option value="">Assigné à : tous</option></select>
+      <select id="fPriorite" aria-label="Filtrer par priorité"><option value="">Priorité : toutes</option></select>
+      <select id="fType" aria-label="Filtrer par type"><option value="">Type : tous</option></select>
+      <select id="fSortBy" aria-label="Trier par"><option value="default">Trier : Par défaut</option><option value="priorite">Trier : Priorité</option><option value="deadline">Trier : Deadline</option></select>
+      <select id="fGroupBy" aria-label="Grouper par"><option value="statut">Grouper : Statut</option><option value="priorite">Grouper : Priorité</option><option value="type">Grouper : Type</option></select>
+      <button class="btn secondary" id="btnToggleView" title="Basculer vue colonnes / liste">📱</button>
+      <button class="btn secondary" id="btnSelectMode" title="Sélection multiple">☑️</button>
+      <button class="btn secondary" id="btnTemplates" title="Modèles de tâches">📑 Modèles</button>
+      <button class="btn secondary" id="btnExportCsv">⬇️ Export CSV</button>
+      <button class="btn secondary" id="btnSettings">⚙️ Colonnes</button>
+      <button class="btn" id="btnNewCard">+ Nouvelle tâche</button>
+    </div>
+    <div id="bulkBar" class="sub-toolbar hidden">
+      <span id="bulkCount"></span>
+      <select id="bulkMoveTo"><option value="">Déplacer vers…</option></select>
+      <button class="btn danger" id="bulkDelete">🗑️ Supprimer la sélection</button>
+      <button class="btn secondary" id="bulkCancel">Annuler</button>
+    </div>
+    <div id="board"></div>
+  </div>
+
+  <!-- Onglet Vue Tableau -->
+  <div id="view-table" class="view hidden">
+    <div class="sub-toolbar">
+      <span style="font-size:12px;color:var(--muted);">Édition directe dans les cellules — les filtres du Kanban s'appliquent aussi ici.</span>
+    </div>
+    <div style="flex:1;overflow:auto;padding:10px;">
+      <table id="tasksTable">
+        <thead>
+          <tr>
+            <th>Tâche</th><th>Statut</th><th>Priorité</th><th>Assigné à</th><th>Type</th><th>Échéance</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tasksTableBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Onglet Gantt -->
+  <div id="view-gantt" class="view hidden">
+    <div class="sub-toolbar">
+      <button class="icon-btn" id="ganttPrev" aria-label="Défiler vers la gauche">◀</button>
+      <button class="btn secondary" id="ganttToday">Aujourd'hui</button>
+      <button class="icon-btn" id="ganttNext" aria-label="Défiler vers la droite">▶</button>
+      <span id="ganttLabel" style="font-size:12px;color:var(--muted);"></span>
+      <select id="ganttZoom" aria-label="Niveau de zoom">
+        <option value="day">Jours</option>
+        <option value="week">Semaines</option>
+        <option value="month">Mois</option>
+      </select>
+    </div>
+    <div id="ganttOuter"><div id="ganttContent"></div></div>
+  </div>
+
+  <!-- Onglet Calendrier -->
+  <div id="view-calendar" class="view hidden">
+    <div class="sub-toolbar">
+      <button class="icon-btn" id="calPrev" aria-label="Mois/semaine précédent">◀</button>
+      <span id="calLabel"></span>
+      <button class="icon-btn" id="calNext" aria-label="Mois/semaine suivant">▶</button>
+      <button class="btn secondary" id="calToday">Aujourd'hui</button>
+      <button class="btn secondary" id="calViewToggle">Vue : Mois</button>
+    </div>
+    <div id="calendarGrid"></div>
+  </div>
+
+  <!-- Onglet Whiteboard -->
+  <div id="view-whiteboard" class="view hidden">
+    <div class="sub-toolbar" id="wbToolbar">
+      <button class="icon-btn wb-tool active" data-wb-tool="pen" title="Stylo">✏️</button>
+      <button class="icon-btn wb-tool" data-wb-tool="eraser" title="Gomme">🧹</button>
+      <button class="icon-btn wb-tool" data-wb-tool="rect" title="Rectangle">⬜</button>
+      <button class="icon-btn wb-tool" data-wb-tool="ellipse" title="Ellipse">⚪</button>
+      <button class="icon-btn wb-tool" data-wb-tool="arrow" title="Flèche">➡️</button>
+      <button class="icon-btn wb-tool" data-wb-tool="text" title="Texte">🔤</button>
+      <button class="icon-btn wb-tool" data-wb-tool="sticky" title="Post-it">🗒️</button>
+      <button class="icon-btn wb-tool" data-wb-tool="select" title="Sélectionner / déplacer">🖱️</button>
+      <span style="width:1px;height:20px;background:#ddd;"></span>
+      <button class="wb-swatch active" data-wb-color="#222222" style="background:#222222" title="Noir"></button>
+      <button class="wb-swatch" data-wb-color="#e63946" style="background:#e63946" title="Rouge"></button>
+      <button class="wb-swatch" data-wb-color="#2a9d8f" style="background:#2a9d8f" title="Vert"></button>
+      <button class="wb-swatch" data-wb-color="#4f7cff" style="background:#4f7cff" title="Bleu"></button>
+      <button class="wb-swatch" data-wb-color="#f4a300" style="background:#f4a300" title="Orange"></button>
+      <label style="font-size:11.5px;display:flex;align-items:center;gap:4px;">Épaisseur <input type="range" id="wbSize" min="1" max="24" value="3"></label>
+      <button class="icon-btn" id="wbZoomOut" title="Zoom arrière">➖</button>
+      <span id="wbZoomLabel">100%</span>
+      <button class="icon-btn" id="wbZoomIn" title="Zoom avant">➕</button>
+      <button class="btn secondary" id="wbClear">🗑️ Tout effacer</button>
+    </div>
+    <div id="wbCanvasWrap"><div id="wbZoomLayer"><canvas id="wbCanvas"></canvas><div id="wbOverlay"></div></div></div>
+  </div>
+</div>
+
+<div class="overlay hidden" id="taskOverlay"><div class="modal" id="taskModal" role="dialog" aria-modal="true"></div></div>
+<div class="overlay hidden" id="settingsOverlay"><div class="modal" id="settingsModal" role="dialog" aria-modal="true"></div></div>
+<div class="overlay hidden" id="dashConfigOverlay"><div class="modal" id="dashConfigModal" role="dialog" aria-modal="true"></div></div>
+<div class="overlay hidden" id="templatesOverlay"><div class="modal" id="templatesModal" role="dialog" aria-modal="true"></div></div>
+<canvas id="confetti-canvas"></canvas>
+
+<script>
+/* ===== CONFIG (données statiques) ===== */
+const REQUIRED_COLUMNS = [
+  { name:"Description", type:"Text" },
+  { name:"Priorite", title:"Priorité", type:"Choice" },
+  { name:"Deadline", type:"DateTime", optional:true },
+  { name:"Statut", type:"Choice" },
+  { name:"AssigneA", title:"Assigné à", type:"ChoiceList", optional:true },
+  { name:"Type", type:"Choice", optional:true },
+  { name:"Notes", type:"Text", optional:true },
+  { name:"Responsable", type:"ChoiceList", optional:true },
+  { name:"CreeLe", title:"Créé le", type:"DateTime", optional:true },
+  { name:"DerniereMaj", title:"Dernière mise à jour", type:"DateTime", optional:true },
+  { name:"Historique", title:"Historique des changements", type:"Text", optional:true },
+  { name:"Ordre", title:"Ordre (tri manuel)", type:"Numeric", optional:true },
+  { name:"Checklist", title:"Sous-tâches (JSON)", type:"Text", optional:true },
+  { name:"Recurrence", title:"Récurrence", type:"Choice", optional:true },
+  { name:"BloquePar", title:"Bloqué par (ids)", type:"Text", optional:true },
+  { name:"DateDebut", title:"Date de début", type:"Date", optional:true },
+];
+const PRIORITY_COLORS = {
+  Urgent:{bg:"#ffd3d3",badge:"#c0392b"}, Haute:{bg:"#ffe3bd",badge:"#d9822b"},
+  Moyenne:{bg:"#fff6b8",badge:"#c9a400"}, Basse:{bg:"#d9f5d6",badge:"#3a9d4c"},
+  __default:{bg:"#f3f0e6",badge:"#8a8a8a"},
+};
+const RECURRENCE_LABELS = { none:"Aucune", daily:"Quotidienne", weekly:"Hebdomadaire", monthly:"Mensuelle" };
+// Effets déclenchables quand une tâche arrive dans une colonne. "confetti" a un rendu
+// dédié (canvas) ; "custom" utilise un émoji libre (lane.customEmoji) ; les autres sont
+// des émojis prédéfinis animés (voir launchEmojiBurst).
+const EFFECTS = {
+  none:     { label: "Aucun" },
+  confetti: { label: "🎉 Confettis" },
+  clap:     { label: "👏🏾 Applaudissements", emoji: "👏🏾" },
+  boom:     { label: "💥 Boom", emoji: "💥" },
+  sparkles: { label: "✨ Étincelles", emoji: "✨" },
+  party:    { label: "🥳 Fête", emoji: "🥳" },
+  fire:     { label: "🔥 Feu", emoji: "🔥" },
+  rocket:   { label: "🚀 Fusée", emoji: "🚀" },
+  custom:   { label: "🖊️ Personnalisé…" },
+};
+const cid = () => "c" + Math.random().toString(36).slice(2, 9);
+const defaultColumnsConfig = () => [
+  { id:cid(), label:"À faire",    statut:"À faire",    color:"#8a8f98", sortByDeadline:true,  effect:"none",     collapsedByDefault:false, dashCategory:"todo" },
+  { id:cid(), label:"En cours",   statut:"En cours",   color:"#4f7cff", sortByDeadline:true,  effect:"none",     collapsedByDefault:false, dashCategory:"doing" },
+  { id:cid(), label:"En attente", statut:"En attente", color:"#d9822b", sortByDeadline:true,  effect:"none",     collapsedByDefault:false, dashCategory:"todo" },
+  { id:cid(), label:"Terminé",    statut:"Terminé",    color:"#3a9d4c", sortByDeadline:false, effect:"confetti", collapsedByDefault:false, dashCategory:"done" },
+  { id:cid(), label:"Annulé",     statut:"Annulé",     color:"#b3261e", sortByDeadline:false, effect:"none",     collapsedByDefault:true,  dashCategory:"cancelled" },
+];
+// Compatibilité avec les configs déjà enregistrées (ancien champ booléen `confetti`, absence de `dashCategory`)
+const normalizeColumnsConfig = cfg => cfg.map(l => ({
+  ...l,
+  effect: l.effect ?? (l.confetti ? "confetti" : "none"),
+  dashCategory: l.dashCategory ?? "todo",
+}));
+const DASHBOARD_MODULES = {
+  kpis:         { label: "Indicateurs clés" },
+  donutStatut:  { label: "Répartition par statut" },
+  barsPriorite: { label: "Répartition par priorité" },
+  teamLoad:     { label: "Charge de l'équipe" },
+  evolution:    { label: "Évolution (8 semaines)", full:true },
+  deadlines:    { label: "Échéances", full:true },
+};
+const defaultDashboardLayout = () => Object.keys(DASHBOARD_MODULES).map(id => ({ id, visible:true }));
+const defaultTaskTemplates = () => [];
+
+/* ===== DOMAINE (logique pure, aucune dépendance DOM/Grist) ===== */
+const gristDateToJS = v => v == null || v === "" ? null : (typeof v === "number" ? new Date(v*1000) : (isNaN(new Date(v)) ? null : new Date(v)));
+const jsDateToGristEpoch = s => s ? Math.floor(new Date(s+"T00:00:00Z").getTime()/1000) : null;
+const nowEpoch = () => Math.floor(Date.now()/1000);
+const fmtDate = d => d ? d.toLocaleDateString("fr-FR",{day:"2-digit",month:"2-digit",year:"2-digit"}) : "";
+const fmtDateTime = d => d ? d.toLocaleString("fr-FR",{day:"2-digit",month:"2-digit",year:"2-digit",hour:"2-digit",minute:"2-digit"}) : "";
+const toDateInputValue = d => d ? `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}` : "";
+const decodeChoiceList = v => Array.isArray(v) ? (v[0]==="L" ? v.slice(1) : v) : (typeof v==="string" && v ? v.split(",").map(s=>s.trim()).filter(Boolean) : []);
+const encodeChoiceList = arr => ["L", ...arr];
+const priorityStyle = p => PRIORITY_COLORS[p] || PRIORITY_COLORS.__default;
+const seededRotation = id => {
+  const n = typeof id==="number" ? id : String(id).split("").reduce((a,c)=>a+c.charCodeAt(0),0);
+  return ((n % 9) - 4) * 0.5;
+};
+const parseChecklist = raw => { try{ const a = JSON.parse(raw||"[]"); return Array.isArray(a) ? a : []; }catch{ return []; } };
+const checklistProgress = raw => { const items = parseChecklist(raw); return items.length ? { done: items.filter(i=>i.done).length, total: items.length } : null; };
+function addInterval(date, recurrence){
+  const d = new Date(date);
+  if (recurrence === "daily") d.setDate(d.getDate()+1);
+  else if (recurrence === "weekly") d.setDate(d.getDate()+7);
+  else if (recurrence === "monthly") d.setMonth(d.getMonth()+1);
+  return d;
+}
+// Regroupement dynamique du Kanban : par défaut les colonnes = vos Statuts configurés
+// (⚙️ Colonnes), mais on peut aussi regrouper à la volée par Priorité ou par Type.
+// laneMatchesTask/laneAssignFields abstraient cette différence pour le reste du code.
+const GROUP_PALETTE = ["#4f7cff","#e07856","#3a9d4c","#a05fd1","#c9a400","#2aa9a0","#c0567a","#6c7a89"];
+function getActiveLanes(){
+  if (!state.groupBy || state.groupBy === "statut") return state.columnsConfig || [];
+  const field = state.groupBy === "priorite" ? "Priorite" : "Type";
+  const values = new Set();
+  filteredRecords().forEach(r => values.add(r[field] || "(Aucun)"));
+  let ordered;
+  if (field === "Priorite"){
+    const order = ["Urgent","Haute","Moyenne","Basse","(Aucun)"];
+    ordered = order.filter(v => values.has(v));
+  } else {
+    ordered = [...values].sort((a,b) => a==="(Aucun)" ? 1 : (b==="(Aucun)" ? -1 : a.localeCompare(b,"fr")));
+  }
+  return ordered.map((v,i) => ({
+    id: `grp__${field}__${v}`, label: v, groupField: field, groupValue: v,
+    color: field==="Priorite" ? priorityStyle(v==="(Aucun)"?"":v).badge : GROUP_PALETTE[i%GROUP_PALETTE.length],
+    sortByDeadline:false, effect:"none",
+  }));
+}
+function laneMatchesTask(lane, t){
+  if (lane.groupField) return (t[lane.groupField] || "(Aucun)") === lane.groupValue;
+  return (t.Statut||"") === lane.statut;
+}
+function laneAssignFields(lane){
+  if (lane.groupField) return { [lane.groupField]: lane.groupValue === "(Aucun)" ? "" : lane.groupValue };
+  return { Statut: lane.statut };
+}
+// Règle métier : tri par deadline sur les colonnes actives ; sur les colonnes non
+// triées par deadline, on respecte l'ordre manuel (glisser-déposer) dès qu'il existe,
+// sinon on retombe sur un tri par dernière mise à jour décroissante. Le sélecteur
+// "Trier par" (state.sortBy) permet de forcer un tri global (Priorité/Deadline).
+function tasksForLane(records, lane){
+  const list = records.filter(r => laneMatchesTask(lane, r));
+  if (state.sortBy === "priorite"){
+    const order = ["Urgent","Haute","Moyenne","Basse"];
+    list.sort((a,b) => order.indexOf(a.Priorite) - order.indexOf(b.Priorite));
+    return list;
+  }
+  const effectiveSortByDeadline = state.sortBy === "deadline" ? true : lane.sortByDeadline;
+  if (effectiveSortByDeadline){
+    list.sort((a,b) => (gristDateToJS(a.Deadline) ?? Infinity) - (gristDateToJS(b.Deadline) ?? Infinity));
+  } else if (list.some(r => r.Ordre != null)){
+    list.sort((a,b) => (a.Ordre ?? Infinity) - (b.Ordre ?? Infinity));
+  } else {
+    list.sort((a,b) => (gristDateToJS(b.DerniereMaj)||0) - (gristDateToJS(a.DerniereMaj)||0));
+  }
+  return list;
+}
+const defaultTaskFields = statut => ({ Description:"Nouvelle tâche", Priorite:"Moyenne", Statut:statut, CreeLe:nowEpoch(), DerniereMaj:nowEpoch() });
+
+/* ===== INFRASTRUCTURE (seules fonctions qui touchent `grist`/`localStorage`) ===== */
+let gristAvailable = true;
+let colMappings = null; // { NomLogique: "vrai_id_colonne_grist", ... }
+
+function initGrist({ onRecordsChange, onOptionsChange, onUnavailable }){
+  try{
+    grist.ready({ columns: REQUIRED_COLUMNS, allowSelectBy: true, requiredAccess: "full" });
+    grist.onRecords((records, mappings) => {
+      colMappings = mappings;
+      onRecordsChange(records.map(r => ({ ...grist.mapColumnNames(r, mappings), id: r.id })));
+    });
+    grist.onOptions(options => onOptionsChange(options || {}));
+  }catch(e){
+    gristAvailable = false;
+    console.warn("Grist indisponible, mode démo local.", e);
+    onUnavailable?.(e);
+  }
+}
+// Traduit { NomLogique: valeur } -> { vrai_id_colonne: valeur } grâce aux mappings
+// fournis par Grist. Une colonne optionnelle non mappée par l'utilisateur est
+// simplement omise (au lieu d'envoyer un identifiant invalide côté Grist).
+function toRealFields(fields){
+  if (!colMappings) return fields;
+  const out = {};
+  for (const [key, value] of Object.entries(fields)){
+    const realKey = colMappings[key];
+    if (realKey) out[realKey] = value;
+  }
+  return out;
+}
+async function updateTaskFields(rowId, fields){
+  const payload = { ...fields, DerniereMaj: nowEpoch() };
+  if (!gristAvailable) throw new Error("Grist indisponible");
+  await grist.selectedTable.update({ id: rowId, fields: toRealFields(payload) });
+}
+async function createTask(fields){
+  if (!gristAvailable) throw new Error("Grist indisponible");
+  return grist.selectedTable.create({ fields: toRealFields(fields) });
+}
+async function deleteTask(rowId){
+  if (!gristAvailable) throw new Error("Grist indisponible");
+  await grist.selectedTable.destroy(rowId);
+}
+function makeLocalStore(key){
+  return {
+    load: () => { try{ return JSON.parse(localStorage.getItem(key)); }catch{ return null; } },
+    save: v => { try{ localStorage.setItem(key, JSON.stringify(v)); }catch{} },
+  };
+}
+const columnsStore = makeLocalStore("kanban_columns_fallback");
+const dashboardStore = makeLocalStore("kanban_dashboard_layout_fallback");
+const whiteboardStore = makeLocalStore("kanban_whiteboard_fallback");
+const templatesStore = makeLocalStore("kanban_templates_fallback");
+function saveColumnsConfig(cfg){ columnsStore.save(cfg); if (gristAvailable){ try{ grist.setOption("kanbanColumns", cfg); }catch(e){ console.error(e); } } }
+function saveDashboardLayout(cfg){ dashboardStore.save(cfg); if (gristAvailable){ try{ grist.setOption("dashboardLayout", cfg); }catch(e){ console.error(e); } } }
+function saveWhiteboardData(data){ whiteboardStore.save(data); if (gristAvailable){ try{ grist.setOption("whiteboardData", data); }catch(e){ console.error(e); } } }
+function saveTemplates(list){ templatesStore.save(list); if (gristAvailable){ try{ grist.setOption("taskTemplates", list); }catch(e){ console.error(e); } } }
+
+/* ===== ÉTAT (store observable) ===== */
+const state = {
+  records:[], columnsConfig:null, dashboardLayout:null, taskTemplates:null, collapsed:new Set(), editingId:null,
+  filters:{ search:"", assignee:"", priorite:"", type:"" },
+  sortBy:"default", groupBy:"statut",
+};
+const listeners = [];
+const subscribe = fn => listeners.push(fn);
+const notify = () => listeners.forEach(fn => fn());
+function setRecords(records){ state.records = records; notify(); }
+function setColumnsConfig(cfg){
+  state.columnsConfig = normalizeColumnsConfig(cfg);
+  state.columnsConfig.forEach(c => c.collapsedByDefault && state.collapsed.add(c.id));
+  notify();
+}
+function setDashboardLayout(cfg){ state.dashboardLayout = cfg; notify(); }
+function setTaskTemplates(list){ state.taskTemplates = list; notify(); }
+function patchRecordLocally(id, fields){ Object.assign(state.records.find(r=>r.id===id) || {}, fields); }
+function filteredRecords(){
+  const f = state.filters;
+  return state.records.filter(r => {
+    if (f.search){
+      const q = f.search.toLowerCase();
+      if (!`${r.Description||""} ${r.Notes||""}`.toLowerCase().includes(q)) return false;
+    }
+    if (f.priorite && r.Priorite !== f.priorite) return false;
+    if (f.type && r.Type !== f.type) return false;
+    if (f.assignee && !decodeChoiceList(r.AssigneA).includes(f.assignee)) return false;
+    return true;
+  });
+}
+
+/* ===== UI (rendu + interactions) ===== */
+const escapeHtml = str => String(str ?? "").replace(/[&<>"']/g, s => ({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[s]));
+const fieldRow = (label, html) => `<div class="field"><label>${label}</label>${html}</div>`;
+const openOverlay = id => document.getElementById(id).classList.remove("hidden");
+const closeOverlay = id => document.getElementById(id).classList.add("hidden");
+function anyOverlayOpen(){ return ["taskOverlay","settingsOverlay","dashConfigOverlay","templatesOverlay"].some(id => !document.getElementById(id).classList.contains("hidden")); }
+function closeAllOverlays(){
+  closeOverlay("taskOverlay"); closeOverlay("settingsOverlay"); closeOverlay("dashConfigOverlay"); closeOverlay("templatesOverlay");
+}
+function showToast(msg){
+  let t = document.getElementById("toast");
+  if (!t){
+    t = document.createElement("div");
+    t.id = "toast";
+    t.style.cssText = "position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:#c0392b;color:#fff;padding:9px 16px;border-radius:8px;font-size:12.5px;z-index:200;box-shadow:0 4px 12px rgba(0,0,0,.3);transition:opacity .3s;max-width:80vw;text-align:center;";
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = "1";
+  clearTimeout(t._timeout);
+  t._timeout = setTimeout(() => { t.style.opacity = "0"; }, 4500);
+}
+// Point d'écriture générique : factorise essai/erreur/toast/indicateur de synchronisation.
+let pendingWrites = 0;
+function updateSyncIndicator(){ document.getElementById("syncIndicator").classList.toggle("hidden", pendingWrites === 0); }
+async function writeToGrist(action, errorMsg){
+  pendingWrites++; updateSyncIndicator();
+  try{ return await action(); }
+  catch(e){ console.error(errorMsg, e); showToast(`⚠️ ${errorMsg}`); return undefined; }
+  finally{ pendingWrites--; updateSyncIndicator(); }
+}
+
+// -- Undo limité aux actions les plus destructrices (suppression de tâche, déplacement
+//    de carte, "tout effacer" du whiteboard) : pas d'historique granulaire par champ. --
+let undoStack = [];
+function pushUndo(fn){ undoStack.push(fn); if (undoStack.length > 20) undoStack.shift(); }
+function performUndo(){
+  const fn = undoStack.pop();
+  if (fn) { fn(); showToast("↩️ Action annulée."); }
+  else showToast("Rien à annuler.");
+}
+
+function launchConfetti(x, y){
+  const canvas = document.getElementById("confetti-canvas");
+  canvas.width = innerWidth; canvas.height = innerHeight;
+  const ctx = canvas.getContext("2d");
+  const colors = ["#ff595e","#ffca3a","#8ac926","#1982c4","#6a4c93"];
+  const LIFE = 300;
+  const particles = Array.from({length:90}, () => ({
+    x, y, vx:(Math.random()-.5)*4, vy:Math.random()*-6-3, size:Math.random()*6+4,
+    color: colors[Math.random()*colors.length|0], rot:Math.random()*360, vr:(Math.random()-.5)*6, life:0,
+  }));
+  (function step(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    let alive = false;
+    for (const p of particles){
+      p.vy += .05; p.vx *= .995; p.x += p.vx; p.y += p.vy; p.rot += p.vr; p.life++;
+      if (p.life < LIFE){
+        alive = true;
+        const fade = p.life > LIFE-50 ? (LIFE-p.life)/50 : 1;
+        ctx.save(); ctx.globalAlpha = fade; ctx.translate(p.x,p.y); ctx.rotate(p.rot*Math.PI/180);
+        ctx.fillStyle = p.color; ctx.fillRect(-p.size/2,-p.size/2,p.size,p.size*.6); ctx.restore();
+      }
+    }
+    if (alive) requestAnimationFrame(step); else ctx.clearRect(0,0,canvas.width,canvas.height);
+  })();
+}
+function launchEmojiBurst(emoji, x, y){
+  for (let i = 0; i < 16; i++){
+    const el = document.createElement("div");
+    el.textContent = emoji;
+    el.style.cssText = `position:fixed;left:${x}px;top:${y}px;font-size:${18+Math.random()*18}px;pointer-events:none;z-index:100;`;
+    document.body.appendChild(el);
+    const angle = Math.random()*Math.PI*2, dist = 70+Math.random()*160;
+    const dx = Math.cos(angle)*dist, dy = Math.sin(angle)*dist - 60;
+    const rot = (Math.random()-.5)*180;
+    const duration = 4500+Math.random()*1000;
+    const anim = el.animate([
+      { transform:"translate(0,0) rotate(0deg) scale(.6)", opacity:1, offset:0 },
+      { transform:`translate(${dx*.6}px,${dy*.6}px) rotate(${rot*.6}deg) scale(1)`, opacity:1, offset:.6 },
+      { transform:`translate(${dx}px,${dy}px) rotate(${rot}deg) scale(1.15)`, opacity:0, offset:1 },
+    ], { duration, easing:"ease-out", fill:"forwards" });
+    anim.onfinish = () => el.remove();
+  }
+}
+function launchEffect(lane, x, y){
+  const effect = lane?.effect;
+  if (!effect || effect === "none") return;
+  if (effect === "confetti") return launchConfetti(x, y);
+  if (effect === "custom") return lane.customEmoji && launchEmojiBurst(lane.customEmoji, x, y);
+  const def = EFFECTS[effect];
+  if (def?.emoji) launchEmojiBurst(def.emoji, x, y);
+}
+
+/* -- Récurrence : recrée automatiquement une tâche quand l'originale est terminée -- */
+async function maybeSpawnRecurrence(sourceTask, newCategory){
+  if (newCategory !== "done" || !sourceTask.Recurrence || sourceTask.Recurrence === "none") return;
+  const firstLane = state.columnsConfig?.[0];
+  if (!firstLane) return;
+  const baseDate = gristDateToJS(sourceTask.Deadline) || new Date();
+  const nextDeadline = addInterval(baseDate, sourceTask.Recurrence);
+  const fields = {
+    Description: sourceTask.Description, Priorite: sourceTask.Priorite, Type: sourceTask.Type,
+    Notes: sourceTask.Notes, Recurrence: sourceTask.Recurrence,
+    Statut: firstLane.statut, Deadline: jsDateToGristEpoch(toDateInputValue(nextDeadline)),
+    CreeLe: nowEpoch(), DerniereMaj: nowEpoch(),
+  };
+  const tempId = -Date.now();
+  state.records.push({ id: tempId, ...fields });
+  notify();
+  const result = await writeToGrist(() => createTask(fields), "Tâche récurrente non recréée dans Grist.");
+  const realId = result?.id ?? (Array.isArray(result) ? result[0]?.id : undefined);
+  if (realId){ const rec = state.records.find(r => r.id === tempId); if (rec) rec.id = realId; }
+}
+
+/* -- Dépendances "Bloqué par" : résout les tâches bloquantes encore actives -- */
+function activeBlockers(t){
+  const ids = (t.BloquePar||"").split(",").map(s=>s.trim()).filter(Boolean).map(Number);
+  if (!ids.length) return [];
+  return ids.map(bid => state.records.find(r=>r.id===bid)).filter(Boolean).filter(b => {
+    const lane = state.columnsConfig?.find(l=>l.statut===b.Statut);
+    return lane?.dashCategory !== "done" && lane?.dashCategory !== "cancelled";
+  });
+}
+
+/* -- Filtres (partagés par Kanban, Calendrier et Tableau de bord) -- */
+function fillSelect(id, placeholder, values){
+  const sel = document.getElementById(id);
+  const current = sel.value;
+  sel.innerHTML = `<option value="">${placeholder}</option>` + values.map(v => `<option value="${escapeHtml(v)}">${escapeHtml(v)}</option>`).join("");
+  if (values.includes(current)) sel.value = current;
+}
+function refreshFilterOptions(){
+  const assignees = new Set(), types = new Set();
+  state.records.forEach(r => { decodeChoiceList(r.AssigneA).forEach(a => assignees.add(a)); if (r.Type) types.add(r.Type); });
+  fillSelect("fAssignee", "Assigné à : tous", [...assignees].sort());
+  fillSelect("fType", "Type : tous", [...types].sort());
+}
+function initFiltersBar(){
+  const priorities = Object.keys(PRIORITY_COLORS).filter(k => k !== "__default");
+  fillSelect("fPriorite", "Priorité : toutes", priorities);
+  document.getElementById("fSearch").addEventListener("input", e => { state.filters.search = e.target.value; notify(); });
+  document.getElementById("fAssignee").addEventListener("change", e => { state.filters.assignee = e.target.value; notify(); });
+  document.getElementById("fPriorite").addEventListener("change", e => { state.filters.priorite = e.target.value; notify(); });
+  document.getElementById("fType").addEventListener("change", e => { state.filters.type = e.target.value; notify(); });
+  document.getElementById("fSortBy").addEventListener("change", e => { state.sortBy = e.target.value; notify(); });
+  document.getElementById("fGroupBy").addEventListener("change", e => { state.groupBy = e.target.value; notify(); });
+}
+
+/* -- Badge "en retard" dans la barre du haut -- */
+function getOverdueTasks(){
+  const now = new Date();
+  return state.records.filter(r => {
+    const lane = state.columnsConfig?.find(l => l.statut === r.Statut);
+    if (lane?.dashCategory === "done" || lane?.dashCategory === "cancelled") return false;
+    const d = gristDateToJS(r.Deadline);
+    return d && d < now;
+  }).sort((a,b) => gristDateToJS(a.Deadline) - gristDateToJS(b.Deadline));
+}
+function refreshAlertsBadge(){
+  const list = state.columnsConfig ? getOverdueTasks() : [];
+  const badge = document.getElementById("alertsBadge");
+  badge.textContent = list.length || "";
+  badge.classList.toggle("hidden", !list.length);
+}
+function renderAlertsPanel(){
+  const list = getOverdueTasks();
+  document.getElementById("alertsPanel").innerHTML = `
+    <div class="alerts-header">🔔 Alertes</div>
+    ${list.length ? list.map(t => `<div class="alerts-item" data-alert-task="${t.id}"><span>⚠️ ${escapeHtml(t.Description||"(sans titre)")}</span><span class="alerts-date">${fmtDate(gristDateToJS(t.Deadline))}</span></div>`).join("") : `<div class="alerts-empty">Aucune alerte</div>`}
+  `;
+}
+function initAlerts(){
+  document.getElementById("btnAlerts").addEventListener("click", e => {
+    e.stopPropagation();
+    const panel = document.getElementById("alertsPanel");
+    const opening = panel.classList.contains("hidden");
+    panel.classList.toggle("hidden");
+    if (opening) renderAlertsPanel();
+  });
+  document.getElementById("alertsPanel").addEventListener("click", e => {
+    const item = e.target.closest("[data-alert-task]");
+    if (item){ document.getElementById("alertsPanel").classList.add("hidden"); openTaskModal(Number(item.dataset.alertTask)); }
+  });
+  document.addEventListener("click", e => {
+    if (!e.target.closest("#alertsWrap")) document.getElementById("alertsPanel").classList.add("hidden");
+  });
+}
+
+/* -- Mode sombre / clair (bascule manuelle, mémorisée) -- */
+function getInitialTheme(){
+  const stored = localStorage.getItem("kanban_theme");
+  if (stored === "light" || stored === "dark") return stored;
+  return matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+}
+let currentTheme = getInitialTheme();
+function applyTheme(theme){
+  currentTheme = theme;
+  document.documentElement.dataset.theme = theme;
+  document.getElementById("btnThemeToggle").textContent = theme === "dark" ? "☀️" : "🌙";
+}
+function initThemeToggle(){
+  applyTheme(currentTheme);
+  document.getElementById("btnThemeToggle").onclick = () => {
+    const next = currentTheme === "dark" ? "light" : "dark";
+    localStorage.setItem("kanban_theme", next);
+    applyTheme(next);
+  };
+}
+
+function refreshOverdueBadge(){
+  const badge = document.getElementById("overdueBadge");
+  if (!state.columnsConfig){ badge.classList.add("hidden"); refreshAlertsBadge(); return; }
+  const stats = computeDashboardStats(state.records);
+  if (stats.overdue > 0){ badge.textContent = `⚠️ ${stats.overdue} en retard`; badge.classList.remove("hidden"); }
+  else badge.classList.add("hidden");
+  refreshAlertsBadge();
+}
+
+/* -- Export CSV / Impression (partagés) -- */
+const csvEscape = v => { v = String(v ?? ""); return /[",\n]/.test(v) ? '"' + v.replace(/"/g,'""') + '"' : v; };
+function csvValue(r, col){
+  if (["AssigneA","Responsable"].includes(col)) return decodeChoiceList(r[col]).join("; ");
+  if (["Deadline","CreeLe","DerniereMaj"].includes(col)) return fmtDate(gristDateToJS(r[col]));
+  return r[col] ?? "";
+}
+function exportCsv(){
+  const cols = ["Description","Priorite","Statut","Deadline","AssigneA","Type","Responsable","CreeLe","DerniereMaj","Notes"];
+  const rows = filteredRecords();
+  const csv = [cols.join(","), ...rows.map(r => cols.map(c => csvEscape(csvValue(r,c))).join(","))].join("\r\n");
+  const blob = new Blob(["\uFEFF" + csv], { type: "text/csv;charset=utf-8;" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = `kanban-export-${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+/* -- Rendu du tableau Kanban -- */
+let selectMode = false;
+let selectedTaskIds = new Set();
+function updateBulkBar(){
+  const bar = document.getElementById("bulkBar");
+  if (!selectMode || selectedTaskIds.size === 0){ bar.classList.add("hidden"); return; }
+  bar.classList.remove("hidden");
+  document.getElementById("bulkCount").textContent = `${selectedTaskIds.size} sélectionnée(s)`;
+  const sel = document.getElementById("bulkMoveTo");
+  const current = sel.value;
+  sel.innerHTML = `<option value="">Déplacer vers…</option>` + (state.columnsConfig||[]).map(l => `<option value="${l.id}">${escapeHtml(l.label)}</option>`).join("");
+  sel.value = current;
+}
+function toggleSelectMode(){
+  selectMode = !selectMode;
+  selectedTaskIds.clear();
+  document.getElementById("btnSelectMode").classList.toggle("active", selectMode);
+  renderBoard();
+}
+
+function renderBoard(){
+  refreshFilterOptions();
+  refreshOverdueBadge();
+  const board = document.getElementById("board");
+  if (!state.columnsConfig){ board.innerHTML = '<p style="padding:20px;color:#888">Chargement…</p>'; return; }
+  const records = filteredRecords();
+  const lanes = getActiveLanes();
+  board.innerHTML = lanes.map(lane => {
+    const tasks = tasksForLane(records, lane);
+    const collapsed = state.collapsed.has(lane.id);
+    return `
+      <div class="lane${collapsed ? " collapsed" : ""}" data-lane-id="${lane.id}">
+        <div class="lane-header" data-toggle="${lane.id}" style="border-bottom:3px solid ${lane.color}">
+          <span class="lane-color-dot" style="background:${lane.color}"></span>
+          <span class="lane-title">${escapeHtml(lane.label)}</span>
+          <span class="lane-count">${tasks.length}</span>
+          <button class="lane-collapse-btn">${collapsed ? "▶" : "▼"}</button>
+        </div>
+        <div class="lane-body" data-drop-lane="${lane.id}">${tasks.map(t => renderCard(t, lane)).join("")}</div>
+        <button class="lane-add-card" data-add-lane="${lane.id}">+ Ajouter une carte</button>
+      </div>`;
+  }).join("");
+  updateBulkBar();
+  renderGlobalStats();
+}
+function renderGlobalStats(){
+  const el = document.getElementById("globalStats");
+  if (!el) return;
+  if (!state.columnsConfig){ el.innerHTML = ""; return; }
+  const records = filteredRecords();
+  const lanes = getActiveLanes();
+  const counts = lanes.map(l => ({ label:l.label, color:l.color, count: tasksForLane(records, l).length }));
+  el.innerHTML = `
+    <div class="stat-card"><div class="stat-value">${records.length}</div><div class="stat-label">Total</div></div>
+    ${counts.map(c => `<div class="stat-card"><div class="stat-value" style="color:${c.color}">${c.count}</div><div class="stat-label">${escapeHtml(c.label)}</div></div>`).join("")}
+  `;
+}
+
+function renderCard(t, lane){
+  const pStyle = priorityStyle(t.Priorite);
+  const deadline = gristDateToJS(t.Deadline);
+  const realLane = state.columnsConfig?.find(l => l.statut === t.Statut);
+  const overdue = deadline && deadline < new Date() && realLane?.dashCategory !== "done" && realLane?.dashCategory !== "cancelled";
+  const assignees = decodeChoiceList(t.AssigneA);
+  const cl = checklistProgress(t.Checklist);
+  const selected = selectedTaskIds.has(t.id);
+  const blockers = activeBlockers(t);
+  return `
+    <div class="card${selectMode?" select-mode-card":""}" tabindex="0" role="button" aria-label="Tâche : ${escapeHtml(t.Description||"sans titre")}" draggable="${selectMode?"false":"true"}" data-id="${t.id}" style="background:${pStyle.bg};border-left-color:${lane.color};transform:rotate(${seededRotation(t.id).toFixed(2)}deg)">
+      ${selectMode ? `<input type="checkbox" class="card-select-box" data-select-task="${t.id}" ${selected?"checked":""} aria-label="Sélectionner cette tâche">` : ""}
+      ${blockers.length ? `<div class="card-blocked">🔒 Bloqué par : ${blockers.map(b=>escapeHtml(b.Description||`#${b.id}`)).join(", ")}</div>` : ""}
+      <div class="card-meta-row">
+        <span class="badge" style="background:${pStyle.badge}">${escapeHtml(t.Priorite||"—")}</span>
+        ${t.Type ? `<span class="chip">${escapeHtml(t.Type)}</span>` : ""}
+        ${cl ? `<span class="chip">✅ ${cl.done}/${cl.total}</span>` : ""}
+        ${t.Recurrence && t.Recurrence !== "none" ? `<span class="chip">🔁</span>` : ""}
+      </div>
+      <div class="card-desc" contenteditable="true" data-field="Description" data-id="${t.id}">${escapeHtml(t.Description||"")}</div>
+      ${assignees.length ? `<div class="card-meta-row">${assignees.map(a=>`<span class="chip">👤 ${escapeHtml(a)}</span>`).join("")}</div>` : ""}
+      <div class="deadline-row ${overdue ? "overdue" : ""}">📅 <input type="date" data-field="Deadline" data-id="${t.id}" value="${toDateInputValue(deadline)}"></div>
+    </div>`;
+}
+
+async function handleAddCard(laneId, extraFields){
+  const lane = getActiveLanes().find(l => l.id === laneId);
+  if (!lane) return;
+  const baseStatut = lane.groupField ? state.columnsConfig[0]?.statut : lane.statut;
+  if (!baseStatut) return;
+  const fields = { ...defaultTaskFields(baseStatut), ...laneAssignFields(lane), ...(extraFields||{}) };
+  const tempId = -Date.now();
+  state.records.push({ id: tempId, ...fields });
+  notify();
+  const result = await writeToGrist(() => createTask(fields), "Tâche non enregistrée dans Grist — vérifiez l'autorisation d'accès du widget.");
+  const realId = result?.id ?? (Array.isArray(result) ? result[0]?.id : undefined);
+  if (realId){
+    const rec = state.records.find(r => r.id === tempId);
+    if (rec) rec.id = realId;
+  }
+}
+
+/* -- Édition inline de la description, avec sauvegarde différée (debounce) -- */
+const descSaveTimers = new Map();
+function flushDescriptionSave(id, val){
+  clearTimeout(descSaveTimers.get(id));
+  descSaveTimers.delete(id);
+  writeToGrist(() => updateTaskFields(id, { Description: val }), "Description non enregistrée dans Grist.");
+  patchRecordLocally(id, { Description: val });
+}
+function scheduleDescriptionSave(id, val){
+  clearTimeout(descSaveTimers.get(id));
+  descSaveTimers.set(id, setTimeout(() => flushDescriptionSave(id, val), 500));
+}
+
+function getDragAfterElement(container, y){
+  const cards = [...container.querySelectorAll(".card:not(.dragging)")];
+  return cards.reduce((closest, child) => {
+    const box = child.getBoundingClientRect();
+    const offset = y - box.top - box.height/2;
+    return (offset < 0 && offset > closest.offset) ? { offset, element: child } : closest;
+  }, { offset: -Infinity, element: null }).element;
+}
+
+let dragFromLaneId = null;
+function initBoardEvents(){
+  const board = document.getElementById("board");
+
+  board.addEventListener("click", e => {
+    const toggle = e.target.closest("[data-toggle]");
+    if (toggle){ const id = toggle.dataset.toggle; state.collapsed.has(id) ? state.collapsed.delete(id) : state.collapsed.add(id); return notify(); }
+    const addBtn = e.target.closest("[data-add-lane]");
+    if (addBtn) return handleAddCard(addBtn.dataset.addLane);
+    const card = e.target.closest(".card");
+    if (selectMode && card){
+      const id = Number(card.dataset.id);
+      selectedTaskIds.has(id) ? selectedTaskIds.delete(id) : selectedTaskIds.add(id);
+      renderBoard();
+      return;
+    }
+    if (e.target.closest("[data-field]")) return;
+    if (card) openTaskModal(Number(card.dataset.id));
+  });
+  board.addEventListener("keydown", e => {
+    if ((e.key === "Enter" || e.key === " ") && e.target.classList.contains("card")){
+      e.preventDefault();
+      if (!selectMode) openTaskModal(Number(e.target.dataset.id));
+    }
+  });
+
+  board.addEventListener("input", e => {
+    const el = e.target.closest('[data-field="Description"]');
+    if (el) scheduleDescriptionSave(Number(el.dataset.id), el.textContent.trim());
+  });
+  board.addEventListener("focusout", e => {
+    const el = e.target.closest('[data-field="Description"]');
+    if (el) flushDescriptionSave(Number(el.dataset.id), el.textContent.trim());
+  });
+  board.addEventListener("keydown", e => {
+    if (e.key === "Enter" && e.target.closest('[data-field="Description"]')){ e.preventDefault(); e.target.blur(); }
+  });
+
+  board.addEventListener("change", e => {
+    const el = e.target.closest('input[data-field="Deadline"]');
+    if (!el) return;
+    const id = Number(el.dataset.id), epoch = jsDateToGristEpoch(el.value);
+    writeToGrist(() => updateTaskFields(id, { Deadline: epoch }), "Deadline non enregistrée dans Grist.");
+    patchRecordLocally(id, { Deadline: epoch });
+    notify();
+  });
+
+  board.addEventListener("dragstart", e => {
+    const card = e.target.closest(".card");
+    if (!card) return;
+    card.classList.add("dragging");
+    dragFromLaneId = card.closest(".lane")?.dataset.laneId || null;
+    e.dataTransfer.setData("text/plain", card.dataset.id);
+    e.dataTransfer.effectAllowed = "move";
+  });
+  board.addEventListener("dragend", e => { e.target.closest(".card")?.classList.remove("dragging"); dragFromLaneId = null; });
+  board.addEventListener("dragover", e => {
+    const zone = e.target.closest("[data-drop-lane]");
+    if (!zone) return;
+    e.preventDefault();
+    zone.classList.add("drag-over");
+    if (zone.dataset.dropLane === dragFromLaneId){
+      const dragging = document.querySelector(".card.dragging");
+      if (dragging){
+        const after = getDragAfterElement(zone, e.clientY);
+        after ? zone.insertBefore(dragging, after) : zone.appendChild(dragging);
+      }
+    }
+  });
+  board.addEventListener("dragleave", e => e.target.closest("[data-drop-lane]")?.classList.remove("drag-over"));
+  board.addEventListener("drop", e => {
+    const zone = e.target.closest("[data-drop-lane]");
+    if (!zone) return;
+    e.preventDefault();
+    zone.classList.remove("drag-over");
+    const id = Number(e.dataTransfer.getData("text/plain"));
+    const lane = getActiveLanes().find(l => l.id === zone.dataset.dropLane);
+    const rec = state.records.find(r => r.id === id);
+    if (!lane || !rec){ dragFromLaneId = null; return; }
+    const sameLane = zone.dataset.dropLane === dragFromLaneId;
+    const wasDifferent = !laneMatchesTask(lane, rec);
+    const prevFields = { Statut: rec.Statut, Ordre: rec.Ordre, Historique: rec.Historique };
+
+    if (sameLane){
+      [...zone.querySelectorAll(".card")].forEach((cardEl, i) => {
+        const cardId = Number(cardEl.dataset.id);
+        const r = state.records.find(x => x.id === cardId);
+        const newOrder = (i+1)*10;
+        if (r && r.Ordre !== newOrder){
+          r.Ordre = newOrder;
+          writeToGrist(() => updateTaskFields(cardId, { Ordre: newOrder }), "Ordre non enregistré dans Grist.");
+        }
+      });
+    } else if (lane.groupField){
+      const maxOrder = state.records.filter(r => laneMatchesTask(lane, r)).reduce((m,r) => Math.max(m, r.Ordre||0), 0);
+      const fields = { ...laneAssignFields(lane), Ordre: maxOrder+10 };
+      writeToGrist(() => updateTaskFields(id, fields), "Déplacement non enregistré dans Grist.");
+      Object.assign(rec, fields);
+    } else {
+      const maxOrder = state.records.filter(r => r.Statut === lane.statut).reduce((m,r) => Math.max(m, r.Ordre||0), 0);
+      const histLine = `${fmtDateTime(new Date())} : ${rec.Statut || "—"} → ${lane.statut}`;
+      const fields = { Statut: lane.statut, Ordre: maxOrder+10, Historique: (rec.Historique ? rec.Historique+"\n" : "")+histLine };
+      writeToGrist(() => updateTaskFields(id, fields), "Déplacement non enregistré dans Grist.");
+      Object.assign(rec, fields);
+      pushUndo(() => {
+        writeToGrist(() => updateTaskFields(id, prevFields), "Annulation non enregistrée dans Grist.");
+        patchRecordLocally(id, prevFields);
+        notify();
+      });
+      maybeSpawnRecurrence(rec, lane.dashCategory);
+    }
+    notify();
+    if (wasDifferent && !lane.groupField) launchEffect(lane, innerWidth/2, innerHeight/2);
+    dragFromLaneId = null;
+  });
+}
+
+/* -- Sélection multiple : barre d'actions groupées -- */
+function initBulkBar(){
+  document.getElementById("btnSelectMode").onclick = toggleSelectMode;
+  document.getElementById("board").addEventListener("change", e => {
+    const chk = e.target.closest("[data-select-task]");
+    if (!chk) return;
+    const id = Number(chk.dataset.selectTask);
+    chk.checked ? selectedTaskIds.add(id) : selectedTaskIds.delete(id);
+    updateBulkBar();
+  });
+  document.getElementById("bulkCancel").onclick = () => { selectMode = false; selectedTaskIds.clear(); document.getElementById("btnSelectMode").classList.remove("active"); renderBoard(); };
+  document.getElementById("bulkDelete").onclick = async () => {
+    if (!confirm(`Supprimer définitivement ${selectedTaskIds.size} tâche(s) ?`)) return;
+    for (const id of selectedTaskIds) await writeToGrist(() => deleteTask(id), "Suppression non enregistrée dans Grist.");
+    state.records = state.records.filter(r => !selectedTaskIds.has(r.id));
+    selectedTaskIds.clear();
+    notify();
+  };
+  document.getElementById("bulkMoveTo").addEventListener("change", e => {
+    const laneId = e.target.value;
+    if (!laneId) return;
+    const lane = state.columnsConfig.find(l => l.id === laneId);
+    if (!lane) return;
+    selectedTaskIds.forEach(id => {
+      const rec = state.records.find(r => r.id === id);
+      if (!rec) return;
+      writeToGrist(() => updateTaskFields(id, { Statut: lane.statut }), "Déplacement non enregistré dans Grist.");
+      rec.Statut = lane.statut;
+      maybeSpawnRecurrence(rec, lane.dashCategory);
+    });
+    selectedTaskIds.clear();
+    e.target.value = "";
+    notify();
+  });
+}
+
+/* -- Popup détail tâche (utilisée depuis Kanban, Calendrier et Tableau de bord) -- */
+let modalChecklist = [];
+function checklistItemsHtml(items){
+  return `<div id="checklist-items">${items.map((it,i) => `
+    <div class="checklist-item" data-idx="${i}">
+      <input type="checkbox" data-chk="done" ${it.done?"checked":""}>
+      <input type="text" data-chk="text" value="${escapeHtml(it.text||"")}" placeholder="Sous-tâche…">
+      <button type="button" class="icon-btn" data-chk="del">✕</button>
+    </div>`).join("")}</div>`;
+}
+function refreshChecklistUI(){
+  document.getElementById("checklist-items").outerHTML = checklistItemsHtml(modalChecklist);
+}
+function initTaskModalEvents(){
+  const modal = document.getElementById("taskModal");
+  modal.addEventListener("click", e => {
+    if (e.target.closest("#checklist-add")){ modalChecklist.push({ text:"", done:false }); refreshChecklistUI(); return; }
+    const del = e.target.closest('[data-chk="del"]');
+    if (del){ modalChecklist.splice(Number(del.closest(".checklist-item").dataset.idx), 1); refreshChecklistUI(); }
+    const addPerson = e.target.closest("[data-add-person]");
+    if (addPerson){
+      const selectId = addPerson.dataset.addPerson;
+      const input = document.getElementById(selectId+"-new");
+      const name = input.value.trim();
+      if (!name) return;
+      const select = document.getElementById(selectId);
+      const existing = [...select.options].find(o => o.value === name);
+      if (existing) existing.selected = true;
+      else {
+        const opt = document.createElement("option");
+        opt.value = name; opt.textContent = name; opt.selected = true;
+        select.appendChild(opt);
+      }
+      input.value = "";
+    }
+  });
+  modal.addEventListener("input", e => {
+    const txt = e.target.closest('[data-chk="text"]');
+    if (txt) modalChecklist[Number(txt.closest(".checklist-item").dataset.idx)].text = txt.value;
+  });
+  modal.addEventListener("change", e => {
+    const chk = e.target.closest('[data-chk="done"]');
+    if (chk) modalChecklist[Number(chk.closest(".checklist-item").dataset.idx)].done = chk.checked;
+  });
+}
+
+function openTaskModal(id){
+  const t = state.records.find(r => r.id === id);
+  if (!t) return;
+  state.editingId = id;
+  modalChecklist = parseChecklist(t.Checklist);
+  const statutOptions = [...new Set(state.columnsConfig.map(l => l.statut))];
+  const priorities = Object.keys(PRIORITY_COLORS).filter(k => k !== "__default");
+  const opts = (values, current) => values.map(v => `<option value="${escapeHtml(v)}" ${v===current?"selected":""}>${escapeHtml(v)}</option>`).join("");
+  const recOpts = Object.entries(RECURRENCE_LABELS).map(([v,l]) => `<option value="${v}" ${(t.Recurrence||"none")===v?"selected":""}>${l}</option>`).join("");
+
+  const typeOptions = [...new Set(state.records.map(r => r.Type).filter(Boolean))];
+  if (t.Type && !typeOptions.includes(t.Type)) typeOptions.push(t.Type);
+  typeOptions.sort((a,b) => a.localeCompare(b,"fr"));
+
+  const peopleSet = new Set();
+  state.records.forEach(r => { decodeChoiceList(r.AssigneA).forEach(p=>peopleSet.add(p)); decodeChoiceList(r.Responsable).forEach(p=>peopleSet.add(p)); });
+  const currentAssignees = decodeChoiceList(t.AssigneA);
+  const currentResp = decodeChoiceList(t.Responsable);
+  currentAssignees.concat(currentResp).forEach(p => peopleSet.add(p));
+  const peopleList = [...peopleSet].sort((a,b) => a.localeCompare(b,"fr"));
+  const multiSelect = (selectId, values, current) => `
+    <select id="${selectId}" multiple size="4">${values.map(v => `<option value="${escapeHtml(v)}" ${current.includes(v)?"selected":""}>${escapeHtml(v)}</option>`).join("")}</select>
+    <div style="display:flex;gap:6px;margin-top:4px;">
+      <input type="text" id="${selectId}-new" placeholder="Nouveau nom…" style="flex:1;">
+      <button type="button" class="icon-btn" data-add-person="${selectId}" title="Ajouter">➕</button>
+    </div>`;
+
+  const blockerOptions = state.records.filter(r => r.id !== id);
+  const currentBlockers = (t.BloquePar||"").split(",").map(s=>s.trim()).filter(Boolean);
+  const blockerSelectHtml = blockerOptions.length ? `
+    <select id="m-bloquepar" multiple size="4">
+      ${blockerOptions.map(o => `<option value="${o.id}" ${currentBlockers.includes(String(o.id))?"selected":""}>${escapeHtml(o.Description||`Tâche #${o.id}`)}</option>`).join("")}
+    </select>` : `<p style="font-size:12px;color:var(--muted);margin:0;">Aucune autre tâche disponible.</p>`;
+
+  document.getElementById("taskModal").innerHTML = `
+    <h2>Détail de la tâche</h2>
+    ${fieldRow("Description", `<textarea id="m-desc">${escapeHtml(t.Description||"")}</textarea>`)}
+    <div class="field-row">
+      ${fieldRow("Priorité", `<select id="m-priorite">${opts(priorities, t.Priorite)}</select>`)}
+      ${fieldRow("Statut", `<select id="m-statut">${opts(statutOptions, t.Statut)}</select>`)}
+    </div>
+    <div class="field-row">
+      ${fieldRow("Date de début", `<input type="date" id="m-datedebut" value="${toDateInputValue(gristDateToJS(t.DateDebut))}">`)}
+      ${fieldRow("Deadline", `<input type="date" id="m-deadline" value="${toDateInputValue(gristDateToJS(t.Deadline))}">`)}
+    </div>
+    <div class="field-row">
+      ${fieldRow("Type", `<select id="m-type"><option value="">—</option>${opts(typeOptions, t.Type)}</select>`)}
+      ${fieldRow("Récurrence", `<select id="m-recurrence">${recOpts}</select>`)}
+    </div>
+    <div class="field-row">
+      ${fieldRow("Assigné à", multiSelect("m-assigne", peopleList, currentAssignees))}
+      ${fieldRow("Responsable", multiSelect("m-resp", peopleList, currentResp))}
+    </div>
+    ${fieldRow("Notes", `<textarea id="m-notes">${escapeHtml(t.Notes||"")}</textarea>`)}
+    ${fieldRow("🔒 Bloqué par (autres tâches)", blockerSelectHtml)}
+    <div class="field">
+      <label>Sous-tâches</label>
+      ${checklistItemsHtml(modalChecklist)}
+      <button type="button" class="btn secondary" id="checklist-add" style="margin-top:4px;">+ Sous-tâche</button>
+    </div>
+    <div class="meta-readonly">
+      Créé le : ${fmtDate(gristDateToJS(t.CreeLe)) || "—"} ·
+      Dernière mise à jour : ${fmtDate(gristDateToJS(t.DerniereMaj)) || "—"}
+    </div>
+    <div class="meta-readonly scroll">${escapeHtml(t.Historique || "Aucun changement de statut enregistré.")}</div>
+    <div class="modal-footer">
+      <div style="display:flex;gap:8px;">
+        <button class="btn danger" id="m-delete">🗑️ Supprimer</button>
+        <button class="btn secondary" id="m-duplicate">📋 Dupliquer</button>
+        <button class="btn secondary" id="m-save-template">💾 Modèle</button>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button class="btn secondary" id="m-close">Fermer</button>
+        <button class="btn" id="m-save">Enregistrer</button>
+      </div>
+    </div>`;
+  openOverlay("taskOverlay");
+  document.getElementById("m-close").onclick = closeTaskModal;
+  document.getElementById("m-save").onclick = saveTaskModal;
+  document.getElementById("m-delete").onclick = () => deleteTaskModal(id);
+  document.getElementById("m-duplicate").onclick = () => duplicateTaskModal(id);
+  document.getElementById("m-save-template").onclick = () => saveAsTemplate(id);
+}
+function closeTaskModal(){ closeOverlay("taskOverlay"); state.editingId = null; }
+
+async function deleteTaskModal(id){
+  const t = state.records.find(r => r.id === id);
+  if (!confirm(`Supprimer définitivement la tâche "${t?.Description || "sans titre"}" ?`)) return;
+  const snapshot = { ...t };
+  await writeToGrist(() => deleteTask(id), "Suppression non enregistrée dans Grist.");
+  state.records = state.records.filter(r => r.id !== id);
+  closeTaskModal();
+  notify();
+  pushUndo(async () => {
+    const { id: _oldId, ...fields } = snapshot;
+    const tempId = -Date.now();
+    state.records.push({ id: tempId, ...fields });
+    notify();
+    const result = await writeToGrist(() => createTask(fields), "Restauration non enregistrée dans Grist.");
+    const realId = result?.id ?? (Array.isArray(result) ? result[0]?.id : undefined);
+    if (realId){ const rec = state.records.find(r => r.id === tempId); if (rec) rec.id = realId; }
+    showToast("↩️ Tâche restaurée (nouvel identifiant, l'historique n'est pas repris).");
+  });
+}
+
+function duplicateTaskModal(id){
+  const t = state.records.find(r => r.id === id);
+  if (!t) return;
+  const { id: _old, CreeLe, DerniereMaj, Historique, ...rest } = t;
+  handleAddCard(state.columnsConfig.find(l => l.statut === t.Statut)?.id || state.columnsConfig[0].id, { ...rest, Description: (t.Description||"") + " (copie)" });
+  closeTaskModal();
+}
+
+function saveAsTemplate(id){
+  const t = state.records.find(r => r.id === id);
+  if (!t) return;
+  const name = prompt("Nom du modèle :", t.Description || "Modèle");
+  if (!name) return;
+  const tpl = { id: cid(), name, Description: t.Description, Priorite: t.Priorite, Type: t.Type, Notes: t.Notes, Checklist: t.Checklist };
+  const list = [...(state.taskTemplates || []), tpl];
+  setTaskTemplates(list);
+  saveTemplates(list);
+  showToast(`Modèle "${name}" enregistré.`);
+}
+
+async function saveTaskModal(){
+  const id = state.editingId, t = state.records.find(r => r.id === id);
+  const val = sel => document.getElementById(sel).value.trim();
+  const newStatut = document.getElementById("m-statut").value;
+  const laneForNewStatut = state.columnsConfig.find(l => l.statut === newStatut);
+  const wasDifferentStatut = t && t.Statut !== newStatut;
+  const historique = wasDifferentStatut
+    ? (t.Historique ? t.Historique+"\n" : "") + `${fmtDateTime(new Date())} : ${t.Statut || "—"} → ${newStatut}`
+    : (t.Historique || "");
+
+  const fields = {
+    Description: val("m-desc"), Priorite: document.getElementById("m-priorite").value, Statut: newStatut,
+    Deadline: jsDateToGristEpoch(document.getElementById("m-deadline").value),
+    DateDebut: jsDateToGristEpoch(document.getElementById("m-datedebut").value),
+    Type: document.getElementById("m-type").value, Recurrence: document.getElementById("m-recurrence").value,
+    AssigneA: encodeChoiceList([...document.getElementById("m-assigne").selectedOptions].map(o => o.value)),
+    Responsable: encodeChoiceList([...document.getElementById("m-resp").selectedOptions].map(o => o.value)),
+    Notes: val("m-notes"),
+    Checklist: JSON.stringify(modalChecklist.filter(it => it.text.trim() !== "")),
+    Historique: historique,
+    BloquePar: document.getElementById("m-bloquepar") ? [...document.getElementById("m-bloquepar").selectedOptions].map(o => o.value).join(",") : "",
+  };
+  await writeToGrist(() => updateTaskFields(id, fields), "Modifications non enregistrées dans Grist.");
+  patchRecordLocally(id, fields);
+  closeTaskModal();
+  notify();
+  if (wasDifferentStatut){
+    launchEffect(laneForNewStatut, innerWidth/2, innerHeight/2);
+    maybeSpawnRecurrence(state.records.find(r => r.id === id), laneForNewStatut?.dashCategory);
+  }
+}
+
+/* -- Popup des modèles de tâches -- */
+function openTemplatesModal(){
+  renderTemplatesModal();
+  openOverlay("templatesOverlay");
+}
+function renderTemplatesModal(){
+  const list = state.taskTemplates || [];
+  document.getElementById("templatesModal").innerHTML = `
+    <h2>Modèles de tâches</h2>
+    ${list.length ? list.map(tpl => `
+      <div class="tpl-row" data-id="${tpl.id}">
+        <span>${escapeHtml(tpl.name)}</span>
+        <button class="btn secondary" data-use="1">Utiliser</button>
+        <button class="icon-btn" data-del="1">🗑️</button>
+      </div>`).join("") : `<p style="font-size:12.5px;color:var(--muted);">Aucun modèle. Ouvrez une tâche et cliquez "💾 Modèle" pour en créer un.</p>`}
+    <div class="modal-footer"><button class="btn secondary" id="tpl-close">Fermer</button></div>`;
+  document.getElementById("templatesModal").querySelectorAll(".tpl-row").forEach(row => {
+    const tplId = row.dataset.id;
+    row.querySelector("[data-use]")?.addEventListener("click", () => {
+      const tpl = list.find(x => x.id === tplId);
+      if (!tpl || !state.columnsConfig?.[0]) return;
+      const lane = state.columnsConfig[0];
+      handleAddCard(lane.id, { Description: tpl.Description, Priorite: tpl.Priorite, Type: tpl.Type, Notes: tpl.Notes, Checklist: tpl.Checklist });
+      closeOverlay("templatesOverlay");
+    });
+    row.querySelector("[data-del]")?.addEventListener("click", () => {
+      const newList = list.filter(x => x.id !== tplId);
+      setTaskTemplates(newList); saveTemplates(newList); renderTemplatesModal();
+    });
+  });
+  document.getElementById("tpl-close").onclick = () => closeOverlay("templatesOverlay");
+}
+
+/* -- Popup configuration des colonnes -- */
+let settingsWorkingCopy = [];
+function openSettingsModal(){
+  settingsWorkingCopy = state.columnsConfig.map(l => ({ ...l }));
+  renderSettingsModal();
+  openOverlay("settingsOverlay");
+}
+function renderSettingsModal(){
+  const cfg = settingsWorkingCopy;
+  const statutCounts = {};
+  cfg.forEach(l => { statutCounts[l.statut] = (statutCounts[l.statut]||0)+1; });
+  const dupStatuts = Object.entries(statutCounts).filter(([,n]) => n>1).map(([s]) => s);
+
+  document.getElementById("settingsModal").innerHTML = `
+    <h2>Colonnes du tableau</h2>
+    ${dupStatuts.length ? `<div class="warning-banner">⚠️ Statut${dupStatuts.length>1?"s":""} utilisé${dupStatuts.length>1?"s":""} par plusieurs colonnes : <strong>${dupStatuts.map(escapeHtml).join(", ")}</strong> — les tâches concernées n'apparaîtront que dans une seule des colonnes.</div>` : ""}
+    <div id="lane-config-list">
+      ${cfg.map((l,i) => `
+        <div class="lane-config-row" data-idx="${i}">
+          <button class="icon-btn" data-move="up" ${i===0?'disabled style="opacity:.3"':""}>↑</button>
+          <button class="icon-btn" data-move="down" ${i===cfg.length-1?'disabled style="opacity:.3"':""}>↓</button>
+          <input type="color" data-cfg="color" value="${l.color}">
+          <input type="text" data-cfg="label" value="${escapeHtml(l.label)}" placeholder="Nom">
+          <input type="text" data-cfg="statut" value="${escapeHtml(l.statut)}" placeholder="Statut lié" style="width:110px">
+          <label style="font-size:10px;display:flex;gap:2px;align-items:center;"><input type="checkbox" data-cfg="sortByDeadline" ${l.sortByDeadline?"checked":""}>Tri deadline</label>
+          <select data-cfg="dashCategory" title="Catégorie pour le tableau de bord">
+            <option value="todo" ${l.dashCategory==="todo"?"selected":""}>À faire</option>
+            <option value="doing" ${l.dashCategory==="doing"?"selected":""}>En cours</option>
+            <option value="done" ${l.dashCategory==="done"?"selected":""}>Terminé</option>
+            <option value="cancelled" ${l.dashCategory==="cancelled"?"selected":""}>Annulé</option>
+          </select>
+          <select data-cfg="effect" title="Effet à l'arrivée dans cette colonne">
+            ${Object.entries(EFFECTS).map(([key,def]) => `<option value="${key}" ${l.effect===key?"selected":""}>${def.label}</option>`).join("")}
+          </select>
+          ${l.effect === "custom" ? `<input type="text" data-cfg="customEmoji" value="${escapeHtml(l.customEmoji||"")}" maxlength="4" style="width:44px;text-align:center;flex:none;" placeholder="🙂">` : ""}
+          <button class="icon-btn" data-del="1">🗑️</button>
+        </div>`).join("")}
+    </div>
+    <button class="btn secondary" id="lane-add" style="margin-top:6px;">+ Ajouter une colonne</button>
+    <div class="modal-footer">
+      <button class="btn secondary" id="s-close">Annuler</button>
+      <button class="btn" id="s-save">Enregistrer</button>
+    </div>`;
+
+  document.getElementById("lane-add").onclick = () => {
+    cfg.push({ id:cid(), label:"Nouvelle colonne", statut:"Nouveau statut", color:"#999999", sortByDeadline:true, effect:"none", dashCategory:"todo", collapsedByDefault:false });
+    renderSettingsModal();
+  };
+  document.getElementById("lane-config-list").addEventListener("click", e => {
+    const row = e.target.closest(".lane-config-row");
+    if (!row) return;
+    const idx = Number(row.dataset.idx);
+    if (e.target.closest("[data-move]")){
+      const j = idx + (e.target.dataset.move === "up" ? -1 : 1);
+      if (j >= 0 && j < cfg.length){ [cfg[idx],cfg[j]] = [cfg[j],cfg[idx]]; renderSettingsModal(); }
+    } else if (e.target.closest("[data-del]")){ cfg.splice(idx,1); renderSettingsModal(); }
+  });
+  const onFieldChange = e => {
+    const row = e.target.closest(".lane-config-row");
+    if (!row || !e.target.dataset.cfg) return;
+    const idx = Number(row.dataset.idx), key = e.target.dataset.cfg;
+    cfg[idx][key] = e.target.type === "checkbox" ? e.target.checked : e.target.value;
+    if (key === "effect") renderSettingsModal();
+  };
+  document.getElementById("lane-config-list").addEventListener("input", onFieldChange);
+  document.getElementById("lane-config-list").addEventListener("change", onFieldChange);
+  document.getElementById("s-close").onclick = () => closeOverlay("settingsOverlay");
+  document.getElementById("s-save").onclick = () => { setColumnsConfig(settingsWorkingCopy); saveColumnsConfig(settingsWorkingCopy); closeOverlay("settingsOverlay"); };
+}
+
+/* ===== ONGLET VUE TABLEAU ===== */
+function renderTableView(){
+  const tbody = document.getElementById("tasksTableBody");
+  let rows = filteredRecords();
+  if (state.sortBy === "priorite"){
+    const order = ["Urgent","Haute","Moyenne","Basse"];
+    rows = [...rows].sort((a,b) => order.indexOf(a.Priorite) - order.indexOf(b.Priorite));
+  } else if (state.sortBy === "deadline"){
+    rows = [...rows].sort((a,b) => (gristDateToJS(a.Deadline)??Infinity) - (gristDateToJS(b.Deadline)??Infinity));
+  }
+  const statutOptions = [...new Set((state.columnsConfig||[]).map(l=>l.statut))];
+  const priorities = Object.keys(PRIORITY_COLORS).filter(k=>k!=="__default");
+
+  tbody.innerHTML = rows.length ? rows.map(t => {
+    const lane = state.columnsConfig?.find(l=>l.statut===t.Statut);
+    const overdue = t.Deadline && gristDateToJS(t.Deadline) < new Date() && lane?.dashCategory!=="done" && lane?.dashCategory!=="cancelled";
+    return `<tr data-id="${t.id}">
+      <td><div contenteditable="true" data-tbl-field="Description" style="min-width:160px;">${escapeHtml(t.Description||"")}</div></td>
+      <td><select data-tbl-field="Statut">${statutOptions.map(s=>`<option value="${escapeHtml(s)}" ${s===t.Statut?"selected":""}>${escapeHtml(s)}</option>`).join("")}</select></td>
+      <td><select data-tbl-field="Priorite">${priorities.map(p=>`<option value="${p}" ${p===t.Priorite?"selected":""}>${p}</option>`).join("")}</select></td>
+      <td>${decodeChoiceList(t.AssigneA).map(a=>`<span class="chip">👤 ${escapeHtml(a)}</span>`).join(" ")||"—"}</td>
+      <td>${t.Type?escapeHtml(t.Type):"—"}</td>
+      <td><input type="date" data-tbl-field="Deadline" value="${toDateInputValue(gristDateToJS(t.Deadline))}" style="${overdue?'color:#c0392b;font-weight:700;':''}"></td>
+      <td><button class="icon-btn" data-tbl-open="1" title="Ouvrir">✏️</button><button class="icon-btn" data-tbl-del="1" title="Supprimer">🗑️</button></td>
+    </tr>`;
+  }).join("") : `<tr><td colspan="7" style="padding:20px;color:#888;text-align:center;">Aucune tâche.</td></tr>`;
+}
+function initTableView(){
+  const table = document.getElementById("tasksTable");
+  table.addEventListener("click", e => {
+    const row = e.target.closest("tr[data-id]");
+    if (!row) return;
+    const id = Number(row.dataset.id);
+    if (e.target.closest("[data-tbl-open]")) return openTaskModal(id);
+    if (e.target.closest("[data-tbl-del]")){
+      const t = state.records.find(r=>r.id===id);
+      if (!confirm(`Supprimer définitivement "${t?.Description||"cette tâche"}" ?`)) return;
+      writeToGrist(() => deleteTask(id), "Suppression non enregistrée dans Grist.");
+      state.records = state.records.filter(r=>r.id!==id);
+      notify();
+    }
+  });
+  table.addEventListener("change", e => {
+    const row = e.target.closest("tr[data-id]");
+    const field = e.target.dataset.tblField;
+    if (!row || !field) return;
+    const id = Number(row.dataset.id);
+    let value = e.target.value;
+    if (field === "Deadline") value = jsDateToGristEpoch(value);
+    writeToGrist(() => updateTaskFields(id, { [field]: value }), `${field} non enregistré dans Grist.`);
+    patchRecordLocally(id, { [field]: value });
+    notify();
+  });
+  table.addEventListener("focusout", e => {
+    const el = e.target.closest('[data-tbl-field="Description"]');
+    if (!el) return;
+    const id = Number(el.closest("tr").dataset.id);
+    const val = el.textContent.trim();
+    writeToGrist(() => updateTaskFields(id, { Description: val }), "Description non enregistrée dans Grist.");
+    patchRecordLocally(id, { Description: val });
+  });
+}
+
+/* ===== ONGLET GANTT ===== */
+const GANTT_DAY_WIDTH = { day:32, week:10, month:4 };
+let ganttZoom = "day";
+const addDays = (d, n) => { const r = new Date(d); r.setDate(r.getDate()+n); return r; };
+const daysBetween = (a, b) => Math.round((b-a)/86400000);
+
+function computeGanttRange(records){
+  const dates = [];
+  records.forEach(r => {
+    const start = gristDateToJS(r.DateDebut) || gristDateToJS(r.CreeLe);
+    const end = gristDateToJS(r.Deadline);
+    if (start) dates.push(start);
+    if (end) dates.push(end);
+  });
+  const today = new Date();
+  if (!dates.length) return { min: addDays(today,-7), max: addDays(today,30) };
+  let min = new Date(Math.min(...dates.map(d=>d.getTime()), today.getTime()));
+  let max = new Date(Math.max(...dates.map(d=>d.getTime()), today.getTime()));
+  return { min: addDays(min,-3), max: addDays(max,7) };
+}
+
+function renderGantt(){
+  const records = filteredRecords();
+  let rows = [...records];
+  if (state.sortBy === "priorite"){
+    const order = ["Urgent","Haute","Moyenne","Basse"];
+    rows.sort((a,b) => order.indexOf(a.Priorite) - order.indexOf(b.Priorite));
+  } else if (state.sortBy === "deadline"){
+    rows.sort((a,b) => (gristDateToJS(a.Deadline)??Infinity) - (gristDateToJS(b.Deadline)??Infinity));
+  }
+  const { min, max } = computeGanttRange(records);
+  const totalDays = Math.max(1, daysBetween(min, max));
+  const dayW = GANTT_DAY_WIDTH[ganttZoom];
+  const totalWidth = totalDays*dayW;
+  document.getElementById("ganttLabel").textContent = `${fmtDate(min)} → ${fmtDate(max)}`;
+
+  const headerMonths = [];
+  { let cur = new Date(min);
+    while (cur < max){
+      const nextMonth = new Date(cur.getFullYear(), cur.getMonth()+1, 1);
+      const segEnd = nextMonth < max ? nextMonth : max;
+      headerMonths.push({ label: cur.toLocaleDateString("fr-FR",{month:"long",year:"numeric"}), span: Math.max(1,daysBetween(cur, segEnd)) });
+      cur = segEnd;
+    }
+  }
+  const dayLabels = [];
+  { let cur = new Date(min); for (let i=0;i<totalDays;i++){ dayLabels.push(cur.getDate()); cur = addDays(cur,1); } }
+
+  const todayOffset = daysBetween(min, new Date());
+
+  const barsData = rows.map(t => {
+    const lane = state.columnsConfig?.find(l=>l.statut===t.Statut);
+    const start = gristDateToJS(t.DateDebut) || gristDateToJS(t.CreeLe) || min;
+    const end = gristDateToJS(t.Deadline) || addDays(start,1);
+    const left = Math.max(0, daysBetween(min, start)) * dayW;
+    const span = Math.max(1, daysBetween(start, end));
+    const width = Math.max(dayW, span*dayW);
+    const color = lane?.color || "#4f7cff";
+    const cl = checklistProgress(t.Checklist);
+    const progressPct = cl ? Math.round(cl.done/cl.total*100) : 0;
+    return { t, left, width, color, progressPct };
+  });
+
+  document.getElementById("ganttContent").innerHTML = `
+    <div class="gantt-header-row">
+      <div class="gantt-corner">Tâche (${rows.length})</div>
+      <div class="gantt-header-dates" style="width:${totalWidth}px;">
+        <div class="gantt-header-months">${headerMonths.map(m=>`<div style="width:${m.span*dayW}px;">${escapeHtml(m.label)}</div>`).join("")}</div>
+        <div class="gantt-header-days">${dayLabels.map(d=>`<div style="width:${dayW}px;">${dayW>=18?d:""}</div>`).join("")}</div>
+      </div>
+    </div>
+    ${barsData.length ? barsData.map(b => `
+      <div class="gantt-row">
+        <div class="gantt-label" data-gantt-task="${b.t.id}">${escapeHtml(b.t.Description||"(sans titre)")}</div>
+        <div class="gantt-track" style="width:${totalWidth}px;">
+          ${todayOffset>=0 && todayOffset<=totalDays ? `<div class="gantt-today-line" style="left:${todayOffset*dayW}px;"></div>` : ""}
+          <div class="gantt-bar" data-gantt-task="${b.t.id}" title="${escapeHtml(b.t.Description||"")}" style="left:${b.left}px;width:${b.width}px;background:${b.color}55;border-color:${b.color};">
+            <div class="gantt-bar-fill" style="width:${b.progressPct}%;background:${b.color};"></div>
+          </div>
+        </div>
+      </div>`).join("") : `<div class="gantt-row"><div class="gantt-label">Aucune tâche.</div><div class="gantt-track" style="width:${totalWidth}px;"></div></div>`}
+  `;
+}
+function initGantt(){
+  document.getElementById("ganttZoom").addEventListener("change", e => { ganttZoom = e.target.value; renderGantt(); });
+  document.getElementById("ganttPrev").onclick = () => document.getElementById("ganttOuter").scrollBy({ left:-200, behavior:"smooth" });
+  document.getElementById("ganttNext").onclick = () => document.getElementById("ganttOuter").scrollBy({ left:200, behavior:"smooth" });
+  document.getElementById("ganttToday").onclick = () => {
+    const records = filteredRecords();
+    const { min } = computeGanttRange(records);
+    const dayW = GANTT_DAY_WIDTH[ganttZoom];
+    const offset = daysBetween(min, new Date()) * dayW;
+    document.getElementById("ganttOuter").scrollTo({ left: Math.max(0, offset-150), behavior:"smooth" });
+  };
+  document.getElementById("ganttContent").addEventListener("click", e => {
+    const t = e.target.closest("[data-gantt-task]");
+    if (t) openTaskModal(Number(t.dataset.ganttTask));
+  });
+}
+
+/* ===== ONGLET CALENDRIER ===== */
+let calYear, calMonth, calViewMode = "month", calWeekStart;
+(function initCalDate(){
+  const n = new Date(); calYear = n.getFullYear(); calMonth = n.getMonth();
+  calWeekStart = new Date(n); calWeekStart.setDate(n.getDate() - (n.getDay()+6)%7);
+})();
+
+function renderCalendar(){
+  calViewMode === "week" ? renderCalendarWeek() : renderCalendarMonth();
+}
+// range: bornes visibles du calendrier (Date, Date). Ajoute, en plus de la vraie deadline,
+// des occurrences futures "projetées" (visuelles uniquement, aucune ligne Grist créée)
+// pour les tâches récurrentes, tant qu'elles tombent dans la période affichée.
+function tasksByDayMap(rangeStart, rangeEnd){
+  const map = {};
+  filteredRecords().forEach(r => {
+    const d = gristDateToJS(r.Deadline);
+    if (d){
+      (map[toDateInputValue(d)] = map[toDateInputValue(d)] || []).push(r);
+    }
+    if (d && r.Recurrence && r.Recurrence !== "none" && rangeStart && rangeEnd){
+      let next = addInterval(d, r.Recurrence);
+      let guard = 0;
+      while (next <= rangeEnd && guard < 366){
+        guard++;
+        if (next >= rangeStart){
+          const key = toDateInputValue(next);
+          (map[key] = map[key] || []).push({ ...r, __ghost: true });
+        }
+        next = addInterval(next, r.Recurrence);
+      }
+    }
+  });
+  return map;
+}
+function renderCalTaskChip(t){
+  const style = priorityStyle(t.Priorite);
+  const ghostStyle = `background:transparent;border:1px dashed ${style.badge};color:${style.badge};`;
+  return `<div class="cal-task${t.__ghost?" cal-task-ghost":""}" draggable="${t.__ghost?"false":"true"}" data-cal-task="${t.id}" title="${t.__ghost?"Prochaine occurrence prévue (non créée)":""}" style="${t.__ghost?ghostStyle:`background:${style.badge}`}">${t.__ghost?"🔁 ":""}${escapeHtml(t.Description||"")}</div>`;
+}
+function renderCalendarMonth(){
+  const grid = document.getElementById("calendarGrid");
+  const monthNames = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+  document.getElementById("calLabel").textContent = `${monthNames[calMonth]} ${calYear}`;
+
+  const firstOfMonth = new Date(calYear, calMonth, 1);
+  const startWeekday = (firstOfMonth.getDay()+6)%7;
+  const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
+  const daysInPrevMonth = new Date(calYear, calMonth, 0).getDate();
+  const tasksByDay = tasksByDayMap(new Date(calYear,calMonth,1), new Date(calYear,calMonth,daysInMonth));
+
+  const cells = [];
+  for (let i = startWeekday-1; i >= 0; i--) cells.push({ day: daysInPrevMonth-i, muted:true });
+  for (let d = 1; d <= daysInMonth; d++) cells.push({ day:d, muted:false, dateObj:new Date(calYear,calMonth,d) });
+  let extra = 1;
+  while (cells.length % 7 !== 0) cells.push({ day: extra++, muted:true });
+
+  const todayKey = toDateInputValue(new Date());
+  const weekdayLabels = ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
+
+  grid.innerHTML = `
+    <div class="cal-weekdays">${weekdayLabels.map(w=>`<div>${w}</div>`).join("")}</div>
+    <div class="cal-days">
+      ${cells.map(c => {
+        if (c.muted) return `<div class="cal-day muted"><span class="cal-daynum">${c.day}</span></div>`;
+        const key = toDateInputValue(c.dateObj);
+        const tasks = tasksByDay[key] || [];
+        return `<div class="cal-day${key===todayKey?" today":""}" data-drop-date="${key}">
+          <span class="cal-daynum">${c.day}</span>
+          <div class="cal-day-tasks">
+            ${tasks.slice(0,3).map(renderCalTaskChip).join("")}
+            ${tasks.length>3 ? `<div class="cal-more">+${tasks.length-3}</div>` : ""}
+          </div>
+        </div>`;
+      }).join("")}
+    </div>`;
+}
+function renderCalendarWeek(){
+  const grid = document.getElementById("calendarGrid");
+  const weekdayLabels = ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
+  const days = Array.from({length:7}, (_,i) => { const d = new Date(calWeekStart); d.setDate(d.getDate()+i); return d; });
+  document.getElementById("calLabel").textContent = `${fmtDate(days[0])} – ${fmtDate(days[6])}`;
+  const tasksByDay = tasksByDayMap(days[0], days[6]);
+  const todayKey = toDateInputValue(new Date());
+
+  grid.innerHTML = `<div class="cal-days cal-week">
+    ${days.map((d,i) => {
+      const key = toDateInputValue(d);
+      const tasks = tasksByDay[key] || [];
+      return `<div class="cal-day${key===todayKey?" today":""}" data-drop-date="${key}">
+        <span class="cal-daynum">${weekdayLabels[i]} ${d.getDate()}</span>
+        <div class="cal-day-tasks">
+          ${tasks.map(renderCalTaskChip).join("")}
+        </div>
+      </div>`;
+    }).join("")}
+  </div>`;
+}
+function initCalendar(){
+  document.getElementById("calPrev").onclick = () => {
+    if (calViewMode === "month"){ calMonth--; if (calMonth<0){ calMonth=11; calYear--; } }
+    else { calWeekStart.setDate(calWeekStart.getDate()-7); }
+    renderCalendar();
+  };
+  document.getElementById("calNext").onclick = () => {
+    if (calViewMode === "month"){ calMonth++; if (calMonth>11){ calMonth=0; calYear++; } }
+    else { calWeekStart.setDate(calWeekStart.getDate()+7); }
+    renderCalendar();
+  };
+  document.getElementById("calToday").onclick = () => {
+    const n = new Date(); calYear = n.getFullYear(); calMonth = n.getMonth();
+    calWeekStart = new Date(n); calWeekStart.setDate(n.getDate() - (n.getDay()+6)%7);
+    renderCalendar();
+  };
+  document.getElementById("calViewToggle").onclick = () => {
+    calViewMode = calViewMode === "month" ? "week" : "month";
+    document.getElementById("calViewToggle").textContent = calViewMode === "month" ? "Vue : Mois" : "Vue : Semaine";
+    renderCalendar();
+  };
+  const grid = document.getElementById("calendarGrid");
+  grid.addEventListener("click", e => {
+    const t = e.target.closest("[data-cal-task]");
+    if (t) openTaskModal(Number(t.dataset.calTask));
+  });
+  grid.addEventListener("dragstart", e => {
+    const t = e.target.closest("[data-cal-task]");
+    if (t) e.dataTransfer.setData("text/plain", t.dataset.calTask);
+  });
+  grid.addEventListener("dragover", e => {
+    const day = e.target.closest("[data-drop-date]");
+    if (day){ e.preventDefault(); day.classList.add("drag-over"); }
+  });
+  grid.addEventListener("dragleave", e => e.target.closest("[data-drop-date]")?.classList.remove("drag-over"));
+  grid.addEventListener("drop", e => {
+    const day = e.target.closest("[data-drop-date]");
+    if (!day) return;
+    e.preventDefault();
+    day.classList.remove("drag-over");
+    const id = Number(e.dataTransfer.getData("text/plain"));
+    const epoch = jsDateToGristEpoch(day.dataset.dropDate);
+    writeToGrist(() => updateTaskFields(id, { Deadline: epoch }), "Deadline non enregistrée dans Grist.");
+    patchRecordLocally(id, { Deadline: epoch });
+    notify();
+  });
+}
+
+/* ===== ONGLET WHITEBOARD ===== */
+let wbStrokes = [];
+let wbElements = [];
+let wbCurrentStroke = null;
+let wbDraftStart = null;
+let wbActiveEl = null;
+let wbSelectedId = null;
+let wbColor = "#222222";
+let wbSize = 3;
+let wbTool = "pen"; // pen | eraser | rect | ellipse | arrow | text | sticky | select
+let wbZoom = 1;
+let wbSaveTimer = null;
+
+function wbRedraw(){
+  const canvas = document.getElementById("wbCanvas");
+  const ctx = canvas.getContext("2d");
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.lineCap = "round"; ctx.lineJoin = "round";
+  wbStrokes.forEach(s => {
+    if (s.points.length < 2) return;
+    ctx.strokeStyle = s.erase ? "#ffffff" : s.color;
+    ctx.lineWidth = s.size;
+    ctx.beginPath();
+    ctx.moveTo(s.points[0][0], s.points[0][1]);
+    s.points.slice(1).forEach(p => ctx.lineTo(p[0], p[1]));
+    ctx.stroke();
+  });
+}
+function wbResizeCanvas(){
+  const wrap = document.getElementById("wbCanvasWrap");
+  const rect = wrap.getBoundingClientRect();
+  const w = Math.max(Math.round(rect.width*1.6), 1200), h = Math.max(Math.round(rect.height*1.6), 800);
+  const canvas = document.getElementById("wbCanvas");
+  if (canvas.width === w && canvas.height === h) return;
+  canvas.width = w; canvas.height = h;
+  document.getElementById("wbZoomLayer").style.width = w+"px";
+  document.getElementById("wbZoomLayer").style.height = h+"px";
+  document.getElementById("wbOverlay").style.width = w+"px";
+  document.getElementById("wbOverlay").style.height = h+"px";
+  wbRedraw();
+}
+function wbApplyZoom(){
+  document.getElementById("wbZoomLayer").style.zoom = wbZoom;
+  document.getElementById("wbZoomLabel").textContent = Math.round(wbZoom*100)+"%";
+}
+function wbSaveDebounced(){
+  clearTimeout(wbSaveTimer);
+  wbSaveTimer = setTimeout(() => saveWhiteboardData({ strokes: wbStrokes, elements: wbElements }), 800);
+}
+function loadWhiteboardData(raw){
+  const data = raw || whiteboardStore.load() || { strokes: [], elements: [] };
+  if (Array.isArray(data)){ wbStrokes = data; wbElements = []; }
+  else { wbStrokes = data.strokes || []; wbElements = data.elements || []; }
+  if (document.getElementById("wbCanvas").width){ wbRedraw(); renderWbOverlay(); }
+}
+function updateWbToolbarUI(){
+  document.querySelectorAll("[data-wb-tool]").forEach(b => b.classList.toggle("active", b.dataset.wbTool === wbTool));
+  document.querySelectorAll("[data-wb-color]").forEach(b => b.classList.toggle("active", b.dataset.wbColor === wbColor));
+}
+
+function wbCreateElement(type, x, y){
+  const defaults = { rect:{w:140,h:90}, ellipse:{w:140,h:90}, text:{w:170,h:50}, sticky:{w:160,h:140} };
+  const d = defaults[type] || { w:120, h:80 };
+  return { id: cid(), type, x, y, w:d.w, h:d.h, color: type==="sticky" ? "#fff6b8" : wbColor, text:"" };
+}
+function wbHandlesHtml(){
+  return `<span class="wb-del" data-wb-del title="Supprimer">✕</span><span class="wb-resize" data-wb-resize title="Redimensionner"></span>`;
+}
+function wbElementHtml(el){
+  if (el.type === "arrow"){
+    const minX = Math.min(el.x1,el.x2), minY = Math.min(el.y1,el.y2);
+    const w = Math.abs(el.x2-el.x1)||2, h = Math.abs(el.y2-el.y1)||2;
+    const rx1 = el.x1-minX, ry1 = el.y1-minY, rx2 = el.x2-minX, ry2 = el.y2-minY;
+    return `<div class="wb-el" data-id="${el.id}" data-type="arrow" style="left:${minX}px;top:${minY}px;width:${w}px;height:${h}px;">
+      <svg width="100%" height="100%" style="position:absolute;inset:0;overflow:visible;pointer-events:none;">
+        <defs><marker id="ah-${el.id}" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="${el.color}"/></marker></defs>
+        <line x1="${rx1}" y1="${ry1}" x2="${rx2}" y2="${ry2}" stroke="${el.color}" stroke-width="3" marker-end="url(#ah-${el.id})"/>
+      </svg>
+      ${wbHandlesHtml()}
+    </div>`;
+  }
+  const style = `left:${el.x}px;top:${el.y}px;width:${el.w}px;height:${el.h}px;`;
+  if (el.type === "rect")
+    return `<div class="wb-el" data-id="${el.id}" data-type="rect" style="${style}"><div class="wb-shape-inner" style="border:3px solid ${el.color};border-radius:6px;"></div>${wbHandlesHtml()}</div>`;
+  if (el.type === "ellipse")
+    return `<div class="wb-el" data-id="${el.id}" data-type="ellipse" style="${style}"><div class="wb-shape-inner" style="border:3px solid ${el.color};border-radius:50%;"></div>${wbHandlesHtml()}</div>`;
+  if (el.type === "text")
+    return `<div class="wb-el" data-id="${el.id}" data-type="text" style="${style}">
+      <div class="wb-draghandle" data-wb-drag>⠿</div>
+      <div class="wb-content" contenteditable="true" style="color:${el.color};">${escapeHtml(el.text)}</div>
+      ${wbHandlesHtml()}
+    </div>`;
+  if (el.type === "sticky")
+    return `<div class="wb-el" data-id="${el.id}" data-type="sticky" style="${style}">
+      <div class="wb-draghandle" data-wb-drag>⠿</div>
+      <div class="wb-content wb-sticky-content" contenteditable="true" style="background:${el.color};">${escapeHtml(el.text)}</div>
+      ${wbHandlesHtml()}
+    </div>`;
+  return "";
+}
+function renderWbOverlay(){
+  document.getElementById("wbOverlay").innerHTML = wbElements.map(wbElementHtml).join("");
+  if (wbSelectedId) wbSelectElement(wbSelectedId);
+}
+function wbSelectElement(id){
+  wbSelectedId = id;
+  document.querySelectorAll(".wb-el").forEach(d => d.classList.toggle("selected", d.dataset.id === id));
+}
+function wbRecolorSelected(color){
+  const el = wbElements.find(x => x.id === wbSelectedId);
+  if (!el) return;
+  el.color = color;
+  renderWbOverlay();
+  wbSaveDebounced();
+}
+function wbDuplicateSelected(){
+  const el = wbElements.find(x => x.id === wbSelectedId);
+  if (!el) return;
+  const copy = { ...el, id: cid() };
+  if (copy.type === "arrow"){ copy.x1 += 20; copy.y1 += 20; copy.x2 += 20; copy.y2 += 20; }
+  else { copy.x += 20; copy.y += 20; }
+  wbElements.push(copy);
+  renderWbOverlay();
+  wbSelectElement(copy.id);
+  wbSaveDebounced();
+}
+
+function wbContentXY(e, wrap){
+  const rect = wrap.getBoundingClientRect();
+  return { x: (e.clientX-rect.left)/wbZoom + wrap.scrollLeft/wbZoom, y: (e.clientY-rect.top)/wbZoom + wrap.scrollTop/wbZoom };
+}
+function wbWrapPointerDown(e){
+  const wrap = document.getElementById("wbCanvasWrap");
+  wrap.setPointerCapture?.(e.pointerId);
+  const { x, y } = wbContentXY(e, wrap);
+
+  if (wbTool === "pen" || wbTool === "eraser"){
+    wbCurrentStroke = { color: wbColor, size: wbSize, erase: wbTool === "eraser", points: [[x,y]] };
+    wbStrokes.push(wbCurrentStroke);
+    return;
+  }
+  if (wbTool === "rect" || wbTool === "ellipse"){
+    wbDraftStart = { x, y, type: wbTool };
+    const draft = document.createElement("div");
+    draft.id = "wbDraft";
+    draft.style.cssText = `position:absolute;left:${x}px;top:${y}px;width:0;height:0;border:2px dashed ${wbColor};border-radius:${wbTool==="ellipse"?"50%":"6px"};pointer-events:none;`;
+    document.getElementById("wbOverlay").appendChild(draft);
+    return;
+  }
+  if (wbTool === "arrow"){
+    wbDraftStart = { x, y, type: "arrow" };
+    const svg = document.createElementNS("http://www.w3.org/2000/svg","svg");
+    svg.id = "wbDraft";
+    svg.style.cssText = "position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible;";
+    svg.innerHTML = `<line x1="${x}" y1="${y}" x2="${x}" y2="${y}" stroke="${wbColor}" stroke-width="3" stroke-dasharray="4 3"/>`;
+    document.getElementById("wbOverlay").appendChild(svg);
+    return;
+  }
+  if (wbTool === "text" || wbTool === "sticky"){
+    const el = wbCreateElement(wbTool, x, y);
+    wbElements.push(el);
+    renderWbOverlay();
+    wbSelectElement(el.id);
+    wbTool = "select"; updateWbToolbarUI();
+    requestAnimationFrame(() => document.querySelector(`.wb-el[data-id="${el.id}"] .wb-content`)?.focus());
+    wbSaveDebounced();
+    return;
+  }
+  wbSelectElement(null);
+}
+function wbWrapPointerMove(e){
+  const wrap = document.getElementById("wbCanvasWrap");
+  const { x, y } = wbContentXY(e, wrap);
+  if (wbCurrentStroke){ wbCurrentStroke.points.push([x,y]); wbRedraw(); return; }
+  if (wbDraftStart?.type === "arrow"){
+    const svg = document.getElementById("wbDraft");
+    if (svg){ const line = svg.querySelector("line"); line.setAttribute("x2", x); line.setAttribute("y2", y); }
+    return;
+  }
+  if (wbDraftStart){
+    const draft = document.getElementById("wbDraft");
+    if (!draft) return;
+    Object.assign(draft.style, {
+      left: Math.min(x, wbDraftStart.x)+"px", top: Math.min(y, wbDraftStart.y)+"px",
+      width: Math.abs(x-wbDraftStart.x)+"px", height: Math.abs(y-wbDraftStart.y)+"px",
+    });
+  }
+}
+function wbWrapPointerUp(e){
+  if (wbCurrentStroke){ wbCurrentStroke = null; wbSaveDebounced(); return; }
+  if (wbDraftStart?.type === "arrow"){
+    const wrap = document.getElementById("wbCanvasWrap");
+    const { x, y } = wbContentXY(e, wrap);
+    document.getElementById("wbDraft")?.remove();
+    if (Math.hypot(x-wbDraftStart.x, y-wbDraftStart.y) > 10){
+      const el = { id: cid(), type:"arrow", x1: wbDraftStart.x, y1: wbDraftStart.y, x2: x, y2: y, color: wbColor };
+      wbElements.push(el);
+      renderWbOverlay();
+      wbSelectElement(el.id);
+      wbSaveDebounced();
+    }
+    wbDraftStart = null;
+    wbTool = "select"; updateWbToolbarUI();
+    return;
+  }
+  if (wbDraftStart){
+    const draft = document.getElementById("wbDraft");
+    const w = parseFloat(draft.style.width) || 0, h = parseFloat(draft.style.height) || 0;
+    if (w > 10 && h > 10){
+      const el = wbCreateElement(wbDraftStart.type, parseFloat(draft.style.left), parseFloat(draft.style.top));
+      el.w = w; el.h = h;
+      wbElements.push(el);
+      renderWbOverlay();
+      wbSelectElement(el.id);
+      wbSaveDebounced();
+    }
+    draft.remove();
+    wbDraftStart = null;
+    wbTool = "select"; updateWbToolbarUI();
+  }
+}
+
+function initWbOverlayEvents(){
+  const overlay = document.getElementById("wbOverlay");
+  overlay.addEventListener("pointerdown", e => {
+    const elDiv = e.target.closest(".wb-el");
+    if (!elDiv) return;
+    e.stopPropagation();
+
+    const delBtn = e.target.closest("[data-wb-del]");
+    if (delBtn){
+      wbElements = wbElements.filter(x => x.id !== elDiv.dataset.id);
+      if (wbSelectedId === elDiv.dataset.id) wbSelectedId = null;
+      renderWbOverlay();
+      wbSaveDebounced();
+      return;
+    }
+
+    wbSelectElement(elDiv.dataset.id);
+
+    const resizeHandle = e.target.closest("[data-wb-resize]");
+    const dragHandle = e.target.closest("[data-wb-drag]");
+    const type = elDiv.dataset.type;
+    const isShapeBody = (type === "rect" || type === "ellipse" || type === "arrow") && !resizeHandle;
+
+    if (resizeHandle || dragHandle || isShapeBody){
+      e.preventDefault();
+      const el = wbElements.find(x => x.id === elDiv.dataset.id);
+      wbActiveEl = {
+        id: el.id, mode: resizeHandle ? "resize" : "move",
+        startX: e.clientX, startY: e.clientY,
+        orig: el.type === "arrow" ? { x1:el.x1, y1:el.y1, x2:el.x2, y2:el.y2 } : { x:el.x, y:el.y, w:el.w, h:el.h },
+      };
+      overlay.setPointerCapture(e.pointerId);
+    }
+  });
+  overlay.addEventListener("pointermove", e => {
+    if (!wbActiveEl) return;
+    const el = wbElements.find(x => x.id === wbActiveEl.id);
+    const div = overlay.querySelector(`.wb-el[data-id="${wbActiveEl.id}"]`);
+    if (!el || !div) return;
+    const dx = (e.clientX - wbActiveEl.startX)/wbZoom, dy = (e.clientY - wbActiveEl.startY)/wbZoom;
+    if (el.type === "arrow"){
+      if (wbActiveEl.mode === "move"){
+        el.x1 = wbActiveEl.orig.x1+dx; el.y1 = wbActiveEl.orig.y1+dy;
+        el.x2 = wbActiveEl.orig.x2+dx; el.y2 = wbActiveEl.orig.y2+dy;
+      } else {
+        el.x2 = wbActiveEl.orig.x2+dx; el.y2 = wbActiveEl.orig.y2+dy;
+      }
+      div.outerHTML = wbElementHtml(el);
+      wbSelectElement(el.id);
+      return;
+    }
+    if (wbActiveEl.mode === "move"){
+      el.x = wbActiveEl.orig.x + dx; el.y = wbActiveEl.orig.y + dy;
+      div.style.left = el.x + "px"; div.style.top = el.y + "px";
+    } else {
+      el.w = Math.max(30, wbActiveEl.orig.w + dx); el.h = Math.max(24, wbActiveEl.orig.h + dy);
+      div.style.width = el.w + "px"; div.style.height = el.h + "px";
+    }
+  });
+  const endActive = () => { if (wbActiveEl){ wbActiveEl = null; wbSaveDebounced(); } };
+  overlay.addEventListener("pointerup", endActive);
+  overlay.addEventListener("pointerleave", endActive);
+  overlay.addEventListener("input", e => {
+    const content = e.target.closest(".wb-content");
+    if (!content) return;
+    const el = wbElements.find(x => x.id === content.closest(".wb-el").dataset.id);
+    if (el){ el.text = content.textContent; wbSaveDebounced(); }
+  });
+}
+
+function initWhiteboard(){
+  const wrap = document.getElementById("wbCanvasWrap");
+  window.addEventListener("resize", () => { if (currentTab === "whiteboard") wbResizeCanvas(); });
+  wrap.addEventListener("pointerdown", wbWrapPointerDown);
+  wrap.addEventListener("pointermove", wbWrapPointerMove);
+  wrap.addEventListener("pointerup", wbWrapPointerUp);
+  wrap.addEventListener("pointerleave", wbWrapPointerUp);
+  initWbOverlayEvents();
+
+  document.getElementById("wbToolbar").addEventListener("click", e => {
+    const toolBtn = e.target.closest("[data-wb-tool]");
+    if (toolBtn){ wbTool = toolBtn.dataset.wbTool; updateWbToolbarUI(); return; }
+    const colorBtn = e.target.closest("[data-wb-color]");
+    if (colorBtn){
+      wbColor = colorBtn.dataset.wbColor; updateWbToolbarUI();
+      if (wbSelectedId) wbRecolorSelected(wbColor);
+      return;
+    }
+    if (e.target.closest("#wbClear")){
+      if (confirm("Effacer tout le whiteboard (traits, formes, textes, post-its) ? Cette action est irréversible.")){
+        const prevStrokes = wbStrokes, prevElements = wbElements;
+        wbStrokes = []; wbElements = []; wbSelectedId = null;
+        wbRedraw(); renderWbOverlay(); wbSaveDebounced();
+        pushUndo(() => { wbStrokes = prevStrokes; wbElements = prevElements; wbRedraw(); renderWbOverlay(); wbSaveDebounced(); });
+      }
+    }
+  });
+  document.getElementById("wbSize").addEventListener("input", e => { wbSize = Number(e.target.value); });
+  document.getElementById("wbZoomIn").onclick = () => { wbZoom = Math.min(2.5, +(wbZoom+0.2).toFixed(2)); wbApplyZoom(); };
+  document.getElementById("wbZoomOut").onclick = () => { wbZoom = Math.max(0.4, +(wbZoom-0.2).toFixed(2)); wbApplyZoom(); };
+  document.addEventListener("keydown", e => {
+    if (currentTab !== "whiteboard" || anyOverlayOpen()) return;
+    if ((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==="d" && wbSelectedId && !e.target.closest("[contenteditable]")){
+      e.preventDefault(); wbDuplicateSelected();
+    }
+  });
+}
+
+/* ===== ONGLET TABLEAU DE BORD ===== */
+function computeDashboardStats(records){
+  records = records || filteredRecords();
+  const laneByStatut = {};
+  (state.columnsConfig||[]).forEach(l => laneByStatut[l.statut] = l);
+  const now = new Date();
+  let done=0, doing=0, overdue=0;
+  const byStatut={}, byPriorite={}, byPerson={};
+  const doneDurations = [];
+  records.forEach(r => {
+    const lane = laneByStatut[r.Statut];
+    const cat = lane?.dashCategory || "todo";
+    if (cat === "done") done++;
+    if (cat === "doing") doing++;
+    const d = gristDateToJS(r.Deadline);
+    if (d && d < now && cat !== "done" && cat !== "cancelled") overdue++;
+    if (cat === "done"){
+      const created = gristDateToJS(r.CreeLe), completed = gristDateToJS(r.DerniereMaj);
+      if (created && completed) doneDurations.push((completed-created)/86400000);
+    }
+    const statutLabel = r.Statut || "—";
+    byStatut[statutLabel] = (byStatut[statutLabel]||0)+1;
+    byPriorite[r.Priorite||"—"] = (byPriorite[r.Priorite||"—"]||0)+1;
+    decodeChoiceList(r.AssigneA).forEach(name => {
+      byPerson[name] = byPerson[name] || { total:0, doing:0 };
+      byPerson[name].total++;
+      if (cat === "doing") byPerson[name].doing++;
+    });
+  });
+  const avgProcessingDays = doneDurations.length ? doneDurations.reduce((a,b)=>a+b,0)/doneDurations.length : null;
+  return { total: records.length, done, doing, overdue, byStatut, byPriorite, byPerson, laneByStatut, avgProcessingDays };
+}
+function computeEvolutionData(){
+  const weeks = 8, now = new Date();
+  const buckets = [];
+  for (let i = weeks-1; i >= 0; i--){
+    const end = new Date(now); end.setDate(end.getDate()-i*7);
+    const start = new Date(end); start.setDate(start.getDate()-6);
+    buckets.push({ start, end, created:0, completed:0, label:`${start.getDate()}/${start.getMonth()+1}` });
+  }
+  const laneByStatut = {};
+  (state.columnsConfig||[]).forEach(l => laneByStatut[l.statut] = l);
+  filteredRecords().forEach(r => {
+    const created = gristDateToJS(r.CreeLe);
+    const isDone = laneByStatut[r.Statut]?.dashCategory === "done";
+    const completed = isDone ? gristDateToJS(r.DerniereMaj) : null;
+    buckets.forEach(b => {
+      if (created && created >= b.start && created <= b.end) b.created++;
+      if (completed && completed >= b.start && completed <= b.end) b.completed++;
+    });
+  });
+  return buckets;
+}
+function renderDonutSVG(segments, size=130, thickness=20){
+  const total = segments.reduce((s,x)=>s+x.value,0) || 1;
+  const r = (size-thickness)/2, circ = 2*Math.PI*r;
+  let offset = 0;
+  const circles = segments.map(seg => {
+    const dash = (seg.value/total)*circ;
+    const el = `<circle cx="${size/2}" cy="${size/2}" r="${r}" fill="none" stroke="${seg.color}" stroke-width="${thickness}" stroke-dasharray="${dash} ${circ-dash}" stroke-dashoffset="${-offset}" transform="rotate(-90 ${size/2} ${size/2})"/>`;
+    offset += dash;
+    return el;
+  }).join("");
+  return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">${circles}<text x="50%" y="50%" text-anchor="middle" dominant-baseline="central" font-size="18" font-weight="800" fill="var(--ink)">${total}</text></svg>`;
+}
+function renderModule(id){
+  const stats = computeDashboardStats();
+  if (id === "kpis"){
+    return `<div class="kpi-grid">
+      <div class="kpi-card"><div class="kpi-value">${stats.total}</div><div class="kpi-label">Total</div></div>
+      <div class="kpi-card"><div class="kpi-value">${stats.doing}</div><div class="kpi-label">En cours</div></div>
+      <div class="kpi-card"><div class="kpi-value">${stats.done}</div><div class="kpi-label">Terminées</div></div>
+      <div class="kpi-card"><div class="kpi-value" style="${stats.overdue?'color:#c0392b':''}">${stats.overdue}</div><div class="kpi-label">En retard</div></div>
+      <div class="kpi-card"><div class="kpi-value">${stats.avgProcessingDays!=null ? stats.avgProcessingDays.toFixed(1) : "—"}</div><div class="kpi-label">⏱️ Jours moy.</div></div>
+    </div>`;
+  }
+  if (id === "donutStatut"){
+    const entries = Object.entries(stats.byStatut);
+    if (!entries.length) return `<p style="font-size:12px;color:var(--muted);">Aucune donnée.</p>`;
+    const segments = entries.map(([statut,count]) => ({ value:count, color: stats.laneByStatut[statut]?.color || "#999", label:statut }));
+    return `<div class="donut-wrap">${renderDonutSVG(segments)}<div class="donut-legend">${segments.map(s=>`<div><span class="donut-legend-dot" style="background:${s.color}"></span>${escapeHtml(s.label)} (${s.value})</div>`).join("")}</div></div>`;
+  }
+  if (id === "barsPriorite"){
+    const priorities = Object.keys(PRIORITY_COLORS).filter(k=>k!=="__default");
+    const max = Math.max(1, ...priorities.map(p => stats.byPriorite[p]||0));
+    return priorities.map(p => {
+      const count = stats.byPriorite[p]||0, pct = Math.round(count/max*100);
+      return `<div class="bar-row">
+        <div style="display:flex;justify-content:space-between;font-size:11.5px;margin-bottom:2px;"><span>${p}</span><span>${count}</span></div>
+        <div class="bar-track"><div class="bar-fill" style="width:${pct}%;background:${priorityStyle(p).badge}"></div></div>
+      </div>`;
+    }).join("");
+  }
+  if (id === "teamLoad"){
+    const names = Object.keys(stats.byPerson).sort((a,b)=>a.localeCompare(b,"fr"));
+    if (!names.length) return `<p style="font-size:12px;color:var(--muted);">Aucune tâche assignée.</p>`;
+    return `<table style="width:100%;font-size:12.5px;border-collapse:collapse;">
+      <tr style="text-align:left;color:var(--muted);"><th style="padding:4px 0;">Personne</th><th>Total</th><th>En cours</th></tr>
+      ${names.map(n=>`<tr><td style="padding:4px 0;">${escapeHtml(n)}</td><td>${stats.byPerson[n].total}</td><td>${stats.byPerson[n].doing}</td></tr>`).join("")}
+    </table>`;
+  }
+  if (id === "evolution"){
+    const data = computeEvolutionData();
+    const max = Math.max(1, ...data.map(b=>Math.max(b.created,b.completed)));
+    const w=320, h=110, pad=16;
+    const stepX = (w-pad*2)/((data.length-1)||1);
+    const pts = key => data.map((b,i)=>`${pad+i*stepX},${h-pad-(b[key]/max)*(h-pad*2)}`).join(" ");
+    return `<svg viewBox="0 0 ${w} ${h}" width="100%" style="max-width:420px;">
+      <polyline points="${pts('created')}" fill="none" stroke="#4f7cff" stroke-width="2"/>
+      <polyline points="${pts('completed')}" fill="none" stroke="#3a9d4c" stroke-width="2"/>
+    </svg>
+    <div style="font-size:11px;display:flex;gap:14px;margin-top:4px;">
+      <span><span style="display:inline-block;width:8px;height:8px;background:#4f7cff;border-radius:50%;margin-right:4px;"></span>Créées</span>
+      <span><span style="display:inline-block;width:8px;height:8px;background:#3a9d4c;border-radius:50%;margin-right:4px;"></span>Terminées</span>
+    </div>`;
+  }
+  if (id === "deadlines"){
+    const withDeadline = filteredRecords().filter(r=>r.Deadline).sort((a,b)=>gristDateToJS(a.Deadline)-gristDateToJS(b.Deadline));
+    if (!withDeadline.length) return `<p style="font-size:12px;color:var(--muted);">Aucune échéance définie.</p>`;
+    const now = new Date();
+    return withDeadline.map(r => {
+      const d = gristDateToJS(r.Deadline), overdue = d < now;
+      return `<div data-cal-task="${r.id}" style="display:flex;justify-content:space-between;gap:8px;padding:4px 0;border-bottom:1px solid #f0f0f0;font-size:12.5px;cursor:pointer;">
+        <span>${escapeHtml(r.Description||"(sans titre)")}</span>
+        <span style="${overdue?'color:#c0392b;font-weight:700;':''}">${fmtDate(d)}</span>
+      </div>`;
+    }).join("");
+  }
+  return "";
+}
+function renderDashboard(){
+  const grid = document.getElementById("dashboardGrid");
+  if (!state.dashboardLayout){ grid.innerHTML = ""; return; }
+  const visible = state.dashboardLayout.filter(m => m.visible && DASHBOARD_MODULES[m.id]);
+  grid.innerHTML = visible.length ? visible.map(m => `
+    <div class="dash-module${DASHBOARD_MODULES[m.id].full ? " full" : ""}">
+      <h3>${escapeHtml(DASHBOARD_MODULES[m.id].label)}</h3>
+      ${renderModule(m.id)}
+    </div>`).join("") : `<p style="padding:20px;color:#888;">Aucun module actif — cliquez sur ⚙️ Personnaliser pour en ajouter.</p>`;
+}
+function initDashboard(){
+  document.getElementById("dashboardGrid").addEventListener("click", e => {
+    const t = e.target.closest("[data-cal-task]");
+    if (t) openTaskModal(Number(t.dataset.calTask));
+  });
+  document.getElementById("btnDashExport").onclick = exportCsv;
+  document.getElementById("btnDashPrint").onclick = () => window.print();
+  document.getElementById("btnDashConfig").onclick = openDashConfigModal;
+}
+
+let dashWorkingCopy = [];
+function openDashConfigModal(){
+  dashWorkingCopy = (state.dashboardLayout || defaultDashboardLayout()).map(m => ({ ...m }));
+  Object.keys(DASHBOARD_MODULES).forEach(id => { if (!dashWorkingCopy.find(m => m.id === id)) dashWorkingCopy.push({ id, visible:false }); });
+  renderDashConfigModal();
+  openOverlay("dashConfigOverlay");
+}
+function renderDashConfigModal(){
+  const cfg = dashWorkingCopy;
+  document.getElementById("dashConfigModal").innerHTML = `
+    <h2>Personnaliser le tableau de bord</h2>
+    <div id="dash-config-list">
+      ${cfg.map((m,i) => `
+        <div class="dash-config-row" data-idx="${i}">
+          <button class="icon-btn" data-move="up" ${i===0?'disabled style="opacity:.3"':""}>↑</button>
+          <button class="icon-btn" data-move="down" ${i===cfg.length-1?'disabled style="opacity:.3"':""}>↓</button>
+          <label style="flex:1;display:flex;align-items:center;gap:6px;"><input type="checkbox" data-dash-visible ${m.visible?"checked":""}> ${escapeHtml(DASHBOARD_MODULES[m.id]?.label || m.id)}</label>
+        </div>`).join("")}
+    </div>
+    <div class="modal-footer">
+      <button class="btn secondary" id="dc-close">Annuler</button>
+      <button class="btn" id="dc-save">Enregistrer</button>
+    </div>`;
+  document.getElementById("dash-config-list").addEventListener("click", e => {
+    const row = e.target.closest(".dash-config-row");
+    if (!row) return;
+    const idx = Number(row.dataset.idx);
+    if (e.target.closest("[data-move]")){
+      const j = idx + (e.target.dataset.move === "up" ? -1 : 1);
+      if (j >= 0 && j < cfg.length){ [cfg[idx],cfg[j]] = [cfg[j],cfg[idx]]; renderDashConfigModal(); }
+    }
+  });
+  document.getElementById("dash-config-list").addEventListener("change", e => {
+    if (e.target.matches("[data-dash-visible]")){
+      cfg[Number(e.target.closest(".dash-config-row").dataset.idx)].visible = e.target.checked;
+    }
+  });
+  document.getElementById("dc-close").onclick = () => closeOverlay("dashConfigOverlay");
+  document.getElementById("dc-save").onclick = () => { setDashboardLayout(dashWorkingCopy); saveDashboardLayout(dashWorkingCopy); closeOverlay("dashConfigOverlay"); };
+}
+
+/* ===== NAVIGATION PAR ONGLETS ===== */
+let currentTab = "kanban";
+function renderTab(tab){
+  if (tab === "kanban") renderBoard();
+  else if (tab === "table") renderTableView();
+  else if (tab === "gantt") renderGantt();
+  else if (tab === "calendar") renderCalendar();
+  else if (tab === "whiteboard"){ wbResizeCanvas(); renderWbOverlay(); }
+  else if (tab === "dashboard") renderDashboard();
+  refreshOverdueBadge();
+  renderGlobalStats();
+}
+function switchTab(tab){
+  currentTab = tab;
+  document.querySelectorAll(".view").forEach(v => v.classList.add("hidden"));
+  document.getElementById("view-"+tab).classList.remove("hidden");
+  document.querySelectorAll(".tab-btn").forEach(b => { const on = b.dataset.tab === tab; b.classList.toggle("active", on); b.setAttribute("aria-selected", on); });
+  renderTab(tab);
+}
+
+/* ===== RACCOURCIS CLAVIER =====
+   Ctrl+N est réservé par les navigateurs (nouvelle fenêtre) et n'atteint jamais la page ;
+   la touche "n" seule (hors saisie de texte) sert donc de raccourci "nouvelle tâche". */
+document.addEventListener("keydown", e => {
+  const typing = e.target.closest("input,textarea,[contenteditable]");
+  if (e.key === "Escape"){
+    if (anyOverlayOpen()) closeAllOverlays();
+    return;
+  }
+  if ((e.ctrlKey||e.metaKey) && e.key.toLowerCase() === "z" && !typing){
+    e.preventDefault(); performUndo(); return;
+  }
+  if (!typing && e.key.toLowerCase() === "n" && !e.ctrlKey && !e.metaKey && !e.altKey && currentTab === "kanban" && state.columnsConfig?.[0]){
+    e.preventDefault(); handleAddCard(state.columnsConfig[0].id);
+  }
+});
+
+/* ===== COMPOSITION ROOT ===== */
+subscribe(() => renderTab(currentTab));
+initBoardEvents();
+initBulkBar();
+initTaskModalEvents();
+initFiltersBar();
+initCalendar();
+initTableView();
+initGantt();
+initAlerts();
+initThemeToggle();
+document.getElementById("btnGlobalExportCsv").onclick = exportCsv;
+initWhiteboard();
+initDashboard();
+updateWbToolbarUI();
+wbApplyZoom();
+document.getElementById("tabBar").addEventListener("click", e => {
+  const btn = e.target.closest("[data-tab]");
+  if (btn) switchTab(btn.dataset.tab);
+});
+document.getElementById("btnTemplates").onclick = openTemplatesModal;
+
+initGrist({
+  onRecordsChange: setRecords,
+  onOptionsChange: options => {
+    setColumnsConfig(options.kanbanColumns || columnsStore.load() || defaultColumnsConfig());
+    loadWhiteboardData(options.whiteboardData);
+    setDashboardLayout(options.dashboardLayout || dashboardStore.load() || defaultDashboardLayout());
+    setTaskTemplates(options.taskTemplates || templatesStore.load() || defaultTaskTemplates());
+  },
+  onUnavailable: () => {
+    setColumnsConfig(columnsStore.load() || defaultColumnsConfig());
+    loadWhiteboardData(null);
+    setDashboardLayout(dashboardStore.load() || defaultDashboardLayout());
+    setTaskTemplates(templatesStore.load() || defaultTaskTemplates());
+    setRecords([]);
+  },
+});
+
+document.getElementById("btnSettings").onclick = openSettingsModal;
+document.getElementById("btnNewCard").onclick = () => state.columnsConfig?.[0] && handleAddCard(state.columnsConfig[0].id);
+document.getElementById("btnExportCsv").onclick = exportCsv;
+const board = document.getElementById("board");
+if (localStorage.getItem("kanban_view_mode") === "stacked") board.classList.add("stacked");
+document.getElementById("btnToggleView").onclick = () => {
+  const stacked = board.classList.toggle("stacked");
+  localStorage.setItem("kanban_view_mode", stacked ? "stacked" : "columns");
+};
+</script>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kanban Grist</title>
+<script src="https://docs.getgrist.com/grist-plugin-api.js"></script>
+<style>
+:root{ --bg:#eef1f5; --ink:#2b2b2b; --muted:#6b7280; --col-bg:#dfe3ea; --col-header:#c9ced8; --accent:#4f7cff; --shadow:0 3px 8px rgba(0,0,0,.18); --surface:#fff; --border:#d7dae0; }
+#fSearch,#fAssignee,#fPriorite,#fType{color:#000000;}
+:root[data-theme="dark"]{ --bg:#181a1f; --ink:#e8e8ea; --muted:#9aa0ab; --col-bg:#242731; --col-header:#2e323e; --accent:#5c86ff; --shadow:0 3px 10px rgba(0,0,0,.5); --surface:#20222a; --border:#333744; }
+:root[data-theme="dark"] .card{box-shadow:var(--shadow);}
+:root[data-theme="dark"] .modal,:root[data-theme="dark"] #wbCanvasWrap,:root[data-theme="dark"] .kpi-card,:root[data-theme="dark"] .dash-module{background:var(--surface);color:var(--ink);}
+:root[data-theme="dark"] .field textarea,:root[data-theme="dark"] .field input,:root[data-theme="dark"] .field select,:root[data-theme="dark"] .sub-toolbar input[type=search],:root[data-theme="dark"] .sub-toolbar select,:root[data-theme="dark"] .lane-config-row input[type=text]{background:var(--surface);color:var(--ink);border-color:var(--border);}
+:root[data-theme="dark"] #fSearch,:root[data-theme="dark"] #fAssignee,:root[data-theme="dark"] #fPriorite,:root[data-theme="dark"] #fType{color:var(--ink);}
+:root[data-theme="dark"] #toolbar,:root[data-theme="dark"] .sub-toolbar{background:var(--surface);border-color:var(--border);}
+:root[data-theme="dark"] .btn.secondary{background:#2c2f3a;color:var(--ink);}
+:root[data-theme="dark"] .lane-count,:root[data-theme="dark"] #wbCanvasWrap{background:var(--surface);}
+:root[data-theme="dark"] .cal-day{background:var(--surface);color:var(--ink);}
+:root[data-theme="dark"] .stat-card{background:var(--surface);}
+:root[data-theme="dark"] #tasksTable th{background:var(--surface);}
+:root[data-theme="dark"] #tasksTable tr:hover{background:#262a33;}
+:root[data-theme="dark"] #tasksTable td{border-color:var(--border);}
+:root[data-theme="dark"] #ganttOuter,:root[data-theme="dark"] .gantt-corner,:root[data-theme="dark"] .gantt-label,:root[data-theme="dark"] .gantt-header-row{background:var(--surface);color:var(--ink);border-color:var(--border);}
+:root[data-theme="dark"] .alerts-panel{background:var(--surface);color:var(--ink);}
+:root[data-theme="dark"] .alerts-item:hover{background:#2c2f3a;}
+*{box-sizing:border-box;}
+html,body{height:100%;margin:0;}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);overflow:hidden;}
+#app{display:flex;flex-direction:column;height:100vh;}
+
+/* Barre du haut + onglets */
+#toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:8px 12px;background:#fff;border-bottom:1px solid #d7dae0;}
+#toolbar h1{font-size:15px;margin:0;color:#333;font-weight:600;}
+#overdueBadge{background:#c0392b;color:#fff;border-radius:999px;font-size:10.5px;padding:1px 7px;font-weight:700;}
+#overdueBadge.hidden{display:none;}
+#tabBar{display:flex;gap:4px;margin-right:auto;flex-wrap:wrap;}
+.tab-btn{border:none;background:none;padding:6px 10px;border-radius:8px;font-size:12.5px;cursor:pointer;color:#555;font-weight:500;}
+.tab-btn.active{background:var(--accent);color:#fff;}
+#syncIndicator{font-size:11px;color:#888;}
+#syncIndicator.hidden{display:none;}
+.alerts-badge{position:absolute;top:-3px;right:-3px;background:#c0392b;color:#fff;border-radius:999px;font-size:9px;min-width:14px;height:14px;line-height:14px;text-align:center;padding:0 2px;font-weight:700;}
+.alerts-badge.hidden{display:none;}
+.alerts-panel{position:absolute;top:100%;right:0;margin-top:6px;width:280px;max-height:320px;overflow-y:auto;background:#fff;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.2);z-index:60;padding:6px;}
+.alerts-panel.hidden{display:none;}
+.alerts-header{font-weight:700;font-size:12px;padding:6px 8px;color:var(--muted);}
+.alerts-item{padding:7px 8px;border-radius:7px;font-size:12px;cursor:pointer;display:flex;justify-content:space-between;gap:8px;}
+.alerts-item:hover{background:#f5f6f9;}
+.alerts-date{color:#c0392b;font-weight:700;white-space:nowrap;}
+.alerts-empty{padding:16px 8px;text-align:center;color:var(--muted);font-size:12px;}
+
+.btn{border:none;border-radius:10px;padding:7px 12px;font-size:13px;cursor:pointer;background:var(--accent);color:#fff;font-weight:500;white-space:nowrap;box-shadow:0 1px 3px rgba(0,0,0,.15);}
+.btn.secondary{background:#eceff3;color:#333;box-shadow:none;}
+.btn.danger{background:#fff;color:#c0392b;border:1px solid #f0c4c0;}
+.btn.danger:hover{background:#fdf1f0;}
+.btn.active{background:#33508f;color:#fff;}
+.btn:active{transform:translateY(1px);}
+.btn:focus-visible,.tab-btn:focus-visible,.icon-btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px;}
+
+.sub-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:7px 12px;background:#fff;border-bottom:1px solid #d7dae0;}
+.sub-toolbar input[type=search],.sub-toolbar select{font-size:12.5px;padding:5px 8px;border:1px solid #d7dae0;border-radius:7px;background:#fff;}
+.sub-toolbar input[type=search]{flex:1;min-width:110px;}
+#bulkBar{background:#eef3ff;}
+#bulkBar.hidden{display:none;}
+#globalStats{display:flex;gap:10px;overflow-x:auto;}
+.stat-card{background:#fff;border-radius:10px;padding:6px 14px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.10);min-width:70px;flex:none;}
+.stat-value{font-size:18px;font-weight:800;}
+.stat-label{font-size:10px;color:var(--muted);margin-top:1px;white-space:nowrap;}
+#tasksTable{width:100%;border-collapse:collapse;font-size:12.5px;}
+#tasksTable th{text-align:left;font-size:11px;color:var(--muted);padding:6px 8px;border-bottom:2px solid #eee;position:sticky;top:0;background:#fff;}
+#tasksTable td{padding:6px 8px;border-bottom:1px solid #f0f0f0;vertical-align:middle;}
+#tasksTable select,#tasksTable input[type=date]{font-size:12px;padding:3px 4px;border:1px solid #ddd;border-radius:5px;}
+#tasksTable [contenteditable]{outline:none;padding:2px;border-radius:4px;}
+#tasksTable [contenteditable]:focus{background:#f5f7ff;}
+#tasksTable tr:hover{background:#fafbfe;}
+
+.view{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0;}
+
+/* Kanban */
+#board{flex:1;display:flex;align-items:flex-start;gap:12px;padding:14px;overflow:auto;height:100%;}
+#board.stacked{flex-direction:column;overflow-x:hidden;}
+#board.stacked .lane{flex:none;width:100%;max-height:none;}
+#board.stacked .lane.collapsed{width:100%;flex:none;height:auto;}
+#board.stacked .lane.collapsed .lane-header{flex-direction:row;height:auto;}
+#board.stacked .lane.collapsed .lane-title{writing-mode:horizontal-tb;transform:none;margin:0;}
+#board.stacked .lane-body{max-height:44vh;}
+.lane{background:var(--col-bg);border-radius:12px;display:flex;flex-direction:column;flex:0 0 280px;max-height:100%;transition:flex-basis .15s;}
+.lane.collapsed{flex:0 0 46px;width:46px;overflow:hidden;}
+.lane-header{display:flex;align-items:center;gap:6px;padding:10px;background:var(--col-header);border-radius:12px 12px 0 0;cursor:pointer;user-select:none;}
+.lane.collapsed .lane-header{flex-direction:column;border-radius:12px;height:100%;padding:10px 6px;}
+.lane-color-dot{width:10px;height:10px;border-radius:50%;flex:none;}
+.lane-title{font-weight:600;font-size:13px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.lane.collapsed .lane-title{writing-mode:vertical-rl;transform:rotate(180deg);flex:1;margin:6px 0;}
+.lane-count{background:#fff;border-radius:999px;font-size:11px;padding:1px 7px;font-weight:700;color:#444;}
+.lane-collapse-btn{background:none;border:none;cursor:pointer;font-size:13px;color:#555;padding:2px 4px;}
+.lane-body{flex:1;overflow-y:auto;padding:8px;display:flex;flex-direction:column;gap:10px;min-height:40px;}
+.lane-body.drag-over{background:rgba(79,124,255,.12);}
+.lane-add-card{margin:0 8px 10px;border:1px dashed #b7bcc6;background:none;border-radius:8px;padding:6px;font-size:12px;color:#666;cursor:pointer;}
+.card{border-radius:8px;padding:10px 10px 8px;cursor:grab;box-shadow:0 2px 6px rgba(0,0,0,.10), 0 1px 2px rgba(0,0,0,.06);font-size:12.5px;position:relative;font-family:'Segoe Print','Bradley Hand',cursive,'Segoe UI',sans-serif;border-left:4px solid transparent;}
+.card.dragging{opacity:.4;}
+.card::before{content:'';position:absolute;top:-5px;left:50%;transform:translateX(-50%) rotate(-2deg);width:30px;height:12px;background:rgba(255,255,255,.45);border-radius:1px;}
+.card-blocked{background:rgba(192,57,43,.13);color:#8a2a20;font-size:10.5px;border-radius:6px;padding:3px 6px;margin-bottom:5px;font-weight:600;}
+.card-select-box{position:absolute;top:6px;left:6px;width:16px;height:16px;z-index:2;}
+.select-mode-card{padding-left:26px;}
+.card-desc{font-weight:600;font-size:13.5px;min-height:18px;outline:none;word-break:break-word;margin-bottom:6px;}
+.card-desc:focus{background:rgba(255,255,255,.5);border-radius:4px;}
+.card-meta-row{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-bottom:5px;}
+.badge{display:inline-block;border-radius:999px;padding:1px 7px;font-size:10.5px;font-weight:700;color:#fff;white-space:nowrap;}
+.chip{background:rgba(255,255,255,.6);border-radius:999px;padding:1px 6px;font-size:10.5px;color:#333;text-decoration:none;}
+.card input[type=date]{font-family:inherit;font-size:11px;border:none;background:rgba(255,255,255,.55);border-radius:5px;padding:2px 3px;cursor:pointer;color:#222;}
+.deadline-row{display:flex;align-items:center;gap:4px;font-size:11px;color:#3a3a3a;}
+.deadline-row.overdue{color:#b3261e;font-weight:700;}
 .card-ref{font-size:10px;color:#555;margin-top:2px;}
 
 /* Modales */
