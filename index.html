@@ -125,6 +125,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .cal-daynum{font-weight:600;font-size:11px;}
 .cal-day-tasks{display:flex;flex-direction:column;gap:2px;margin-top:3px;}
 .cal-task{color:#fff;border-radius:4px;padding:1px 4px;font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:grab;}
+.cal-task-ghost{cursor:pointer;font-weight:600;}
 .cal-more{font-size:10px;color:var(--muted);}
 .cal-week .cal-day{min-height:220px;}
 
@@ -896,6 +897,22 @@ function initTaskModalEvents(){
     if (e.target.closest("#checklist-add")){ modalChecklist.push({ text:"", done:false }); refreshChecklistUI(); return; }
     const del = e.target.closest('[data-chk="del"]');
     if (del){ modalChecklist.splice(Number(del.closest(".checklist-item").dataset.idx), 1); refreshChecklistUI(); }
+    const addPerson = e.target.closest("[data-add-person]");
+    if (addPerson){
+      const selectId = addPerson.dataset.addPerson;
+      const input = document.getElementById(selectId+"-new");
+      const name = input.value.trim();
+      if (!name) return;
+      const select = document.getElementById(selectId);
+      const existing = [...select.options].find(o => o.value === name);
+      if (existing) existing.selected = true;
+      else {
+        const opt = document.createElement("option");
+        opt.value = name; opt.textContent = name; opt.selected = true;
+        select.appendChild(opt);
+      }
+      input.value = "";
+    }
   });
   modal.addEventListener("input", e => {
     const txt = e.target.closest('[data-chk="text"]');
@@ -917,6 +934,23 @@ function openTaskModal(id){
   const opts = (values, current) => values.map(v => `<option value="${escapeHtml(v)}" ${v===current?"selected":""}>${escapeHtml(v)}</option>`).join("");
   const recOpts = Object.entries(RECURRENCE_LABELS).map(([v,l]) => `<option value="${v}" ${(t.Recurrence||"none")===v?"selected":""}>${l}</option>`).join("");
 
+  const typeOptions = [...new Set(state.records.map(r => r.Type).filter(Boolean))];
+  if (t.Type && !typeOptions.includes(t.Type)) typeOptions.push(t.Type);
+  typeOptions.sort((a,b) => a.localeCompare(b,"fr"));
+
+  const peopleSet = new Set();
+  state.records.forEach(r => { decodeChoiceList(r.AssigneA).forEach(p=>peopleSet.add(p)); decodeChoiceList(r.Responsable).forEach(p=>peopleSet.add(p)); decodeChoiceList(r.CreePar).forEach(p=>peopleSet.add(p)); });
+  const currentAssignees = decodeChoiceList(t.AssigneA);
+  const currentResp = decodeChoiceList(t.Responsable);
+  currentAssignees.concat(currentResp).forEach(p => peopleSet.add(p));
+  const peopleList = [...peopleSet].sort((a,b) => a.localeCompare(b,"fr"));
+  const multiSelect = (selectId, values, current) => `
+    <select id="${selectId}" multiple size="4">${values.map(v => `<option value="${escapeHtml(v)}" ${current.includes(v)?"selected":""}>${escapeHtml(v)}</option>`).join("")}</select>
+    <div style="display:flex;gap:6px;margin-top:4px;">
+      <input type="text" id="${selectId}-new" placeholder="Nouveau nom…" style="flex:1;">
+      <button type="button" class="icon-btn" data-add-person="${selectId}" title="Ajouter">➕</button>
+    </div>`;
+
   document.getElementById("taskModal").innerHTML = `
     <h2>Détail de la tâche</h2>
     ${fieldRow("Description", `<textarea id="m-desc">${escapeHtml(t.Description||"")}</textarea>`)}
@@ -926,15 +960,15 @@ function openTaskModal(id){
     </div>
     <div class="field-row">
       ${fieldRow("Deadline", `<input type="date" id="m-deadline" value="${toDateInputValue(gristDateToJS(t.Deadline))}">`)}
-      ${fieldRow("Type", `<input type="text" id="m-type" value="${escapeHtml(t.Type||"")}">`)}
+      ${fieldRow("Type", `<select id="m-type"><option value="">—</option>${opts(typeOptions, t.Type)}</select>`)}
     </div>
     <div class="field-row">
       ${fieldRow("Référence du Projet", `<input type="text" id="m-ref" value="${escapeHtml(t.RefProjet||"")}">`)}
       ${fieldRow("Récurrence", `<select id="m-recurrence">${recOpts}</select>`)}
     </div>
     <div class="field-row">
-      ${fieldRow("Assigné à (virgules)", `<input type="text" id="m-assigne" value="${escapeHtml(decodeChoiceList(t.AssigneA).join(", "))}">`)}
-      ${fieldRow("Responsable (virgules)", `<input type="text" id="m-resp" value="${escapeHtml(decodeChoiceList(t.Responsable).join(", "))}">`)}
+      ${fieldRow("Assigné à", multiSelect("m-assigne", peopleList, currentAssignees))}
+      ${fieldRow("Responsable", multiSelect("m-resp", peopleList, currentResp))}
     </div>
     ${fieldRow("Notes", `<textarea id="m-notes">${escapeHtml(t.Notes||"")}</textarea>`)}
     <div class="field">
@@ -1021,9 +1055,9 @@ async function saveTaskModal(){
   const fields = {
     Description: val("m-desc"), Priorite: document.getElementById("m-priorite").value, Statut: newStatut,
     Deadline: jsDateToGristEpoch(document.getElementById("m-deadline").value),
-    Type: val("m-type"), RefProjet: val("m-ref"), Recurrence: document.getElementById("m-recurrence").value,
-    AssigneA: encodeChoiceList(val("m-assigne").split(",").map(s=>s.trim()).filter(Boolean)),
-    Responsable: encodeChoiceList(val("m-resp").split(",").map(s=>s.trim()).filter(Boolean)),
+    Type: document.getElementById("m-type").value, RefProjet: val("m-ref"), Recurrence: document.getElementById("m-recurrence").value,
+    AssigneA: encodeChoiceList([...document.getElementById("m-assigne").selectedOptions].map(o => o.value)),
+    Responsable: encodeChoiceList([...document.getElementById("m-resp").selectedOptions].map(o => o.value)),
     Notes: val("m-notes"),
     Checklist: JSON.stringify(modalChecklist.filter(it => it.text.trim() !== "")),
     Historique: historique,
@@ -1151,15 +1185,35 @@ let calYear, calMonth, calViewMode = "month", calWeekStart;
 function renderCalendar(){
   calViewMode === "week" ? renderCalendarWeek() : renderCalendarMonth();
 }
-function tasksByDayMap(){
+// range: bornes visibles du calendrier (Date, Date). Ajoute, en plus de la vraie deadline,
+// des occurrences futures "projetées" (visuelles uniquement, aucune ligne Grist créée)
+// pour les tâches récurrentes, tant qu'elles tombent dans la période affichée.
+function tasksByDayMap(rangeStart, rangeEnd){
   const map = {};
   filteredRecords().forEach(r => {
     const d = gristDateToJS(r.Deadline);
-    if (!d) return;
-    const key = toDateInputValue(d);
-    (map[key] = map[key] || []).push(r);
+    if (d){
+      (map[toDateInputValue(d)] = map[toDateInputValue(d)] || []).push(r);
+    }
+    if (d && r.Recurrence && r.Recurrence !== "none" && rangeStart && rangeEnd){
+      let next = addInterval(d, r.Recurrence);
+      let guard = 0;
+      while (next <= rangeEnd && guard < 366){
+        guard++;
+        if (next >= rangeStart){
+          const key = toDateInputValue(next);
+          (map[key] = map[key] || []).push({ ...r, __ghost: true });
+        }
+        next = addInterval(next, r.Recurrence);
+      }
+    }
   });
   return map;
+}
+function renderCalTaskChip(t){
+  const style = priorityStyle(t.Priorite);
+  const ghostStyle = `background:transparent;border:1px dashed ${style.badge};color:${style.badge};`;
+  return `<div class="cal-task${t.__ghost?" cal-task-ghost":""}" draggable="${t.__ghost?"false":"true"}" data-cal-task="${t.id}" title="${t.__ghost?"Prochaine occurrence prévue (non créée)":""}" style="${t.__ghost?ghostStyle:`background:${style.badge}`}">${t.__ghost?"🔁 ":""}${escapeHtml(t.Description||"")}</div>`;
 }
 function renderCalendarMonth(){
   const grid = document.getElementById("calendarGrid");
@@ -1170,7 +1224,7 @@ function renderCalendarMonth(){
   const startWeekday = (firstOfMonth.getDay()+6)%7;
   const daysInMonth = new Date(calYear, calMonth+1, 0).getDate();
   const daysInPrevMonth = new Date(calYear, calMonth, 0).getDate();
-  const tasksByDay = tasksByDayMap();
+  const tasksByDay = tasksByDayMap(new Date(calYear,calMonth,1), new Date(calYear,calMonth,daysInMonth));
 
   const cells = [];
   for (let i = startWeekday-1; i >= 0; i--) cells.push({ day: daysInPrevMonth-i, muted:true });
@@ -1191,7 +1245,7 @@ function renderCalendarMonth(){
         return `<div class="cal-day${key===todayKey?" today":""}" data-drop-date="${key}">
           <span class="cal-daynum">${c.day}</span>
           <div class="cal-day-tasks">
-            ${tasks.slice(0,3).map(t => `<div class="cal-task" draggable="true" data-cal-task="${t.id}" style="background:${priorityStyle(t.Priorite).badge}">${escapeHtml(t.Description||"")}</div>`).join("")}
+            ${tasks.slice(0,3).map(renderCalTaskChip).join("")}
             ${tasks.length>3 ? `<div class="cal-more">+${tasks.length-3}</div>` : ""}
           </div>
         </div>`;
@@ -1203,7 +1257,7 @@ function renderCalendarWeek(){
   const weekdayLabels = ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
   const days = Array.from({length:7}, (_,i) => { const d = new Date(calWeekStart); d.setDate(d.getDate()+i); return d; });
   document.getElementById("calLabel").textContent = `${fmtDate(days[0])} – ${fmtDate(days[6])}`;
-  const tasksByDay = tasksByDayMap();
+  const tasksByDay = tasksByDayMap(days[0], days[6]);
   const todayKey = toDateInputValue(new Date());
 
   grid.innerHTML = `<div class="cal-days cal-week">
@@ -1213,7 +1267,7 @@ function renderCalendarWeek(){
       return `<div class="cal-day${key===todayKey?" today":""}" data-drop-date="${key}">
         <span class="cal-daynum">${weekdayLabels[i]} ${d.getDate()}</span>
         <div class="cal-day-tasks">
-          ${tasks.map(t => `<div class="cal-task" draggable="true" data-cal-task="${t.id}" style="background:${priorityStyle(t.Priorite).badge}">${escapeHtml(t.Description||"")}</div>`).join("")}
+          ${tasks.map(renderCalTaskChip).join("")}
         </div>
       </div>`;
     }).join("")}
