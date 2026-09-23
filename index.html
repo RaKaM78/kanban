@@ -101,6 +101,8 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .card::before{content:'';position:absolute;top:-5px;left:50%;transform:translateX(-50%) rotate(-2deg);width:30px;height:12px;background:rgba(255,255,255,.45);border-radius:1px;}
 .card-blocked{background:rgba(192,57,43,.13);color:#8a2a20;font-size:10.5px;border-radius:6px;padding:3px 6px;margin-bottom:5px;font-weight:600;}
 .card-select-box{position:absolute;top:6px;left:6px;width:16px;height:16px;z-index:2;}
+.card-delete-btn{position:absolute;top:4px;right:4px;background:rgba(255,255,255,.75);border:none;border-radius:50%;width:20px;height:20px;font-size:11px;line-height:20px;text-align:center;cursor:pointer;color:#8a2a20;z-index:2;padding:0;}
+.card-delete-btn:hover{background:#fff;color:#c0392b;}
 .select-mode-card{padding-left:26px;}
 .card-desc{font-weight:600;font-size:13.5px;min-height:18px;outline:none;word-break:break-word;margin-bottom:6px;}
 .card-desc:focus{background:rgba(255,255,255,.5);border-radius:4px;}
@@ -892,7 +894,7 @@ function renderCard(t, lane){
   const blockers = activeBlockers(t);
   return `
     <div class="card${selectMode?" select-mode-card":""}" tabindex="0" role="button" aria-label="Tâche : ${escapeHtml(t.Description||"sans titre")}" draggable="${selectMode?"false":"true"}" data-id="${t.id}" style="background:${pStyle.bg};border-left-color:${lane.color};transform:rotate(${seededRotation(t.id).toFixed(2)}deg)">
-      ${selectMode ? `<input type="checkbox" class="card-select-box" data-select-task="${t.id}" ${selected?"checked":""} aria-label="Sélectionner cette tâche">` : ""}
+      ${selectMode ? `<input type="checkbox" class="card-select-box" data-select-task="${t.id}" ${selected?"checked":""} aria-label="Sélectionner cette tâche">` : `<button class="card-delete-btn" data-delete-task="${t.id}" title="Supprimer (cliquer deux fois)" aria-label="Supprimer la tâche">✕</button>`}
       ${blockers.length ? `<div class="card-blocked">🔒 Bloqué par : ${blockers.map(b=>escapeHtml(b.Description||`#${b.id}`)).join(", ")}</div>` : ""}
       <div class="card-meta-row">
         <span class="badge" style="background:${pStyle.badge}">${escapeHtml(t.Priorite||"—")}</span>
@@ -954,6 +956,8 @@ function initBoardEvents(){
     if (toggle){ const id = toggle.dataset.toggle; state.collapsed.has(id) ? state.collapsed.delete(id) : state.collapsed.add(id); return notify(); }
     const addBtn = e.target.closest("[data-add-lane]");
     if (addBtn) return handleAddCard(addBtn.dataset.addLane);
+    const delBtn = e.target.closest("[data-delete-task]");
+    if (delBtn) return armDoubleClickConfirm(delBtn, () => confirmDeleteTask(Number(delBtn.dataset.deleteTask)), "✅");
     const card = e.target.closest(".card");
     if (selectMode && card){
       const id = Number(card.dataset.id);
@@ -1073,13 +1077,12 @@ function initBulkBar(){
     updateBulkBar();
   });
   document.getElementById("bulkCancel").onclick = () => { selectMode = false; selectedTaskIds.clear(); document.getElementById("btnSelectMode").classList.remove("active"); renderBoard(); };
-  document.getElementById("bulkDelete").onclick = async () => {
-    if (!confirm(`Supprimer définitivement ${selectedTaskIds.size} tâche(s) ?`)) return;
+  document.getElementById("bulkDelete").onclick = e => armDoubleClickConfirm(e.currentTarget, async () => {
     for (const id of selectedTaskIds) await writeToGrist(() => deleteTask(id), "Suppression non enregistrée dans Grist.");
     state.records = state.records.filter(r => !selectedTaskIds.has(r.id));
     selectedTaskIds.clear();
     notify();
-  };
+  }, "✅ Confirmer ?");
   document.getElementById("bulkMoveTo").addEventListener("change", e => {
     const laneId = e.target.value;
     if (!laneId) return;
@@ -1211,7 +1214,6 @@ function openTaskModal(id){
     <div class="meta-readonly scroll">${escapeHtml(t.Historique || "Aucun changement de statut enregistré.")}</div>
     <div class="modal-footer">
       <div style="display:flex;gap:8px;">
-        <button class="btn danger" id="m-delete">🗑️ Supprimer</button>
         <button class="btn secondary" id="m-duplicate">📋 Dupliquer</button>
         <button class="btn secondary" id="m-save-template">💾 Modèle</button>
       </div>
@@ -1223,20 +1225,39 @@ function openTaskModal(id){
   openOverlay("taskOverlay");
   document.getElementById("m-close").onclick = closeTaskModal;
   document.getElementById("m-save").onclick = saveTaskModal;
-  document.getElementById("m-delete").onclick = () => deleteTaskModal(id);
   document.getElementById("m-duplicate").onclick = () => duplicateTaskModal(id);
   document.getElementById("m-save-template").onclick = () => saveAsTemplate(id);
 }
 function closeTaskModal(){ closeOverlay("taskOverlay"); state.editingId = null; }
 
-async function deleteTaskModal(id){
+// Suppression via l'icône ✕ sur la carte, en deux clics (sans window.confirm — souvent
+// bloqué dans l'iframe d'un widget Grist, ce qui rendait le bouton "Supprimer" muet).
+// Confirmation en deux clics sans window.confirm (souvent bloqué dans l'iframe d'un
+// widget Grist). Premier clic : le bouton affiche confirmLabel quelques secondes ;
+// second clic dans ce délai : exécute l'action. État stocké sur le bouton lui-même,
+// donc ça fonctionne même si le bouton est reconstruit entre-temps par un re-rendu.
+function armDoubleClickConfirm(btn, actionFn, confirmLabel, resetMs=3000){
+  if (btn.dataset.armed === "1"){
+    btn.dataset.armed = "0";
+    clearTimeout(Number(btn.dataset.timerId));
+    btn.textContent = btn.dataset.originalLabel;
+    actionFn();
+  } else {
+    if (!btn.dataset.originalLabel) btn.dataset.originalLabel = btn.textContent;
+    btn.dataset.armed = "1";
+    btn.textContent = confirmLabel;
+    btn.dataset.timerId = String(setTimeout(() => { btn.dataset.armed = "0"; btn.textContent = btn.dataset.originalLabel; }, resetMs));
+  }
+}
+
+async function confirmDeleteTask(id){
   const t = state.records.find(r => r.id === id);
-  if (!confirm(`Supprimer définitivement la tâche "${t?.Description || "sans titre"}" ?`)) return;
   const snapshot = { ...t };
   await writeToGrist(() => deleteTask(id), "Suppression non enregistrée dans Grist.");
   state.records = state.records.filter(r => r.id !== id);
-  closeTaskModal();
+  if (state.editingId === id) closeTaskModal();
   notify();
+  showToast("🗑️ Tâche supprimée.");
   pushUndo(async () => {
     const { id: _oldId, ...fields } = snapshot;
     const tempId = -Date.now();
@@ -1259,14 +1280,29 @@ function duplicateTaskModal(id){
 
 function saveAsTemplate(id){
   const t = state.records.find(r => r.id === id);
-  if (!t) return;
-  const name = prompt("Nom du modèle :", t.Description || "Modèle");
-  if (!name) return;
-  const tpl = { id: cid(), name, Description: t.Description, Priorite: t.Priorite, Type: t.Type, Notes: t.Notes, Checklist: t.Checklist };
-  const list = [...(state.taskTemplates || []), tpl];
-  setTaskTemplates(list);
-  saveTemplates(list);
-  showToast(`Modèle "${name}" enregistré.`);
+  const btn = document.getElementById("m-save-template");
+  if (!t || !btn || btn.dataset.editing === "1") return;
+  btn.dataset.editing = "1";
+  const wrapper = document.createElement("span");
+  wrapper.style.cssText = "display:inline-flex;gap:4px;align-items:center;";
+  wrapper.innerHTML = `<input type="text" id="tpl-name-input" value="${escapeHtml(t.Description||"Modèle")}" style="width:120px;padding:5px 7px;border:1px solid #ccc;border-radius:6px;font-size:12px;"><button type="button" class="icon-btn" id="tpl-name-ok" title="Valider">✔️</button>`;
+  btn.replaceWith(wrapper);
+  const input = wrapper.querySelector("#tpl-name-input");
+  input.focus(); input.select();
+  const finish = save => {
+    const name = input.value.trim();
+    wrapper.replaceWith(btn);
+    btn.dataset.editing = "0";
+    if (!save || !name) return;
+    const tpl = { id: cid(), name, Description: t.Description, Priorite: t.Priorite, Type: t.Type, Notes: t.Notes, Checklist: t.Checklist };
+    const list = [...(state.taskTemplates || []), tpl];
+    setTaskTemplates(list);
+    saveTemplates(list);
+    showToast(`Modèle "${name}" enregistré.`);
+  };
+  wrapper.querySelector("#tpl-name-ok").onclick = () => finish(true);
+  input.addEventListener("keydown", e => { if (e.key==="Enter") finish(true); if (e.key==="Escape") finish(false); });
+  input.addEventListener("blur", () => setTimeout(() => { if (btn.dataset.editing === "1") finish(false); }, 150));
 }
 
 async function saveTaskModal(){
@@ -1438,12 +1474,13 @@ function initTableView(){
     if (!row) return;
     const id = Number(row.dataset.id);
     if (e.target.closest("[data-tbl-open]")) return openTaskModal(id);
-    if (e.target.closest("[data-tbl-del]")){
-      const t = state.records.find(r=>r.id===id);
-      if (!confirm(`Supprimer définitivement "${t?.Description||"cette tâche"}" ?`)) return;
-      writeToGrist(() => deleteTask(id), "Suppression non enregistrée dans Grist.");
-      state.records = state.records.filter(r=>r.id!==id);
-      notify();
+    const delBtn = e.target.closest("[data-tbl-del]");
+    if (delBtn){
+      return armDoubleClickConfirm(delBtn, () => {
+        writeToGrist(() => deleteTask(id), "Suppression non enregistrée dans Grist.");
+        state.records = state.records.filter(r=>r.id!==id);
+        notify();
+      }, "✅");
     }
   });
   table.addEventListener("change", e => {
@@ -2023,13 +2060,14 @@ function initWhiteboard(){
       if (wbSelectedId) wbRecolorSelected(wbColor);
       return;
     }
-    if (e.target.closest("#wbClear")){
-      if (confirm("Effacer tout le whiteboard (traits, formes, textes, post-its) ? Cette action est irréversible.")){
+    const clearBtn = e.target.closest("#wbClear");
+    if (clearBtn){
+      armDoubleClickConfirm(clearBtn, () => {
         const prevStrokes = wbStrokes, prevElements = wbElements;
         wbStrokes = []; wbElements = []; wbSelectedId = null;
         wbRedraw(); renderWbOverlay(); wbSaveDebounced();
         pushUndo(() => { wbStrokes = prevStrokes; wbElements = prevElements; wbRedraw(); renderWbOverlay(); wbSaveDebounced(); });
-      }
+      }, "✅ Confirmer ?");
     }
   });
   document.getElementById("wbSize").addEventListener("input", e => { wbSize = Number(e.target.value); });
