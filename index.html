@@ -18,10 +18,7 @@
 :root[data-theme="dark"] .lane-count,:root[data-theme="dark"] #wbCanvasWrap{background:var(--surface);}
 :root[data-theme="dark"] .cal-day{background:var(--surface);color:var(--ink);}
 :root[data-theme="dark"] .stat-card{background:var(--surface);}
-:root[data-theme="dark"] #tasksTable th{background:var(--surface);}
-:root[data-theme="dark"] #tasksTable tr:hover{background:#262a33;}
-:root[data-theme="dark"] #tasksTable td{border-color:var(--border);}
-:root[data-theme="dark"] #ganttOuter,:root[data-theme="dark"] .gantt-corner,:root[data-theme="dark"] .gantt-label,:root[data-theme="dark"] .gantt-header-row{background:var(--surface);color:var(--ink);border-color:var(--border);}
+:root[data-theme="dark"] .pf-row:hover .pf-lbl{background:rgba(255,255,255,.04);}
 :root[data-theme="dark"] .alerts-panel{background:var(--surface);color:var(--ink);}
 :root[data-theme="dark"] .alerts-item:hover{background:#2c2f3a;}
 *{box-sizing:border-box;}
@@ -64,13 +61,63 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .stat-card{background:#fff;border-radius:10px;padding:6px 14px;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.10);min-width:70px;flex:none;}
 .stat-value{font-size:18px;font-weight:800;}
 .stat-label{font-size:10px;color:var(--muted);margin-top:1px;white-space:nowrap;}
-#tasksTable{width:100%;border-collapse:collapse;font-size:12.5px;}
-#tasksTable th{text-align:left;font-size:11px;color:var(--muted);padding:6px 8px;border-bottom:2px solid #eee;position:sticky;top:0;background:#fff;}
-#tasksTable td{padding:6px 8px;border-bottom:1px solid #f0f0f0;vertical-align:middle;}
-#tasksTable select,#tasksTable input[type=date]{font-size:12px;padding:3px 4px;border:1px solid #ddd;border-radius:5px;}
-#tasksTable [contenteditable]{outline:none;padding:2px;border-radius:4px;}
-#tasksTable [contenteditable]:focus{background:#f5f7ff;}
-#tasksTable tr:hover{background:#fafbfe;}
+/* Portefeuille projets : frise 12 mois + Kanban fusionné */
+#pfMain{padding:14px;display:flex;flex-direction:column;gap:16px;}
+.pf-timeline{background:var(--surface);border-radius:12px;box-shadow:var(--shadow);overflow:hidden;}
+.pf-head{display:flex;border-bottom:1px solid var(--border);}
+.pf-head-lbl{min-width:200px;max-width:200px;padding:8px 12px;font-weight:700;font-size:12px;color:var(--muted);flex:none;}
+.pf-months-wrap{position:relative;flex:1;}
+.pf-months{display:flex;}
+.pf-months>div{flex:1;padding:8px 0 8px 6px;font-size:11px;color:var(--muted);border-left:1px solid var(--border);white-space:nowrap;overflow:hidden;box-sizing:border-box;}
+.pf-months>div.year{color:var(--ink);font-weight:700;}
+.pf-today-tag{position:absolute;top:2px;transform:translateX(-50%);background:#c0392b;color:#fff;font-size:10px;padding:0 6px;border-radius:8px;white-space:nowrap;}
+.pf-row{display:flex;border-bottom:1px solid var(--border);cursor:pointer;min-height:52px;}
+.pf-row:hover .pf-lbl{background:rgba(0,0,0,.03)}
+.pf-row.dim{opacity:.35;}
+.pf-lbl{min-width:200px;max-width:200px;flex:none;padding:8px 12px;display:grid;grid-template-columns:1fr auto;gap:0 8px;align-items:center;border-right:1px solid var(--border);}
+.pf-lbl-name{font-weight:700;font-size:12.5px;display:flex;align-items:center;gap:7px;min-width:0;grid-column:1/2;}
+.pf-lbl-name span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.pf-dot{width:9px;height:9px;border-radius:3px;flex:none;background:var(--c);}
+.pf-pct{font-size:16px;font-weight:800;grid-row:span 2;}
+.pf-sub{grid-column:1/2;color:var(--muted);font-size:10.5px;}
+.pf-sub .late{color:#c0392b;font-weight:700;}
+.pf-sub .ok{color:#3a9d4c;font-weight:700;}
+.pf-track{position:relative;flex:1;background-image:repeating-linear-gradient(to right, var(--border) 0 1px, transparent 1px calc(100%/12));}
+.pf-bar{position:absolute;top:50%;height:16px;margin-top:-8px;border-radius:8px;overflow:hidden;background:rgba(0,0,0,.06);box-shadow:inset 0 0 0 1px rgba(0,0,0,.12);}
+.pf-bar.cut-l{border-top-left-radius:0;border-bottom-left-radius:0;}
+.pf-bar.cut-r{border-top-right-radius:0;border-bottom-right-radius:0;}
+.pf-fill{height:100%;background:var(--c);}
+.pf-nodates{position:absolute;left:12px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:11px;font-style:italic;}
+.pf-today{position:absolute;top:0;bottom:0;width:2px;background:#c0392b;z-index:1;}
+.pf-task-row{min-height:32px;background:rgba(0,0,0,.02);}
+.pf-task-lbl{padding-left:24px;border-right:1px solid var(--border);}
+.pf-task-name{font-size:11px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;}
+.pf-bar-task{height:9px;margin-top:-4.5px;}
+.pf-single-marker{position:absolute;top:50%;width:9px;height:9px;margin-top:-4.5px;margin-left:-4.5px;border-radius:2px;background:var(--c);transform:rotate(45deg);}
+.pf-subtask-marker{position:absolute;top:50%;width:8px;height:8px;margin-top:-4px;margin-left:-4px;border-radius:50%;background:var(--surface);border:2px solid var(--c);z-index:2;cursor:help;}
+.pf-subtask-marker.done{background:var(--c);}
+.pf-subtask-marker.overdue{border-color:#c0392b;}
+.pf-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}
+.pf-chip{border:1px solid var(--border);background:var(--surface);border-radius:999px;padding:3px 10px 3px 8px;display:inline-flex;align-items:center;gap:6px;font-size:11.5px;cursor:pointer;color:var(--ink);}
+.pf-chip[aria-pressed="true"]{border-color:var(--c);background:color-mix(in srgb, var(--c) 18%, transparent);}
+.pf-chip.clear{color:var(--muted);}
+.pf-board{display:flex;gap:12px;overflow-x:auto;padding-bottom:6px;}
+.pf-col{flex:0 0 250px;background:var(--col-bg);border-radius:10px;padding:8px;min-height:100px;}
+.pf-col.over{box-shadow:inset 0 0 0 2px var(--accent);}
+.pf-col-head{font-size:11.5px;font-weight:700;display:flex;justify-content:space-between;margin:2px 4px 8px;color:var(--ink);}
+.pf-col-head .n{color:var(--muted);font-weight:400;}
+.pf-card{background:var(--surface);border-radius:8px;padding:8px 10px;margin-bottom:6px;border:1px solid var(--border);border-left:4px solid var(--c);cursor:grab;}
+.pf-card.dragging{opacity:.4;}
+.pf-card-proj{font-size:10.5px;color:var(--muted);}
+.pf-card-title{font-weight:600;font-size:12.5px;margin:1px 0 4px;overflow-wrap:anywhere;}
+.pf-card-meta{display:flex;justify-content:space-between;gap:8px;font-size:10.5px;color:var(--muted);}
+.pf-card-meta .overdue{color:#c0392b;font-weight:700;}
+.pf-subtasks{margin-top:6px;padding-top:6px;border-top:1px dashed var(--border);display:flex;flex-direction:column;gap:2px;}
+.pf-subtask{display:flex;align-items:center;gap:5px;font-size:10.5px;color:var(--ink);}
+.pf-subtask.done .pf-subtask-text{text-decoration:line-through;color:var(--muted);}
+.pf-subtask-text{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.pf-subtask-date{color:var(--muted);white-space:nowrap;}
+.pf-subtask-date.overdue{color:#c0392b;font-weight:700;}
 
 .view{flex:1;display:flex;flex-direction:column;overflow:hidden;min-height:0;}
 
@@ -125,8 +172,10 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .modal-footer{display:flex;justify-content:space-between;margin-top:16px;gap:8px;flex-wrap:wrap;}
 .meta-readonly{font-size:11px;color:var(--muted);margin-top:10px;border-top:1px solid #eee;padding-top:8px;white-space:pre-line;}
 .meta-readonly.scroll{max-height:80px;overflow-y:auto;}
-.checklist-item{display:flex;align-items:center;gap:6px;margin-bottom:4px;}
-.checklist-item input[type=text]{flex:1;padding:5px 6px;font-size:12.5px;border:1px solid #ddd;border-radius:6px;}
+.checklist-item{display:flex;align-items:center;gap:6px;margin-bottom:4px;flex-wrap:wrap;}
+.checklist-item input[type=checkbox]{width:auto;flex:none;}
+.checklist-item input[type=text]{flex:1;width:auto;min-width:90px;padding:5px 6px;font-size:12.5px;border:1px solid #ddd;border-radius:6px;}
+.checklist-item input[type=date]{width:auto;flex:none;padding:4px 5px;font-size:11.5px;border:1px solid #ddd;border-radius:6px;}
 .lane-config-row{display:flex;align-items:center;gap:6px;padding:6px;border:1px solid #eee;border-radius:8px;margin-bottom:6px;flex-wrap:wrap;}
 .lane-config-row input[type=text]{flex:1;min-width:70px;padding:5px 6px;border:1px solid #ddd;border-radius:6px;font-size:12px;}
 .lane-config-row input[type=color]{width:30px;height:26px;border:none;padding:0;background:none;}
@@ -153,23 +202,6 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .cal-task-ghost{cursor:pointer;font-weight:600;}
 .cal-more{font-size:10px;color:var(--muted);}
 .cal-week .cal-day{min-height:220px;}
-
-/* Gantt */
-#ganttOuter{flex:1;overflow:auto;position:relative;background:#fff;}
-#ganttContent{display:inline-block;min-width:100%;}
-.gantt-header-row{display:flex;position:sticky;top:0;z-index:3;background:#fff;}
-.gantt-corner{position:sticky;left:0;z-index:4;background:#fff;border-right:1px solid #e5e5e5;border-bottom:1px solid #e5e5e5;min-width:190px;max-width:190px;padding:6px 8px;font-size:11px;font-weight:700;color:var(--muted);display:flex;align-items:center;}
-.gantt-header-dates{display:flex;flex-direction:column;border-bottom:1px solid #e5e5e5;}
-.gantt-header-months{display:flex;font-size:10.5px;color:var(--muted);border-bottom:1px solid #f0f0f0;}
-.gantt-header-months>div{padding:2px 4px;border-right:1px solid #f0f0f0;white-space:nowrap;overflow:hidden;text-transform:capitalize;box-sizing:border-box;}
-.gantt-header-days{display:flex;font-size:9.5px;color:#999;}
-.gantt-header-days>div{text-align:center;border-right:1px solid #f5f5f5;flex:none;box-sizing:border-box;}
-.gantt-row{display:flex;border-bottom:1px solid #f0f0f0;}
-.gantt-label{position:sticky;left:0;z-index:2;background:#fff;min-width:190px;max-width:190px;padding:6px 8px;font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-right:1px solid #e5e5e5;cursor:pointer;display:flex;align-items:center;height:34px;box-sizing:border-box;}
-.gantt-track{position:relative;height:34px;flex:none;}
-.gantt-bar{position:absolute;top:6px;height:22px;border-radius:5px;cursor:pointer;overflow:hidden;box-shadow:0 1px 3px rgba(0,0,0,.25);border:1px solid rgba(0,0,0,.08);}
-.gantt-bar-fill{height:100%;opacity:.9;}
-.gantt-today-line{position:absolute;top:0;bottom:0;width:2px;background:#c0392b;z-index:1;}
 
 /* Whiteboard */
 .wb-swatch{width:22px;height:22px;border-radius:50%;border:2px solid transparent;cursor:pointer;padding:0;}
@@ -227,7 +259,6 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
       <button class="tab-btn" data-tab="dashboard" role="tab">📊 Tableau de bord</button>
       <button class="tab-btn active" data-tab="kanban" role="tab" aria-selected="true">🗂️ Kanban</button>
       <button class="tab-btn" data-tab="table" role="tab">📋 Tableau</button>
-      <button class="tab-btn" data-tab="gantt" role="tab">📈 Gantt</button>
       <button class="tab-btn" data-tab="calendar" role="tab">📅 Calendrier</button>
       <button class="tab-btn" data-tab="whiteboard" role="tab">🖌️ Whiteboard</button>
     </div>
@@ -275,37 +306,16 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
     <div id="board"></div>
   </div>
 
-  <!-- Onglet Vue Tableau -->
+  <!-- Onglet Portefeuille projets : frise glissante 12 mois + Kanban fusionné filtrable -->
   <div id="view-table" class="view hidden">
     <div class="sub-toolbar">
-      <span style="font-size:12px;color:var(--muted);">Édition directe dans les cellules — les filtres du Kanban s'appliquent aussi ici.</span>
+      <span id="pfSummary" style="font-size:12px;color:var(--muted);margin-right:auto;"></span>
+      <button class="icon-btn" id="pfPrev" aria-label="Mois précédent">◀</button>
+      <span id="pfRange" style="font-size:12.5px;font-weight:600;min-width:150px;text-align:center;"></span>
+      <button class="icon-btn" id="pfNext" aria-label="Mois suivant">▶</button>
+      <button class="btn secondary" id="pfToday">Aujourd'hui</button>
     </div>
-    <div style="flex:1;overflow:auto;padding:10px;">
-      <table id="tasksTable">
-        <thead>
-          <tr>
-            <th>Tâche</th><th>Statut</th><th>Priorité</th><th>Assigné à</th><th>Type</th><th>Échéance</th><th>Actions</th>
-          </tr>
-        </thead>
-        <tbody id="tasksTableBody"></tbody>
-      </table>
-    </div>
-  </div>
-
-  <!-- Onglet Gantt -->
-  <div id="view-gantt" class="view hidden">
-    <div class="sub-toolbar">
-      <button class="icon-btn" id="ganttPrev" aria-label="Défiler vers la gauche">◀</button>
-      <button class="btn secondary" id="ganttToday">Aujourd'hui</button>
-      <button class="icon-btn" id="ganttNext" aria-label="Défiler vers la droite">▶</button>
-      <span id="ganttLabel" style="font-size:12px;color:var(--muted);"></span>
-      <select id="ganttZoom" aria-label="Niveau de zoom">
-        <option value="day">Jours</option>
-        <option value="week">Semaines</option>
-        <option value="month">Mois</option>
-      </select>
-    </div>
-    <div id="ganttOuter"><div id="ganttContent"></div></div>
+    <div id="pfMain" style="flex:1;overflow:auto;"></div>
   </div>
 
   <!-- Onglet Calendrier -->
@@ -1100,6 +1110,7 @@ function checklistItemsHtml(items){
     <div class="checklist-item" data-idx="${i}">
       <input type="checkbox" data-chk="done" ${it.done?"checked":""}>
       <input type="text" data-chk="text" value="${escapeHtml(it.text||"")}" placeholder="Sous-tâche…">
+      <input type="date" data-chk="date" value="${it.date||""}" title="Échéance de la sous-tâche">
       <button type="button" class="icon-btn" data-chk="del">✕</button>
     </div>`).join("")}</div>`;
 }
@@ -1109,7 +1120,7 @@ function refreshChecklistUI(){
 function initTaskModalEvents(){
   const modal = document.getElementById("taskModal");
   modal.addEventListener("click", e => {
-    if (e.target.closest("#checklist-add")){ modalChecklist.push({ text:"", done:false }); refreshChecklistUI(); return; }
+    if (e.target.closest("#checklist-add")){ modalChecklist.push({ text:"", done:false, date:"" }); refreshChecklistUI(); return; }
     const del = e.target.closest('[data-chk="del"]');
     if (del){ modalChecklist.splice(Number(del.closest(".checklist-item").dataset.idx), 1); refreshChecklistUI(); }
     const addPerson = e.target.closest("[data-add-person]");
@@ -1136,6 +1147,8 @@ function initTaskModalEvents(){
   modal.addEventListener("change", e => {
     const chk = e.target.closest('[data-chk="done"]');
     if (chk) modalChecklist[Number(chk.closest(".checklist-item").dataset.idx)].done = chk.checked;
+    const dt = e.target.closest('[data-chk="date"]');
+    if (dt) modalChecklist[Number(dt.closest(".checklist-item").dataset.idx)].date = dt.value;
   });
 }
 
@@ -1432,167 +1445,234 @@ function renderSettingsModal(){
   document.getElementById("s-save").onclick = () => { setColumnsConfig(settingsWorkingCopy); saveColumnsConfig(settingsWorkingCopy); closeOverlay("settingsOverlay"); };
 }
 
-/* ===== ONGLET VUE TABLEAU ===== */
-function renderTableView(){
-  const tbody = document.getElementById("tasksTableBody");
-  let rows = filteredRecords();
-  if (state.sortBy === "priorite"){
-    const order = ["Urgent","Haute","Moyenne","Basse"];
-    rows = [...rows].sort((a,b) => order.indexOf(a.Priorite) - order.indexOf(b.Priorite));
-  } else if (state.sortBy === "deadline"){
-    rows = [...rows].sort((a,b) => (gristDateToJS(a.Deadline)??Infinity) - (gristDateToJS(b.Deadline)??Infinity));
-  }
-  const statutOptions = [...new Set((state.columnsConfig||[]).map(l=>l.statut))];
-  const priorities = Object.keys(PRIORITY_COLORS).filter(k=>k!=="__default");
+/* ===== ONGLET PORTEFEUILLE PROJETS : frise glissante 12 mois + Kanban fusionné =====
+   Adapté d'un widget fourni par l'utilisateur. Mapping vers notre modèle :
+   Projet = Type, Tâche = Description, Début = DateDebut (ou Créé le à défaut),
+   Échéance = Deadline, "terminé" = lane.dashCategory==="done" (pas de pondération). */
+let pfOffset = 0;             // décalage de la fenêtre de 12 mois, en mois
+let pfFilter = new Set();     // projets sélectionnés (filtre du kanban fusionné)
 
-  tbody.innerHTML = rows.length ? rows.map(t => {
-    const lane = state.columnsConfig?.find(l=>l.statut===t.Statut);
-    const overdue = t.Deadline && gristDateToJS(t.Deadline) < new Date() && lane?.dashCategory!=="done" && lane?.dashCategory!=="cancelled";
-    return `<tr data-id="${t.id}">
-      <td><div contenteditable="true" data-tbl-field="Description" style="min-width:160px;">${escapeHtml(t.Description||"")}</div></td>
-      <td><select data-tbl-field="Statut">${statutOptions.map(s=>`<option value="${escapeHtml(s)}" ${s===t.Statut?"selected":""}>${escapeHtml(s)}</option>`).join("")}</select></td>
-      <td><select data-tbl-field="Priorite">${priorities.map(p=>`<option value="${p}" ${p===t.Priorite?"selected":""}>${p}</option>`).join("")}</select></td>
-      <td>${decodeChoiceList(t.AssigneA).map(a=>`<span class="chip">👤 ${escapeHtml(a)}</span>`).join(" ")||"—"}</td>
-      <td>${t.Type?escapeHtml(t.Type):"—"}</td>
-      <td><input type="date" data-tbl-field="Deadline" value="${toDateInputValue(gristDateToJS(t.Deadline))}" style="${overdue?'color:#c0392b;font-weight:700;':''}"></td>
-      <td><button class="icon-btn" data-tbl-open="1" title="Ouvrir">✏️</button><button class="icon-btn" data-tbl-del="1" title="Supprimer">🗑️</button></td>
-    </tr>`;
-  }).join("") : `<tr><td colspan="7" style="padding:20px;color:#888;text-align:center;">Aucune tâche.</td></tr>`;
+const fmtDateShort = d => d.toLocaleDateString("fr-FR", { day:"numeric", month:"short" });
+
+function pfWindowStart(){
+  const n = new Date();
+  return new Date(n.getFullYear(), n.getMonth()-2+pfOffset, 1);
 }
-function initTableView(){
-  const table = document.getElementById("tasksTable");
-  table.addEventListener("click", e => {
-    const row = e.target.closest("tr[data-id]");
-    if (!row) return;
-    const id = Number(row.dataset.id);
-    if (e.target.closest("[data-tbl-open]")) return openTaskModal(id);
-    const delBtn = e.target.closest("[data-tbl-del]");
-    if (delBtn){
-      return armDoubleClickConfirm(delBtn, () => {
-        writeToGrist(() => deleteTask(id), "Suppression non enregistrée dans Grist.");
-        state.records = state.records.filter(r=>r.id!==id);
-        notify();
-      }, "✅");
-    }
-  });
-  table.addEventListener("change", e => {
-    const row = e.target.closest("tr[data-id]");
-    const field = e.target.dataset.tblField;
-    if (!row || !field) return;
-    const id = Number(row.dataset.id);
-    let value = e.target.value;
-    if (field === "Deadline") value = jsDateToGristEpoch(value);
-    writeToGrist(() => updateTaskFields(id, { [field]: value }), `${field} non enregistré dans Grist.`);
-    patchRecordLocally(id, { [field]: value });
-    notify();
-  });
-  table.addEventListener("focusout", e => {
-    const el = e.target.closest('[data-tbl-field="Description"]');
-    if (!el) return;
-    const id = Number(el.closest("tr").dataset.id);
-    const val = el.textContent.trim();
-    writeToGrist(() => updateTaskFields(id, { Description: val }), "Description non enregistrée dans Grist.");
-    patchRecordLocally(id, { Description: val });
-  });
+function pfPos(d, base){
+  const m = (d.getFullYear()-base.getFullYear())*12 + d.getMonth()-base.getMonth();
+  const dim = new Date(d.getFullYear(), d.getMonth()+1, 0).getDate();
+  return (m + (d.getDate()-1+d.getHours()/24)/dim)/12;
 }
-
-/* ===== ONGLET GANTT ===== */
-const GANTT_DAY_WIDTH = { day:32, week:10, month:4 };
-let ganttZoom = "day";
-const addDays = (d, n) => { const r = new Date(d); r.setDate(r.getDate()+n); return r; };
-const daysBetween = (a, b) => Math.round((b-a)/86400000);
-
-function computeGanttRange(records){
-  const dates = [];
-  records.forEach(r => {
+function pfHealth(p){
+  if (p.pct >= 1) return { cls:"ok", label:"Terminé" };
+  if (!p.start || !p.end || p.end <= p.start) return { cls:"", label:"Sans dates" };
+  const now = Date.now();
+  if (now < p.start.getTime()) return { cls:"", label:"Démarre le "+fmtDateShort(p.start) };
+  if (now > p.end.getTime()) return { cls:"late", label:"Échéance dépassée" };
+  const reached = p.start.getTime() + p.pct*(p.end.getTime()-p.start.getTime());
+  const lag = Math.round((now-reached)/86400000);
+  if (lag > 7) return { cls:"late", label:"Retard ~"+(lag<21 ? lag+" j" : Math.round(lag/7)+" sem.") };
+  if (lag < -7) return { cls:"ok", label:"En avance" };
+  return { cls:"ok", label:"Dans les temps" };
+}
+function pfBuildProjects(){
+  const laneByStatut = {};
+  (state.columnsConfig||[]).forEach(l => laneByStatut[l.statut] = l);
+  const map = new Map();
+  filteredRecords().forEach(r => {
+    const name = r.Type || "Sans type";
+    if (!map.has(name)) map.set(name, { name, tasks:[], total:0, done:0, start:null, end:null });
+    const p = map.get(name);
+    const isDone = laneByStatut[r.Statut]?.dashCategory === "done";
     const start = gristDateToJS(r.DateDebut) || gristDateToJS(r.CreeLe);
     const end = gristDateToJS(r.Deadline);
-    if (start) dates.push(start);
-    if (end) dates.push(end);
+    p.tasks.push({ r, start, end, done:isDone });
+    p.total++;
+    if (isDone) p.done++;
+    [start,end].forEach(d => { if (!d) return; if (!p.start||d<p.start) p.start=d; if (!p.end||d>p.end) p.end=d; });
   });
-  const today = new Date();
-  if (!dates.length) return { min: addDays(today,-7), max: addDays(today,30) };
-  let min = new Date(Math.min(...dates.map(d=>d.getTime()), today.getTime()));
-  let max = new Date(Math.max(...dates.map(d=>d.getTime()), today.getTime()));
-  return { min: addDays(min,-3), max: addDays(max,7) };
+  const projects = [...map.values()].sort((a,b) => a.name.localeCompare(b.name,"fr"));
+  projects.forEach((p,i) => {
+    p.color = GROUP_PALETTE[i % GROUP_PALETTE.length];
+    p.pct = p.total ? p.done/p.total : 0;
+    p.health = pfHealth(p);
+  });
+  return projects;
 }
-
-function renderGantt(){
-  const records = filteredRecords();
-  let rows = [...records];
-  if (state.sortBy === "priorite"){
-    const order = ["Urgent","Haute","Moyenne","Basse"];
-    rows.sort((a,b) => order.indexOf(a.Priorite) - order.indexOf(b.Priorite));
-  } else if (state.sortBy === "deadline"){
-    rows.sort((a,b) => (gristDateToJS(a.Deadline)??Infinity) - (gristDateToJS(b.Deadline)??Infinity));
+function pfRenderTimeline(projects, base){
+  const tp = pfPos(new Date(), base);
+  const showToday = tp>=0 && tp<=1;
+  let months = "";
+  for (let i=0;i<12;i++){
+    const d = new Date(base.getFullYear(), base.getMonth()+i, 1);
+    const isYear = i===0 || d.getMonth()===0;
+    months += `<div class="${isYear?"year":""}">${d.toLocaleDateString("fr-FR",{month:"short"})}${isYear?" "+d.getFullYear():""}</div>`;
   }
-  const { min, max } = computeGanttRange(records);
-  const totalDays = Math.max(1, daysBetween(min, max));
-  const dayW = GANTT_DAY_WIDTH[ganttZoom];
-  const totalWidth = totalDays*dayW;
-  document.getElementById("ganttLabel").textContent = `${fmtDate(min)} → ${fmtDate(max)}`;
-
-  const headerMonths = [];
-  { let cur = new Date(min);
-    while (cur < max){
-      const nextMonth = new Date(cur.getFullYear(), cur.getMonth()+1, 1);
-      const segEnd = nextMonth < max ? nextMonth : max;
-      headerMonths.push({ label: cur.toLocaleDateString("fr-FR",{month:"long",year:"numeric"}), span: Math.max(1,daysBetween(cur, segEnd)) });
-      cur = segEnd;
+  let html = `<div class="pf-timeline"><div class="pf-head">
+    <div class="pf-head-lbl">Projet</div>
+    <div class="pf-months-wrap"><div class="pf-months">${months}</div>
+    ${showToday ? `<span class="pf-today-tag" style="left:${tp*100}%">Aujourd'hui</span>` : ""}</div>
+  </div>`;
+  projects.forEach(p => {
+    let bar = `<span class="pf-nodates">Ajoutez des dates de début ou d'échéance</span>`;
+    if (p.start && p.end){
+      const ps = pfPos(p.start, base), pe = pfPos(p.end, base);
+      const l = Math.max(0,ps), r = Math.min(1,pe);
+      if (r > l){
+        const pf = ps + p.pct*(pe-ps);
+        const fillW = Math.max(0, Math.min(1, (pf-l)/(r-l)));
+        bar = `<div class="pf-bar ${ps<0?"cut-l":""} ${pe>1?"cut-r":""}" style="left:${l*100}%;width:${Math.max((r-l)*100,0.6)}%;--c:${p.color};" title="${escapeHtml(p.name)} : ${fmtDateShort(p.start)} → ${fmtDateShort(p.end)}, ${Math.round(p.pct*100)}%">
+          <div class="pf-fill" style="width:${fillW*100}%"></div></div>`;
+      } else {
+        bar = `<span class="pf-nodates">${pe<=0?"Terminé avant cette période":"Commence après cette période"}</span>`;
+      }
     }
-  }
-  const dayLabels = [];
-  { let cur = new Date(min); for (let i=0;i<totalDays;i++){ dayLabels.push(cur.getDate()); cur = addDays(cur,1); } }
-
-  const todayOffset = daysBetween(min, new Date());
-
-  const barsData = rows.map(t => {
-    const lane = state.columnsConfig?.find(l=>l.statut===t.Statut);
-    const start = gristDateToJS(t.DateDebut) || gristDateToJS(t.CreeLe) || min;
-    const end = gristDateToJS(t.Deadline) || addDays(start,1);
-    const left = Math.max(0, daysBetween(min, start)) * dayW;
-    const span = Math.max(1, daysBetween(start, end));
-    const width = Math.max(dayW, span*dayW);
-    const color = lane?.color || "#4f7cff";
-    const cl = checklistProgress(t.Checklist);
-    const progressPct = cl ? Math.round(cl.done/cl.total*100) : 0;
-    return { t, left, width, color, progressPct };
-  });
-
-  document.getElementById("ganttContent").innerHTML = `
-    <div class="gantt-header-row">
-      <div class="gantt-corner">Tâche (${rows.length})</div>
-      <div class="gantt-header-dates" style="width:${totalWidth}px;">
-        <div class="gantt-header-months">${headerMonths.map(m=>`<div style="width:${m.span*dayW}px;">${escapeHtml(m.label)}</div>`).join("")}</div>
-        <div class="gantt-header-days">${dayLabels.map(d=>`<div style="width:${dayW}px;">${dayW>=18?d:""}</div>`).join("")}</div>
+    const dim = pfFilter.size && !pfFilter.has(p.name) ? "dim" : "";
+    html += `<div class="pf-row ${dim}" tabindex="0" data-pf-proj="${escapeHtml(p.name)}">
+      <div class="pf-lbl">
+        <div class="pf-lbl-name"><span class="pf-dot" style="background:${p.color}"></span><span>${escapeHtml(p.name)}</span></div>
+        <div class="pf-pct">${Math.round(p.pct*100)}%</div>
+        <div class="pf-sub">${p.done}/${p.total} tâches · <span class="${p.health.cls}">${escapeHtml(p.health.label)}</span></div>
       </div>
-    </div>
-    ${barsData.length ? barsData.map(b => `
-      <div class="gantt-row">
-        <div class="gantt-label" data-gantt-task="${b.t.id}">${escapeHtml(b.t.Description||"(sans titre)")}</div>
-        <div class="gantt-track" style="width:${totalWidth}px;">
-          ${todayOffset>=0 && todayOffset<=totalDays ? `<div class="gantt-today-line" style="left:${todayOffset*dayW}px;"></div>` : ""}
-          <div class="gantt-bar" data-gantt-task="${b.t.id}" title="${escapeHtml(b.t.Description||"")}" style="left:${b.left}px;width:${b.width}px;background:${b.color}55;border-color:${b.color};">
-            <div class="gantt-bar-fill" style="width:${b.progressPct}%;background:${b.color};"></div>
-          </div>
-        </div>
-      </div>`).join("") : `<div class="gantt-row"><div class="gantt-label">Aucune tâche.</div><div class="gantt-track" style="width:${totalWidth}px;"></div></div>`}
-  `;
+      <div class="pf-track">${bar}${showToday?`<div class="pf-today" style="left:${tp*100}%"></div>`:""}</div>
+    </div>`;
+    if (pfFilter.has(p.name)){
+      const tasksSorted = [...p.tasks].sort((a,b) => (a.start?.getTime()??Infinity) - (b.start?.getTime()??Infinity));
+      html += tasksSorted.map(t => pfRenderTaskRow(t, p, base)).join("");
+    }
+  });
+  return html + `</div>`;
 }
-function initGantt(){
-  document.getElementById("ganttZoom").addEventListener("change", e => { ganttZoom = e.target.value; renderGantt(); });
-  document.getElementById("ganttPrev").onclick = () => document.getElementById("ganttOuter").scrollBy({ left:-200, behavior:"smooth" });
-  document.getElementById("ganttNext").onclick = () => document.getElementById("ganttOuter").scrollBy({ left:200, behavior:"smooth" });
-  document.getElementById("ganttToday").onclick = () => {
-    const records = filteredRecords();
-    const { min } = computeGanttRange(records);
-    const dayW = GANTT_DAY_WIDTH[ganttZoom];
-    const offset = daysBetween(min, new Date()) * dayW;
-    document.getElementById("ganttOuter").scrollTo({ left: Math.max(0, offset-150), behavior:"smooth" });
-  };
-  document.getElementById("ganttContent").addEventListener("click", e => {
-    const t = e.target.closest("[data-gantt-task]");
-    if (t) openTaskModal(Number(t.dataset.ganttTask));
+function pfRenderTaskRow(task, project, base){
+  const r = task.r;
+  let bar = `<span class="pf-nodates">Sans dates</span>`;
+  if (task.start && task.end && task.end > task.start){
+    const ps = pfPos(task.start, base), pe = pfPos(task.end, base);
+    const l = Math.max(0,ps), rr = Math.min(1,pe);
+    if (rr > l){
+      bar = `<div class="pf-bar pf-bar-task ${ps<0?"cut-l":""} ${pe>1?"cut-r":""}" style="left:${l*100}%;width:${Math.max((rr-l)*100,0.6)}%;--c:${project.color};" title="${escapeHtml(r.Description||"")} : ${fmtDateShort(task.start)} → ${fmtDateShort(task.end)}"></div>`;
+    } else {
+      bar = `<span class="pf-nodates">${pe<=0?"Terminée avant cette période":"Commence après cette période"}</span>`;
+    }
+  } else if (task.start || task.end){
+    const d = task.start || task.end;
+    const pfr = pfPos(d, base);
+    if (pfr>=0 && pfr<=1) bar = `<div class="pf-single-marker" style="left:${pfr*100}%;--c:${project.color};" title="${escapeHtml(r.Description||"")} : ${fmtDateShort(d)}"></div>`;
+  }
+  const markers = parseChecklist(r.Checklist).filter(it => it.date).map(it => {
+    const d = new Date(it.date+"T00:00:00");
+    const pfr = pfPos(d, base);
+    if (pfr<0 || pfr>1) return "";
+    const overdue = !it.done && d < new Date();
+    return `<div class="pf-subtask-marker ${it.done?"done":""} ${overdue?"overdue":""}" style="left:${pfr*100}%;--c:${project.color};" title="${escapeHtml(it.text||"")} — ${fmtDateShort(d)}"></div>`;
+  }).join("");
+  return `<div class="pf-row pf-task-row" data-id="${r.id}">
+    <div class="pf-lbl pf-task-lbl"><span class="pf-task-name">↳ ${escapeHtml(r.Description||"(sans titre)")}</span></div>
+    <div class="pf-track pf-task-track">${bar}${markers}</div>
+  </div>`;
+}
+function pfSubtasksHtml(raw){
+  const items = parseChecklist(raw);
+  if (!items.length) return "";
+  const now = new Date();
+  return `<div class="pf-subtasks">${items.map(it => {
+    const d = it.date ? new Date(it.date+"T00:00:00") : null;
+    const overdue = d && !it.done && d < now;
+    return `<div class="pf-subtask${it.done?" done":""}">
+      <span class="pf-subtask-check">${it.done?"✅":"▫️"}</span>
+      <span class="pf-subtask-text">${escapeHtml(it.text||"")}</span>
+      ${d ? `<span class="pf-subtask-date${overdue?" overdue":""}">${fmtDateShort(d)}</span>` : ""}
+    </div>`;
+  }).join("")}</div>`;
+}
+function pfRenderBoard(projects){
+  const colorOf = Object.fromEntries(projects.map(p => [p.name, p.color]));
+  const now = new Date();
+  const visible = filteredRecords().filter(r => !pfFilter.size || pfFilter.has(r.Type || "Sans type"));
+  let chips = projects.map(p => `<button type="button" class="pf-chip" aria-pressed="${pfFilter.has(p.name)}" data-pf-proj="${escapeHtml(p.name)}" style="--c:${p.color}"><span class="pf-dot" style="background:${p.color}"></span>${escapeHtml(p.name)}</button>`).join("");
+  if (pfFilter.size) chips += `<button type="button" class="pf-chip clear" id="pfClearFilter">Tout afficher</button>`;
+
+  const lanes = state.columnsConfig || [];
+  let cols = lanes.map(lane => {
+    const cards = visible.filter(r => r.Statut === lane.statut)
+      .sort((a,b) => (gristDateToJS(a.Deadline)?.getTime() ?? Infinity) - (gristDateToJS(b.Deadline)?.getTime() ?? Infinity));
+    const cardsHtml = cards.map(r => {
+      const proj = r.Type || "Sans type";
+      const deadline = gristDateToJS(r.Deadline);
+      const overdue = deadline && deadline < now && lane.dashCategory!=="done" && lane.dashCategory!=="cancelled";
+      return `<div class="pf-card" draggable="true" tabindex="0" data-id="${r.id}" style="--c:${colorOf[proj]||"#999"}">
+        <div class="pf-card-proj">${escapeHtml(proj)}</div>
+        <div class="pf-card-title">${escapeHtml(r.Description||"Sans titre")}</div>
+        <div class="pf-card-meta"><span>${escapeHtml(decodeChoiceList(r.AssigneA).join(", "))}</span><span class="${overdue?"overdue":""}">${deadline?fmtDateShort(deadline):""}</span></div>
+        ${pfSubtasksHtml(r.Checklist)}
+      </div>`;
+    }).join("");
+    return `<div class="pf-col" data-pf-status="${escapeHtml(lane.statut)}"><div class="pf-col-head"><span>${escapeHtml(lane.label)}</span><span class="n">${cards.length}</span></div>${cardsHtml}</div>`;
+  }).join("");
+  return `<div class="pf-chips">${chips}</div><div class="pf-board">${cols}</div>`;
+}
+function renderPortfolio(){
+  const base = pfWindowStart();
+  const last = new Date(base.getFullYear(), base.getMonth()+11, 1);
+  const f = d => d.toLocaleDateString("fr-FR",{month:"short",year:"numeric"});
+  document.getElementById("pfRange").textContent = `${f(base)} – ${f(last)}`;
+
+  const main = document.getElementById("pfMain");
+  if (!state.columnsConfig){ main.innerHTML = `<p style="padding:20px;color:#888;">Chargement…</p>`; document.getElementById("pfSummary").textContent = ""; return; }
+
+  const projects = pfBuildProjects();
+  [...pfFilter].forEach(n => { if (!projects.some(p => p.name===n)) pfFilter.delete(n); });
+
+  const totalTasks = projects.reduce((s,p)=>s+p.total,0);
+  const doneTasks = projects.reduce((s,p)=>s+p.done,0);
+  const late = projects.filter(p => p.health.cls==="late").length;
+  document.getElementById("pfSummary").textContent = totalTasks
+    ? `${projects.length} projet${projects.length>1?"s":""}, ${Math.round(doneTasks/totalTasks*100)}% réalisé${late?`, ${late} en retard`:""}`
+    : "";
+
+  main.innerHTML = totalTasks ? (pfRenderTimeline(projects, base) + pfRenderBoard(projects)) : `<p style="padding:20px;color:#888;">Aucune tâche.</p>`;
+}
+function pfToggleProject(name){ pfFilter.has(name) ? pfFilter.delete(name) : pfFilter.add(name); renderPortfolio(); }
+async function pfMoveCard(id, statut){
+  const r = state.records.find(x => x.id===id);
+  if (!r || r.Statut===statut) return;
+  const prev = r.Statut;
+  r.Statut = statut;
+  renderPortfolio();
+  const result = await writeToGrist(() => updateTaskFields(id, { Statut: statut }), "Déplacement non enregistré dans Grist.");
+  if (result === undefined){ r.Statut = prev; renderPortfolio(); }
+}
+function initPortfolio(){
+  document.getElementById("pfPrev").onclick = () => { pfOffset--; renderPortfolio(); };
+  document.getElementById("pfNext").onclick = () => { pfOffset++; renderPortfolio(); };
+  document.getElementById("pfToday").onclick = () => { pfOffset = 0; renderPortfolio(); };
+
+  const main = document.getElementById("pfMain");
+  main.addEventListener("click", e => {
+    const proj = e.target.closest("[data-pf-proj]");
+    if (proj) return pfToggleProject(proj.dataset.pfProj);
+    if (e.target.closest("#pfClearFilter")){ pfFilter.clear(); return renderPortfolio(); }
+    const taskRow = e.target.closest(".pf-task-row");
+    if (taskRow) return openTaskModal(Number(taskRow.dataset.id));
+    const card = e.target.closest(".pf-card");
+    if (card) openTaskModal(Number(card.dataset.id));
+  });
+  main.addEventListener("keydown", e => {
+    if (e.key==="Enter"){ const row = e.target.closest("[data-pf-proj]"); if (row) pfToggleProject(row.dataset.pfProj); }
+  });
+  main.addEventListener("dragstart", e => {
+    const card = e.target.closest(".pf-card");
+    if (card){ card.classList.add("dragging"); e.dataTransfer.setData("text/plain", card.dataset.id); }
+  });
+  main.addEventListener("dragend", e => e.target.closest(".pf-card")?.classList.remove("dragging"));
+  main.addEventListener("dragover", e => { const col = e.target.closest(".pf-col"); if (col){ e.preventDefault(); col.classList.add("over"); } });
+  main.addEventListener("dragleave", e => e.target.closest(".pf-col")?.classList.remove("over"));
+  main.addEventListener("drop", e => {
+    const col = e.target.closest(".pf-col");
+    if (!col) return;
+    e.preventDefault();
+    col.classList.remove("over");
+    pfMoveCard(Number(e.dataTransfer.getData("text/plain")), col.dataset.pfStatus);
   });
 }
 
@@ -2268,8 +2348,7 @@ function renderDashConfigModal(){
 let currentTab = "kanban";
 function renderTab(tab){
   if (tab === "kanban") renderBoard();
-  else if (tab === "table") renderTableView();
-  else if (tab === "gantt") renderGantt();
+  else if (tab === "table") renderPortfolio();
   else if (tab === "calendar") renderCalendar();
   else if (tab === "whiteboard"){ wbResizeCanvas(); renderWbOverlay(); }
   else if (tab === "dashboard") renderDashboard();
@@ -2308,8 +2387,7 @@ initBulkBar();
 initTaskModalEvents();
 initFiltersBar();
 initCalendar();
-initTableView();
-initGantt();
+initPortfolio();
 initAlerts();
 initThemeToggle();
 document.getElementById("btnGlobalExportCsv").onclick = exportCsv;
