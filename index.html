@@ -21,6 +21,10 @@
 :root[data-theme="dark"] .pf-row:hover .pf-lbl{background:rgba(255,255,255,.04);}
 :root[data-theme="dark"] .alerts-panel{background:var(--surface);color:var(--ink);}
 :root[data-theme="dark"] .alerts-item:hover{background:#2c2f3a;}
+:root[data-theme="dark"] .cbdd-trigger,:root[data-theme="dark"] .cbdd-panel{background:var(--surface);color:var(--ink);border-color:var(--border);}
+:root[data-theme="dark"] .cbdd-item:hover{background:#2c2f3a;}
+:root[data-theme="dark"] .cbdd-add{border-color:var(--border);}
+:root[data-theme="dark"] .cbdd-add input{background:var(--surface);color:var(--ink);border-color:var(--border);}
 *{box-sizing:border-box;}
 html,body{height:100%;margin:0;}
 body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--ink);overflow:hidden;}
@@ -94,9 +98,10 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .pf-task-name{font-size:11px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;}
 .pf-bar-task{height:9px;margin-top:-4.5px;}
 .pf-single-marker{position:absolute;top:50%;width:9px;height:9px;margin-top:-4.5px;margin-left:-4.5px;border-radius:2px;background:var(--c);transform:rotate(45deg);}
-.pf-subtask-marker{position:absolute;top:50%;width:8px;height:8px;margin-top:-4px;margin-left:-4px;border-radius:50%;background:var(--surface);border:2px solid var(--c);z-index:2;cursor:help;}
-.pf-subtask-marker.done{background:var(--c);}
-.pf-subtask-marker.overdue{border-color:#c0392b;}
+.pf-subtask-block{position:absolute;top:50%;width:13px;height:13px;margin-top:-6.5px;margin-left:-6.5px;border-radius:4px;background:var(--c);box-shadow:0 1px 3px rgba(0,0,0,.35);z-index:2;cursor:pointer;border:2px solid var(--surface);}
+.pf-subtask-block:hover{transform:scale(1.15);}
+.pf-subtask-block.done{opacity:.5;}
+.pf-subtask-block.overdue{box-shadow:0 0 0 2px #c0392b;}
 .pf-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}
 .pf-chip{border:1px solid var(--border);background:var(--surface);border-radius:999px;padding:3px 10px 3px 8px;display:inline-flex;align-items:center;gap:6px;font-size:11.5px;cursor:pointer;color:var(--ink);}
 .pf-chip[aria-pressed="true"]{border-color:var(--c);background:color-mix(in srgb, var(--c) 18%, transparent);}
@@ -144,7 +149,6 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .card{border-radius:8px;padding:10px 10px 8px;cursor:grab;box-shadow:0 2px 6px rgba(0,0,0,.10), 0 1px 2px rgba(0,0,0,.06);font-size:12.5px;position:relative;font-family:'Segoe Print','Bradley Hand',cursive,'Segoe UI',sans-serif;border-left:4px solid transparent;}
 .card.dragging{opacity:.4;}
 .card::before{content:'';position:absolute;top:-5px;left:50%;transform:translateX(-50%) rotate(-2deg);width:30px;height:12px;background:rgba(255,255,255,.45);border-radius:1px;}
-.card-blocked{background:rgba(192,57,43,.13);color:#8a2a20;font-size:10.5px;border-radius:6px;padding:3px 6px;margin-bottom:5px;font-weight:600;}
 .card-select-box{position:absolute;top:6px;left:6px;width:16px;height:16px;z-index:2;}
 .card-delete-btn{position:absolute;top:4px;right:4px;background:rgba(255,255,255,.75);border:none;border-radius:50%;width:20px;height:20px;font-size:11px;line-height:20px;text-align:center;cursor:pointer;color:#8a2a20;z-index:2;padding:0;}
 .card-delete-btn:hover{background:#fff;color:#c0392b;}
@@ -176,6 +180,18 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .checklist-item input[type=checkbox]{width:auto;flex:none;}
 .checklist-item input[type=text]{flex:1;width:auto;min-width:90px;padding:5px 6px;font-size:12.5px;border:1px solid #ddd;border-radius:6px;}
 .checklist-item input[type=date]{width:auto;flex:none;padding:4px 5px;font-size:11.5px;border:1px solid #ddd;border-radius:6px;}
+.cbdd{position:relative;}
+.cbdd-trigger{width:100%;text-align:left;padding:7px 8px;border:1px solid #d7dae0;border-radius:7px;background:#fff;font-size:13px;font-family:inherit;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:6px;}
+.cbdd-trigger-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink);}
+.cbdd-arrow{color:var(--muted);font-size:11px;flex:none;}
+.cbdd-panel{position:absolute;top:100%;left:0;right:0;margin-top:4px;background:#fff;border:1px solid #d7dae0;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,.18);z-index:20;padding:6px;}
+.cbdd-panel.hidden{display:none;}
+.cbdd-list{max-height:160px;overflow-y:auto;display:flex;flex-direction:column;gap:2px;}
+.cbdd-item{display:flex;align-items:center;gap:7px;padding:5px 6px;border-radius:6px;font-size:12.5px;cursor:pointer;}
+.cbdd-item:hover{background:#f2f4f8;}
+.cbdd-item input{width:auto;flex:none;}
+.cbdd-add{display:flex;gap:6px;margin-top:6px;padding-top:6px;border-top:1px solid #eee;}
+.cbdd-add input{flex:1;padding:5px 6px;border:1px solid #ddd;border-radius:6px;font-size:12px;}
 .lane-config-row{display:flex;align-items:center;gap:6px;padding:6px;border:1px solid #eee;border-radius:8px;margin-bottom:6px;flex-wrap:wrap;}
 .lane-config-row input[type=text]{flex:1;min-width:70px;padding:5px 6px;border:1px solid #ddd;border-radius:6px;font-size:12px;}
 .lane-config-row input[type=color]{width:30px;height:26px;border:none;padding:0;background:none;}
@@ -241,6 +257,22 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .bar-track{background:#eee;border-radius:6px;overflow:hidden;height:10px;}
 .bar-fill{height:100%;}
 .dash-config-row{display:flex;align-items:center;gap:8px;padding:6px;border:1px solid #eee;border-radius:8px;margin-bottom:6px;}
+.cm-chart{display:flex;align-items:flex-end;gap:8px;height:150px;padding:10px 4px 0;}
+.cm-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;height:100%;justify-content:flex-end;min-width:0;}
+.cm-value{font-size:11px;font-weight:700;margin-bottom:3px;color:var(--ink);}
+.cm-bar{width:100%;border-radius:6px 6px 0 0;min-height:4px;}
+.cm-label{font-size:10px;color:var(--muted);margin-top:4px;white-space:nowrap;}
+.cm-label.current{color:#c0392b;font-weight:700;}
+.cm-legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px;font-size:11px;color:var(--muted);}
+.cm-legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:4px;vertical-align:middle;}
+.sp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px;}
+.sp-card{border:2px solid;border-radius:10px;padding:10px 12px;background:var(--surface);cursor:pointer;}
+.sp-title{font-weight:700;font-size:12.5px;margin-bottom:2px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.sp-sub{font-size:11px;color:var(--muted);margin-bottom:8px;}
+.sp-bar{display:flex;height:20px;border-radius:5px;overflow:hidden;background:rgba(0,0,0,.06);position:relative;}
+.sp-seg{flex:1;border-right:1px solid rgba(0,0,0,.15);}
+.sp-seg:last-child{border-right:none;}
+.sp-today{position:absolute;top:-3px;bottom:-3px;width:2px;background:#e05a7a;}
 
 @media print{
   #toolbar,.sub-toolbar,#confetti-canvas{display:none !important;}
@@ -361,6 +393,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 <div class="overlay hidden" id="settingsOverlay"><div class="modal" id="settingsModal" role="dialog" aria-modal="true"></div></div>
 <div class="overlay hidden" id="dashConfigOverlay"><div class="modal" id="dashConfigModal" role="dialog" aria-modal="true"></div></div>
 <div class="overlay hidden" id="templatesOverlay"><div class="modal" id="templatesModal" role="dialog" aria-modal="true"></div></div>
+<div class="overlay hidden" id="subtaskOverlay"><div class="modal" id="subtaskModal" role="dialog" aria-modal="true"></div></div>
 <canvas id="confetti-canvas"></canvas>
 
 <script>
@@ -380,8 +413,8 @@ const REQUIRED_COLUMNS = [
   { name:"Ordre", title:"Ordre (tri manuel)", type:"Numeric", optional:true },
   { name:"Checklist", title:"Sous-tâches (JSON)", type:"Text", optional:true },
   { name:"Recurrence", title:"Récurrence", type:"Choice", optional:true },
-  { name:"BloquePar", title:"Bloqué par (ids)", type:"Text", optional:true },
   { name:"DateDebut", title:"Date de début", type:"Date", optional:true },
+  { name:"Couleur", title:"Couleur (frise)", type:"Text", optional:true },
 ];
 const PRIORITY_COLORS = {
   Urgent:{bg:"#ffd3d3",badge:"#c0392b"}, Haute:{bg:"#ffe3bd",badge:"#d9822b"},
@@ -418,12 +451,14 @@ const normalizeColumnsConfig = cfg => cfg.map(l => ({
   dashCategory: l.dashCategory ?? "todo",
 }));
 const DASHBOARD_MODULES = {
-  kpis:         { label: "Indicateurs clés" },
-  donutStatut:  { label: "Répartition par statut" },
-  barsPriorite: { label: "Répartition par priorité" },
-  teamLoad:     { label: "Charge de l'équipe" },
-  evolution:    { label: "Évolution (8 semaines)", full:true },
-  deadlines:    { label: "Échéances", full:true },
+  kpis:              { label: "Indicateurs clés" },
+  donutStatut:       { label: "Répartition par statut" },
+  barsPriorite:      { label: "Répartition par priorité" },
+  teamLoad:          { label: "Charge de l'équipe" },
+  evolution:         { label: "Évolution (8 semaines)", full:true },
+  chargeParMois:     { label: "Analyse & synthèse — Charge par mois", full:true },
+  syntheseParProjet: { label: "Synthèse par projet", full:true },
+  deadlines:         { label: "Échéances", full:true },
 };
 const defaultDashboardLayout = () => Object.keys(DASHBOARD_MODULES).map(id => ({ id, visible:true }));
 const defaultTaskTemplates = () => [];
@@ -599,9 +634,9 @@ const escapeHtml = str => String(str ?? "").replace(/[&<>"']/g, s => ({ "&":"&am
 const fieldRow = (label, html) => `<div class="field"><label>${label}</label>${html}</div>`;
 const openOverlay = id => document.getElementById(id).classList.remove("hidden");
 const closeOverlay = id => document.getElementById(id).classList.add("hidden");
-function anyOverlayOpen(){ return ["taskOverlay","settingsOverlay","dashConfigOverlay","templatesOverlay"].some(id => !document.getElementById(id).classList.contains("hidden")); }
+function anyOverlayOpen(){ return ["taskOverlay","settingsOverlay","dashConfigOverlay","templatesOverlay","subtaskOverlay"].some(id => !document.getElementById(id).classList.contains("hidden")); }
 function closeAllOverlays(){
-  closeOverlay("taskOverlay"); closeOverlay("settingsOverlay"); closeOverlay("dashConfigOverlay"); closeOverlay("templatesOverlay");
+  closeOverlay("taskOverlay"); closeOverlay("settingsOverlay"); closeOverlay("dashConfigOverlay"); closeOverlay("templatesOverlay"); closeOverlay("subtaskOverlay");
 }
 function showToast(msg){
   let t = document.getElementById("toast");
@@ -707,16 +742,6 @@ async function maybeSpawnRecurrence(sourceTask, newCategory){
   const result = await writeToGrist(() => createTask(fields), "Tâche récurrente non recréée dans Grist.");
   const realId = result?.id ?? (Array.isArray(result) ? result[0]?.id : undefined);
   if (realId){ const rec = state.records.find(r => r.id === tempId); if (rec) rec.id = realId; }
-}
-
-/* -- Dépendances "Bloqué par" : résout les tâches bloquantes encore actives -- */
-function activeBlockers(t){
-  const ids = (t.BloquePar||"").split(",").map(s=>s.trim()).filter(Boolean).map(Number);
-  if (!ids.length) return [];
-  return ids.map(bid => state.records.find(r=>r.id===bid)).filter(Boolean).filter(b => {
-    const lane = state.columnsConfig?.find(l=>l.statut===b.Statut);
-    return lane?.dashCategory !== "done" && lane?.dashCategory !== "cancelled";
-  });
 }
 
 /* -- Filtres (partagés par Kanban, Calendrier et Tableau de bord) -- */
@@ -893,11 +918,9 @@ function renderCard(t, lane){
   const assignees = decodeChoiceList(t.AssigneA);
   const cl = checklistProgress(t.Checklist);
   const selected = selectedTaskIds.has(t.id);
-  const blockers = activeBlockers(t);
   return `
     <div class="card${selectMode?" select-mode-card":""}" tabindex="0" role="button" aria-label="Tâche : ${escapeHtml(t.Description||"sans titre")}" draggable="${selectMode?"false":"true"}" data-id="${t.id}" style="background:${pStyle.bg};border-left-color:${lane.color};transform:rotate(${seededRotation(t.id).toFixed(2)}deg)">
       ${selectMode ? `<input type="checkbox" class="card-select-box" data-select-task="${t.id}" ${selected?"checked":""} aria-label="Sélectionner cette tâche">` : `<button class="card-delete-btn" data-delete-task="${t.id}" title="Supprimer (cliquer deux fois)" aria-label="Supprimer la tâche">✕</button>`}
-      ${blockers.length ? `<div class="card-blocked">🔒 Bloqué par : ${blockers.map(b=>escapeHtml(b.Description||`#${b.id}`)).join(", ")}</div>` : ""}
       <div class="card-meta-row">
         <span class="badge" style="background:${pStyle.badge}">${escapeHtml(t.Priorite||"—")}</span>
         ${t.Type ? `<span class="chip">${escapeHtml(t.Type)}</span>` : ""}
@@ -1105,6 +1128,7 @@ function initBulkBar(){
 
 /* -- Popup détail tâche (utilisée depuis Kanban, Calendrier et Tableau de bord) -- */
 let modalChecklist = [];
+let modalMultiSelects = {};
 function checklistItemsHtml(items){
   return `<div id="checklist-items">${items.map((it,i) => `
     <div class="checklist-item" data-idx="${i}">
@@ -1122,23 +1146,35 @@ function initTaskModalEvents(){
   modal.addEventListener("click", e => {
     if (e.target.closest("#checklist-add")){ modalChecklist.push({ text:"", done:false, date:"" }); refreshChecklistUI(); return; }
     const del = e.target.closest('[data-chk="del"]');
-    if (del){ modalChecklist.splice(Number(del.closest(".checklist-item").dataset.idx), 1); refreshChecklistUI(); }
+    if (del){ modalChecklist.splice(Number(del.closest(".checklist-item").dataset.idx), 1); refreshChecklistUI(); return; }
+
+    const toggle = e.target.closest("[data-cbdd-toggle]");
+    if (toggle){
+      const panel = document.getElementById(toggle.dataset.cbddToggle+"-panel");
+      modal.querySelectorAll(".cbdd-panel").forEach(p => { if (p !== panel) p.classList.add("hidden"); });
+      panel.classList.toggle("hidden");
+      return;
+    }
     const addPerson = e.target.closest("[data-add-person]");
     if (addPerson){
-      const selectId = addPerson.dataset.addPerson;
-      const input = document.getElementById(selectId+"-new");
+      const ddId = addPerson.dataset.addPerson;
+      const input = document.getElementById(ddId+"-new");
       const name = input.value.trim();
       if (!name) return;
-      const select = document.getElementById(selectId);
-      const existing = [...select.options].find(o => o.value === name);
-      if (existing) existing.selected = true;
+      const arr = modalMultiSelects[ddId];
+      if (!arr.includes(name)) arr.push(name);
+      const panel = document.getElementById(ddId+"-panel");
+      const existingBox = [...panel.querySelectorAll("[data-cbdd-check]")].find(cb => cb.value === name);
+      if (existingBox) existingBox.checked = true;
       else {
-        const opt = document.createElement("option");
-        opt.value = name; opt.textContent = name; opt.selected = true;
-        select.appendChild(opt);
+        panel.querySelector(".cbdd-list").insertAdjacentHTML("beforeend",
+          `<label class="cbdd-item"><input type="checkbox" data-cbdd-check="${ddId}" value="${escapeHtml(name)}" checked><span>${escapeHtml(name)}</span></label>`);
       }
+      updateCbddTrigger(ddId);
       input.value = "";
+      return;
     }
+    if (!e.target.closest(".cbdd")) modal.querySelectorAll(".cbdd-panel").forEach(p => p.classList.add("hidden"));
   });
   modal.addEventListener("input", e => {
     const txt = e.target.closest('[data-chk="text"]');
@@ -1149,7 +1185,20 @@ function initTaskModalEvents(){
     if (chk) modalChecklist[Number(chk.closest(".checklist-item").dataset.idx)].done = chk.checked;
     const dt = e.target.closest('[data-chk="date"]');
     if (dt) modalChecklist[Number(dt.closest(".checklist-item").dataset.idx)].date = dt.value;
+
+    const cb = e.target.closest("[data-cbdd-check]");
+    if (cb){
+      const ddId = cb.dataset.cbddCheck, val = cb.value, arr = modalMultiSelects[ddId];
+      if (cb.checked){ if (!arr.includes(val)) arr.push(val); }
+      else { const i = arr.indexOf(val); if (i>-1) arr.splice(i,1); }
+      updateCbddTrigger(ddId);
+    }
   });
+}
+function updateCbddTrigger(ddId){
+  const arr = modalMultiSelects[ddId] || [];
+  const trigger = document.querySelector(`[data-cbdd-toggle="${ddId}"] .cbdd-trigger-text`);
+  if (trigger) trigger.textContent = arr.length ? arr.join(", ") : "Sélectionner…";
 }
 
 function openTaskModal(id){
@@ -1172,19 +1221,25 @@ function openTaskModal(id){
   const currentResp = decodeChoiceList(t.Responsable);
   currentAssignees.concat(currentResp).forEach(p => peopleSet.add(p));
   const peopleList = [...peopleSet].sort((a,b) => a.localeCompare(b,"fr"));
-  const multiSelect = (selectId, values, current) => `
-    <select id="${selectId}" multiple size="4">${values.map(v => `<option value="${escapeHtml(v)}" ${current.includes(v)?"selected":""}>${escapeHtml(v)}</option>`).join("")}</select>
-    <div style="display:flex;gap:6px;margin-top:4px;">
-      <input type="text" id="${selectId}-new" placeholder="Nouveau nom…" style="flex:1;">
-      <button type="button" class="icon-btn" data-add-person="${selectId}" title="Ajouter">➕</button>
+  modalMultiSelects = { "m-assigne": [...currentAssignees], "m-resp": [...currentResp] };
+  const checkboxDropdownHtml = (ddId, values) => {
+    const current = modalMultiSelects[ddId];
+    return `<div class="cbdd">
+      <button type="button" class="cbdd-trigger" data-cbdd-toggle="${ddId}">
+        <span class="cbdd-trigger-text">${current.length ? current.map(escapeHtml).join(", ") : "Sélectionner…"}</span>
+        <span class="cbdd-arrow">▾</span>
+      </button>
+      <div class="cbdd-panel hidden" id="${ddId}-panel">
+        <div class="cbdd-list">
+          ${values.map(v => `<label class="cbdd-item"><input type="checkbox" data-cbdd-check="${ddId}" value="${escapeHtml(v)}" ${current.includes(v)?"checked":""}><span>${escapeHtml(v)}</span></label>`).join("") || `<p style="font-size:11.5px;color:var(--muted);padding:4px 6px;">Aucun nom pour l'instant.</p>`}
+        </div>
+        <div class="cbdd-add">
+          <input type="text" id="${ddId}-new" placeholder="Nouveau nom…">
+          <button type="button" class="icon-btn" data-add-person="${ddId}" title="Ajouter">➕</button>
+        </div>
+      </div>
     </div>`;
-
-  const blockerOptions = state.records.filter(r => r.id !== id);
-  const currentBlockers = (t.BloquePar||"").split(",").map(s=>s.trim()).filter(Boolean);
-  const blockerSelectHtml = blockerOptions.length ? `
-    <select id="m-bloquepar" multiple size="4">
-      ${blockerOptions.map(o => `<option value="${o.id}" ${currentBlockers.includes(String(o.id))?"selected":""}>${escapeHtml(o.Description||`Tâche #${o.id}`)}</option>`).join("")}
-    </select>` : `<p style="font-size:12px;color:var(--muted);margin:0;">Aucune autre tâche disponible.</p>`;
+  };
 
   document.getElementById("taskModal").innerHTML = `
     <h2>Détail de la tâche</h2>
@@ -1201,12 +1256,15 @@ function openTaskModal(id){
       ${fieldRow("Type", `<select id="m-type"><option value="">—</option>${opts(typeOptions, t.Type)}</select>`)}
       ${fieldRow("Récurrence", `<select id="m-recurrence">${recOpts}</select>`)}
     </div>
+    ${fieldRow("Couleur sur la frise (Portefeuille)", `<div style="display:flex;gap:8px;align-items:center;">
+      <input type="color" id="m-couleur" value="${t.Couleur || "#4f7cff"}" data-auto="${t.Couleur ? "0" : "1"}" style="width:44px;height:32px;padding:2px;">
+      <button type="button" class="btn secondary" id="m-couleur-reset">↺ Couleur automatique (projet)</button>
+    </div>`)}
     <div class="field-row">
-      ${fieldRow("Assigné à", multiSelect("m-assigne", peopleList, currentAssignees))}
-      ${fieldRow("Responsable", multiSelect("m-resp", peopleList, currentResp))}
+      ${fieldRow("Assigné à", checkboxDropdownHtml("m-assigne", peopleList))}
+      ${fieldRow("Responsable", checkboxDropdownHtml("m-resp", peopleList))}
     </div>
     ${fieldRow("Notes", `<textarea id="m-notes">${escapeHtml(t.Notes||"")}</textarea>`)}
-    ${fieldRow("🔒 Bloqué par (autres tâches)", blockerSelectHtml)}
     <div class="field">
       <label>Sous-tâches</label>
       ${checklistItemsHtml(modalChecklist)}
@@ -1232,6 +1290,9 @@ function openTaskModal(id){
   document.getElementById("m-save").onclick = saveTaskModal;
   document.getElementById("m-duplicate").onclick = () => duplicateTaskModal(id);
   document.getElementById("m-save-template").onclick = () => saveAsTemplate(id);
+  const colorInput = document.getElementById("m-couleur");
+  colorInput.addEventListener("input", () => { colorInput.dataset.auto = "0"; });
+  document.getElementById("m-couleur-reset").onclick = () => { colorInput.dataset.auto = "1"; colorInput.value = "#4f7cff"; };
 }
 function closeTaskModal(){ closeOverlay("taskOverlay"); state.editingId = null; }
 
@@ -1325,12 +1386,12 @@ async function saveTaskModal(){
     Deadline: jsDateToGristEpoch(document.getElementById("m-deadline").value),
     DateDebut: jsDateToGristEpoch(document.getElementById("m-datedebut").value),
     Type: document.getElementById("m-type").value, Recurrence: document.getElementById("m-recurrence").value,
-    AssigneA: encodeChoiceList([...document.getElementById("m-assigne").selectedOptions].map(o => o.value)),
-    Responsable: encodeChoiceList([...document.getElementById("m-resp").selectedOptions].map(o => o.value)),
+    AssigneA: encodeChoiceList(modalMultiSelects["m-assigne"] || []),
+    Responsable: encodeChoiceList(modalMultiSelects["m-resp"] || []),
     Notes: val("m-notes"),
     Checklist: JSON.stringify(modalChecklist.filter(it => it.text.trim() !== "")),
+    Couleur: document.getElementById("m-couleur").dataset.auto === "1" ? "" : document.getElementById("m-couleur").value,
     Historique: historique,
-    BloquePar: document.getElementById("m-bloquepar") ? [...document.getElementById("m-bloquepar").selectedOptions].map(o => o.value).join(",") : "",
   };
   await writeToGrist(() => updateTaskFields(id, fields), "Modifications non enregistrées dans Grist.");
   patchRecordLocally(id, fields);
@@ -1545,31 +1606,80 @@ function pfRenderTimeline(projects, base){
 }
 function pfRenderTaskRow(task, project, base){
   const r = task.r;
+  const color = r.Couleur || project.color;
   let bar = `<span class="pf-nodates">Sans dates</span>`;
   if (task.start && task.end && task.end > task.start){
     const ps = pfPos(task.start, base), pe = pfPos(task.end, base);
     const l = Math.max(0,ps), rr = Math.min(1,pe);
     if (rr > l){
-      bar = `<div class="pf-bar pf-bar-task ${ps<0?"cut-l":""} ${pe>1?"cut-r":""}" style="left:${l*100}%;width:${Math.max((rr-l)*100,0.6)}%;--c:${project.color};" title="${escapeHtml(r.Description||"")} : ${fmtDateShort(task.start)} → ${fmtDateShort(task.end)}"></div>`;
+      bar = `<div class="pf-bar pf-bar-task ${ps<0?"cut-l":""} ${pe>1?"cut-r":""}" style="left:${l*100}%;width:${Math.max((rr-l)*100,0.6)}%;--c:${color};" title="${escapeHtml(r.Description||"")} : ${fmtDateShort(task.start)} → ${fmtDateShort(task.end)}"></div>`;
     } else {
       bar = `<span class="pf-nodates">${pe<=0?"Terminée avant cette période":"Commence après cette période"}</span>`;
     }
   } else if (task.start || task.end){
     const d = task.start || task.end;
     const pfr = pfPos(d, base);
-    if (pfr>=0 && pfr<=1) bar = `<div class="pf-single-marker" style="left:${pfr*100}%;--c:${project.color};" title="${escapeHtml(r.Description||"")} : ${fmtDateShort(d)}"></div>`;
+    if (pfr>=0 && pfr<=1) bar = `<div class="pf-single-marker" style="left:${pfr*100}%;--c:${color};" title="${escapeHtml(r.Description||"")} : ${fmtDateShort(d)}"></div>`;
   }
-  const markers = parseChecklist(r.Checklist).filter(it => it.date).map(it => {
-    const d = new Date(it.date+"T00:00:00");
-    const pfr = pfPos(d, base);
-    if (pfr<0 || pfr>1) return "";
-    const overdue = !it.done && d < new Date();
-    return `<div class="pf-subtask-marker ${it.done?"done":""} ${overdue?"overdue":""}" style="left:${pfr*100}%;--c:${project.color};" title="${escapeHtml(it.text||"")} — ${fmtDateShort(d)}"></div>`;
-  }).join("");
+  const markers = parseChecklist(r.Checklist)
+    .map((it, idx) => ({ it, idx }))
+    .filter(x => x.it.date)
+    .map(({ it, idx }) => {
+      const d = new Date(it.date+"T00:00:00");
+      const pfr = pfPos(d, base);
+      if (pfr<0 || pfr>1) return "";
+      const overdue = !it.done && d < new Date();
+      return `<div class="pf-subtask-block ${it.done?"done":""} ${overdue?"overdue":""}" data-subtask-task="${r.id}" data-subtask-idx="${idx}" style="left:${pfr*100}%;--c:${color};" title="${escapeHtml(it.text||"")} — ${fmtDateShort(d)}${it.done?" (terminée)":""}"></div>`;
+    }).join("");
   return `<div class="pf-row pf-task-row" data-id="${r.id}">
     <div class="pf-lbl pf-task-lbl"><span class="pf-task-name">↳ ${escapeHtml(r.Description||"(sans titre)")}</span></div>
     <div class="pf-track pf-task-track">${bar}${markers}</div>
   </div>`;
+}
+
+/* -- Popup dédiée à une sous-tâche (ouverte depuis un bloc de la frise) -- */
+let subtaskContext = null;
+function openSubtaskPopup(taskId, idx){
+  const t = state.records.find(r => r.id === taskId);
+  if (!t) return;
+  const items = parseChecklist(t.Checklist);
+  const it = items[idx];
+  if (!it) return;
+  subtaskContext = { taskId, idx };
+  document.getElementById("subtaskModal").innerHTML = `
+    <h2>Détail de la sous-tâche</h2>
+    ${fieldRow("Nom", `<input type="text" id="st-text" value="${escapeHtml(it.text||"")}">`)}
+    <div class="field-row">
+      ${fieldRow("Date", `<input type="date" id="st-date" value="${it.date||""}">`)}
+      ${fieldRow("État", `<label style="display:flex;align-items:center;gap:6px;margin-top:9px;"><input type="checkbox" id="st-done" ${it.done?"checked":""}> Terminée</label>`)}
+    </div>
+    <p style="font-size:11px;color:var(--muted);margin-top:4px;">Tâche parente : ${escapeHtml(t.Description||"(sans titre)")}</p>
+    <div class="modal-footer">
+      <button class="btn secondary" id="st-close">Fermer</button>
+      <button class="btn" id="st-save">Enregistrer</button>
+    </div>`;
+  openOverlay("subtaskOverlay");
+  document.getElementById("st-close").onclick = () => closeOverlay("subtaskOverlay");
+  document.getElementById("st-save").onclick = saveSubtaskPopup;
+}
+async function saveSubtaskPopup(){
+  if (!subtaskContext) return;
+  const { taskId, idx } = subtaskContext;
+  const t = state.records.find(r => r.id === taskId);
+  if (!t) return;
+  const items = parseChecklist(t.Checklist);
+  if (!items[idx]) return;
+  items[idx] = {
+    ...items[idx],
+    text: document.getElementById("st-text").value.trim(),
+    date: document.getElementById("st-date").value,
+    done: document.getElementById("st-done").checked,
+  };
+  const newChecklist = JSON.stringify(items);
+  await writeToGrist(() => updateTaskFields(taskId, { Checklist: newChecklist }), "Sous-tâche non enregistrée dans Grist.");
+  patchRecordLocally(taskId, { Checklist: newChecklist });
+  closeOverlay("subtaskOverlay");
+  notify();
 }
 function pfSubtasksHtml(raw){
   const items = parseChecklist(raw);
@@ -1600,7 +1710,7 @@ function pfRenderBoard(projects){
       const proj = r.Type || "Sans type";
       const deadline = gristDateToJS(r.Deadline);
       const overdue = deadline && deadline < now && lane.dashCategory!=="done" && lane.dashCategory!=="cancelled";
-      return `<div class="pf-card" draggable="true" tabindex="0" data-id="${r.id}" style="--c:${colorOf[proj]||"#999"}">
+      return `<div class="pf-card" draggable="true" tabindex="0" data-id="${r.id}" style="--c:${r.Couleur || colorOf[proj] || "#999"}">
         <div class="pf-card-proj">${escapeHtml(proj)}</div>
         <div class="pf-card-title">${escapeHtml(r.Description||"Sans titre")}</div>
         <div class="pf-card-meta"><span>${escapeHtml(decodeChoiceList(r.AssigneA).join(", "))}</span><span class="${overdue?"overdue":""}">${deadline?fmtDateShort(deadline):""}</span></div>
@@ -1652,6 +1762,8 @@ function initPortfolio(){
     const proj = e.target.closest("[data-pf-proj]");
     if (proj) return pfToggleProject(proj.dataset.pfProj);
     if (e.target.closest("#pfClearFilter")){ pfFilter.clear(); return renderPortfolio(); }
+    const stBlock = e.target.closest(".pf-subtask-block");
+    if (stBlock) return openSubtaskPopup(Number(stBlock.dataset.subtaskTask), Number(stBlock.dataset.subtaskIdx));
     const taskRow = e.target.closest(".pf-task-row");
     if (taskRow) return openTaskModal(Number(taskRow.dataset.id));
     const card = e.target.closest(".pf-card");
@@ -2269,6 +2381,61 @@ function renderModule(id){
       <span><span style="display:inline-block;width:8px;height:8px;background:#3a9d4c;border-radius:50%;margin-right:4px;"></span>Terminées</span>
     </div>`;
   }
+  if (id === "chargeParMois"){
+    const year = new Date().getFullYear();
+    const now = new Date();
+    const monthsFull = ["Jan","Fév","Mar","Avr","Mai","Juin","Juil","Août","Sep","Oct","Nov","Déc"];
+    const counts = Array(12).fill(0);
+    filteredRecords().forEach(r => {
+      const d = gristDateToJS(r.Deadline);
+      if (d && d.getFullYear() === year) counts[d.getMonth()]++;
+    });
+    const max = Math.max(1, ...counts);
+    const peakIdx = counts.indexOf(max);
+    const bars = counts.map((c,i) => {
+      const pct = c/max;
+      let color = "#7fa8e0"; // Faible
+      if (c>0 && i===peakIdx) color = "#e8a34d"; // Pic de charge
+      else if (pct > 0.7) color = "#e0625f"; // Élevée
+      else if (pct >= 0.4) color = "#4f7cff"; // Modérée
+      const h = c ? Math.max(6, Math.round(pct*100)) : 2;
+      const isCurrent = year===now.getFullYear() && i===now.getMonth();
+      return `<div class="cm-bar-wrap"><div class="cm-value">${c}</div><div class="cm-bar" style="height:${h}%;background:${color};"></div><div class="cm-label${isCurrent?" current":""}">${monthsFull[i]}</div></div>`;
+    }).join("");
+    return `<div class="cm-chart">${bars}</div>
+      <div class="cm-legend">
+        <span><i style="background:#7fa8e0"></i>Faible (&lt;40%)</span>
+        <span><i style="background:#4f7cff"></i>Modérée (40-70%)</span>
+        <span><i style="background:#e0625f"></i>Élevée (&gt;70%)</span>
+        <span><i style="background:#e8a34d"></i>Pic de charge</span>
+      </div>`;
+  }
+  if (id === "syntheseParProjet"){
+    const groups = {};
+    filteredRecords().forEach(r => { (groups[r.Type||"Sans type"] = groups[r.Type||"Sans type"] || []).push(r); });
+    const names = Object.keys(groups).sort((a,b) => a.localeCompare(b,"fr"));
+    if (!names.length) return `<p style="font-size:12px;color:var(--muted);">Aucune tâche.</p>`;
+    const monthsShort = ["Jan","Fév","Mar","Avr","Mai","Juin","Juil","Août","Sep","Oct","Nov","Déc"];
+    const now = new Date();
+    const cards = names.map((name,i) => {
+      const tasks = groups[name];
+      const color = GROUP_PALETTE[i % GROUP_PALETTE.length];
+      const dateOf = r => gristDateToJS(r.DateDebut) || gristDateToJS(r.CreeLe) || gristDateToJS(r.Deadline);
+      const allDates = tasks.flatMap(r => [dateOf(r), gristDateToJS(r.Deadline)]).filter(Boolean);
+      const minD = allDates.length ? new Date(Math.min(...allDates.map(d=>d.getTime()))) : null;
+      const maxD = allDates.length ? new Date(Math.max(...allDates.map(d=>d.getTime()))) : null;
+      const range = minD && maxD ? `${monthsShort[minD.getMonth()]} → ${monthsShort[maxD.getMonth()]}` : "Sans dates";
+      const sorted = [...tasks].sort((a,b) => (dateOf(a)?.getTime()??0) - (dateOf(b)?.getTime()??0));
+      const segs = sorted.map(r => `<div class="sp-seg" style="background:${r.Couleur||color}" title="${escapeHtml(r.Description||"")}"></div>`).join("");
+      const todayLine = (minD && maxD && maxD>minD) ? `<div class="sp-today" style="left:${Math.min(1,Math.max(0,(now-minD)/(maxD-minD)))*100}%"></div>` : "";
+      return `<div class="sp-card" style="border-color:${color}" data-pf-proj-link="${escapeHtml(name)}" title="Voir dans le Portefeuille">
+        <div class="sp-title">${escapeHtml(name)}</div>
+        <div class="sp-sub">${tasks.length} tâche${tasks.length>1?"s":""} · ${range}</div>
+        <div class="sp-bar">${segs}${todayLine}</div>
+      </div>`;
+    }).join("");
+    return `<div class="sp-grid">${cards}</div>`;
+  }
   if (id === "deadlines"){
     const withDeadline = filteredRecords().filter(r=>r.Deadline).sort((a,b)=>gristDateToJS(a.Deadline)-gristDateToJS(b.Deadline));
     if (!withDeadline.length) return `<p style="font-size:12px;color:var(--muted);">Aucune échéance définie.</p>`;
@@ -2296,7 +2463,9 @@ function renderDashboard(){
 function initDashboard(){
   document.getElementById("dashboardGrid").addEventListener("click", e => {
     const t = e.target.closest("[data-cal-task]");
-    if (t) openTaskModal(Number(t.dataset.calTask));
+    if (t) return openTaskModal(Number(t.dataset.calTask));
+    const sp = e.target.closest("[data-pf-proj-link]");
+    if (sp){ pfFilter = new Set([sp.dataset.pfProjLink]); switchTab("table"); }
   });
   document.getElementById("btnDashExport").onclick = exportCsv;
   document.getElementById("btnDashPrint").onclick = () => window.print();
