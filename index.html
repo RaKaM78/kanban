@@ -96,16 +96,16 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .pf-task-row{min-height:32px;background:rgba(0,0,0,.02);}
 .pf-task-lbl{padding-left:24px;border-right:1px solid var(--border);}
 .pf-task-name{font-size:11px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;}
-.pf-bar-task{height:9px;margin-top:-4.5px;}
+.pf-bar-task{height:9px;margin-top:-4.5px;background:var(--c);}
 .pf-single-marker{position:absolute;top:50%;width:9px;height:9px;margin-top:-4.5px;margin-left:-4.5px;border-radius:2px;background:var(--c);transform:rotate(45deg);}
-.pf-subtask-block{position:absolute;top:50%;width:13px;height:13px;margin-top:-6.5px;margin-left:-6.5px;border-radius:4px;background:var(--c);box-shadow:0 1px 3px rgba(0,0,0,.35);z-index:2;cursor:pointer;border:2px solid var(--surface);}
-.pf-subtask-block:hover{transform:scale(1.15);}
-.pf-subtask-block.done{opacity:.5;}
-.pf-subtask-block.overdue{box-shadow:0 0 0 2px #c0392b;}
-.pf-subtask-range{position:absolute;top:50%;height:9px;margin-top:-4.5px;border-radius:5px;background:var(--c);box-shadow:0 1px 3px rgba(0,0,0,.3);z-index:2;cursor:pointer;opacity:.85;}
-.pf-subtask-range:hover{opacity:1;}
-.pf-subtask-range.done{opacity:.4;}
-.pf-subtask-range.overdue{box-shadow:0 0 0 2px #c0392b;}
+.pf-subtask-block{position:absolute;top:50%;width:14px;height:14px;margin-top:-7px;margin-left:-7px;border-radius:4px;background:var(--surface);border:2.5px solid var(--c);box-shadow:0 1px 4px rgba(0,0,0,.45);z-index:3;cursor:pointer;}
+.pf-subtask-block:hover{transform:scale(1.18);}
+.pf-subtask-block.done{background:var(--c);}
+.pf-subtask-block.overdue{border-color:#c0392b;}
+.pf-subtask-range{position:absolute;top:50%;height:10px;margin-top:-5px;border-radius:5px;background:var(--surface);border:2px solid var(--c);box-shadow:0 1px 4px rgba(0,0,0,.4);z-index:3;cursor:pointer;}
+.pf-subtask-range:hover{filter:brightness(1.1);}
+.pf-subtask-range.done{background:var(--c);}
+.pf-subtask-range.overdue{border-color:#c0392b;}
 .pf-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}
 .pf-chip{border:1px solid var(--border);background:var(--surface);border-radius:999px;padding:3px 10px 3px 8px;display:inline-flex;align-items:center;gap:6px;font-size:11.5px;cursor:pointer;color:var(--ink);}
 .pf-chip[aria-pressed="true"]{border-color:var(--c);background:color-mix(in srgb, var(--c) 18%, transparent);}
@@ -1816,7 +1816,7 @@ function initPortfolio(){
     const proj = e.target.closest("[data-pf-proj]");
     if (proj) return pfToggleProject(proj.dataset.pfProj);
     if (e.target.closest("#pfClearFilter")){ pfFilter.clear(); return renderPortfolio(); }
-    const stBlock = e.target.closest(".pf-subtask-block");
+    const stBlock = e.target.closest(".pf-subtask-block, .pf-subtask-range");
     if (stBlock) return openSubtaskPopup(Number(stBlock.dataset.subtaskTask), Number(stBlock.dataset.subtaskIdx));
     const taskRow = e.target.closest(".pf-task-row");
     if (taskRow) return openTaskModal(Number(taskRow.dataset.id));
