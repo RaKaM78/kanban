@@ -67,8 +67,8 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .stat-label{font-size:10px;color:var(--muted);margin-top:1px;white-space:nowrap;}
 /* Portefeuille projets : frise 12 mois + Kanban fusionné */
 #pfMain{padding:14px;display:flex;flex-direction:column;gap:16px;}
-.pf-timeline{background:var(--surface);border-radius:12px;box-shadow:var(--shadow);overflow:hidden;}
-.pf-head{display:flex;border-bottom:1px solid var(--border);}
+.pf-timeline{background:var(--surface);border-radius:12px;box-shadow:var(--shadow);overflow-x:hidden;overflow-y:auto;max-height:55vh;}
+.pf-head{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:2;background:var(--surface);}
 .pf-head-lbl{min-width:200px;max-width:200px;padding:8px 12px;font-weight:700;font-size:12px;color:var(--muted);flex:none;}
 .pf-months-wrap{position:relative;flex:1;}
 .pf-months{display:flex;}
@@ -102,6 +102,10 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .pf-subtask-block:hover{transform:scale(1.15);}
 .pf-subtask-block.done{opacity:.5;}
 .pf-subtask-block.overdue{box-shadow:0 0 0 2px #c0392b;}
+.pf-subtask-range{position:absolute;top:50%;height:9px;margin-top:-4.5px;border-radius:5px;background:var(--c);box-shadow:0 1px 3px rgba(0,0,0,.3);z-index:2;cursor:pointer;opacity:.85;}
+.pf-subtask-range:hover{opacity:1;}
+.pf-subtask-range.done{opacity:.4;}
+.pf-subtask-range.overdue{box-shadow:0 0 0 2px #c0392b;}
 .pf-chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}
 .pf-chip{border:1px solid var(--border);background:var(--surface);border-radius:999px;padding:3px 10px 3px 8px;display:inline-flex;align-items:center;gap:6px;font-size:11.5px;cursor:pointer;color:var(--ink);}
 .pf-chip[aria-pressed="true"]{border-color:var(--c);background:color-mix(in srgb, var(--c) 18%, transparent);}
@@ -176,10 +180,15 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .modal-footer{display:flex;justify-content:space-between;margin-top:16px;gap:8px;flex-wrap:wrap;}
 .meta-readonly{font-size:11px;color:var(--muted);margin-top:10px;border-top:1px solid #eee;padding-top:8px;white-space:pre-line;}
 .meta-readonly.scroll{max-height:80px;overflow-y:auto;}
-.checklist-item{display:flex;align-items:center;gap:6px;margin-bottom:4px;flex-wrap:wrap;}
+.checklist-item{margin-bottom:8px;padding-bottom:6px;border-bottom:1px solid #f0f0f0;}
+.checklist-item-row1{display:flex;align-items:center;gap:6px;}
+.checklist-item-row2{display:flex;align-items:center;gap:6px;margin-top:4px;padding-left:22px;flex-wrap:wrap;}
 .checklist-item input[type=checkbox]{width:auto;flex:none;}
 .checklist-item input[type=text]{flex:1;width:auto;min-width:90px;padding:5px 6px;font-size:12.5px;border:1px solid #ddd;border-radius:6px;}
 .checklist-item input[type=date]{width:auto;flex:none;padding:4px 5px;font-size:11.5px;border:1px solid #ddd;border-radius:6px;}
+.chk-period-toggle{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--muted);white-space:nowrap;}
+.chk-period-toggle input{width:auto;}
+.chk-arrow{font-size:11px;color:var(--muted);}
 .cbdd{position:relative;}
 .cbdd-trigger{width:100%;text-align:left;padding:7px 8px;border:1px solid #d7dae0;border-radius:7px;background:#fff;font-size:13px;font-family:inherit;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:6px;}
 .cbdd-trigger-text{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--ink);}
@@ -1130,13 +1139,22 @@ function initBulkBar(){
 let modalChecklist = [];
 let modalMultiSelects = {};
 function checklistItemsHtml(items){
-  return `<div id="checklist-items">${items.map((it,i) => `
+  return `<div id="checklist-items">${items.map((it,i) => {
+    const isRange = !!it.dateEnd;
+    return `
     <div class="checklist-item" data-idx="${i}">
-      <input type="checkbox" data-chk="done" ${it.done?"checked":""}>
-      <input type="text" data-chk="text" value="${escapeHtml(it.text||"")}" placeholder="Sous-tâche…">
-      <input type="date" data-chk="date" value="${it.date||""}" title="Échéance de la sous-tâche">
-      <button type="button" class="icon-btn" data-chk="del">✕</button>
-    </div>`).join("")}</div>`;
+      <div class="checklist-item-row1">
+        <input type="checkbox" data-chk="done" ${it.done?"checked":""}>
+        <input type="text" data-chk="text" value="${escapeHtml(it.text||"")}" placeholder="Sous-tâche…">
+        <button type="button" class="icon-btn" data-chk="del">✕</button>
+      </div>
+      <div class="checklist-item-row2">
+        <label class="chk-period-toggle"><input type="checkbox" data-chk="period-toggle" ${isRange?"checked":""}> Période</label>
+        <input type="date" data-chk="date" value="${it.date||""}" title="${isRange?"Date de début":"Date"}">
+        ${isRange ? `<span class="chk-arrow">→</span><input type="date" data-chk="dateEnd" value="${it.dateEnd||""}" title="Date de fin">` : ""}
+      </div>
+    </div>`;
+  }).join("")}</div>`;
 }
 function refreshChecklistUI(){
   document.getElementById("checklist-items").outerHTML = checklistItemsHtml(modalChecklist);
@@ -1144,7 +1162,7 @@ function refreshChecklistUI(){
 function initTaskModalEvents(){
   const modal = document.getElementById("taskModal");
   modal.addEventListener("click", e => {
-    if (e.target.closest("#checklist-add")){ modalChecklist.push({ text:"", done:false, date:"" }); refreshChecklistUI(); return; }
+    if (e.target.closest("#checklist-add")){ modalChecklist.push({ text:"", done:false, date:"", dateEnd:"" }); refreshChecklistUI(); return; }
     const del = e.target.closest('[data-chk="del"]');
     if (del){ modalChecklist.splice(Number(del.closest(".checklist-item").dataset.idx), 1); refreshChecklistUI(); return; }
 
@@ -1185,6 +1203,15 @@ function initTaskModalEvents(){
     if (chk) modalChecklist[Number(chk.closest(".checklist-item").dataset.idx)].done = chk.checked;
     const dt = e.target.closest('[data-chk="date"]');
     if (dt) modalChecklist[Number(dt.closest(".checklist-item").dataset.idx)].date = dt.value;
+    const dtEnd = e.target.closest('[data-chk="dateEnd"]');
+    if (dtEnd) modalChecklist[Number(dtEnd.closest(".checklist-item").dataset.idx)].dateEnd = dtEnd.value;
+    const periodToggle = e.target.closest('[data-chk="period-toggle"]');
+    if (periodToggle){
+      const idx = Number(periodToggle.closest(".checklist-item").dataset.idx);
+      modalChecklist[idx].dateEnd = periodToggle.checked ? (modalChecklist[idx].date || "") : "";
+      refreshChecklistUI();
+      return;
+    }
 
     const cb = e.target.closest("[data-cbdd-check]");
     if (cb){
@@ -1625,11 +1652,21 @@ function pfRenderTaskRow(task, project, base){
     .map((it, idx) => ({ it, idx }))
     .filter(x => x.it.date)
     .map(({ it, idx }) => {
-      const d = new Date(it.date+"T00:00:00");
-      const pfr = pfPos(d, base);
+      const d1 = new Date(it.date+"T00:00:00");
+      const d2 = it.dateEnd ? new Date(it.dateEnd+"T00:00:00") : null;
+      const refEnd = d2 || d1;
+      const overdue = !it.done && refEnd < new Date();
+      const doneCls = it.done?"done":"", overdueCls = overdue?"overdue":"";
+      if (d2 && d2.getTime() !== d1.getTime()){
+        const start = d1<d2?d1:d2, end = d1<d2?d2:d1;
+        const ps = pfPos(start, base), pe = pfPos(end, base);
+        const l = Math.max(0,ps), rr = Math.min(1,pe);
+        if (rr <= l) return "";
+        return `<div class="pf-subtask-range ${doneCls} ${overdueCls}" data-subtask-task="${r.id}" data-subtask-idx="${idx}" style="left:${l*100}%;width:${Math.max((rr-l)*100,1)}%;--c:${color};" title="${escapeHtml(it.text||"")} — ${fmtDateShort(start)} → ${fmtDateShort(end)}${it.done?" (terminée)":""}"></div>`;
+      }
+      const pfr = pfPos(d1, base);
       if (pfr<0 || pfr>1) return "";
-      const overdue = !it.done && d < new Date();
-      return `<div class="pf-subtask-block ${it.done?"done":""} ${overdue?"overdue":""}" data-subtask-task="${r.id}" data-subtask-idx="${idx}" style="left:${pfr*100}%;--c:${color};" title="${escapeHtml(it.text||"")} — ${fmtDateShort(d)}${it.done?" (terminée)":""}"></div>`;
+      return `<div class="pf-subtask-block ${doneCls} ${overdueCls}" data-subtask-task="${r.id}" data-subtask-idx="${idx}" style="left:${pfr*100}%;--c:${color};" title="${escapeHtml(it.text||"")} — ${fmtDateShort(d1)}${it.done?" (terminée)":""}"></div>`;
     }).join("");
   return `<div class="pf-row pf-task-row" data-id="${r.id}">
     <div class="pf-lbl pf-task-lbl"><span class="pf-task-name">↳ ${escapeHtml(r.Description||"(sans titre)")}</span></div>
@@ -1646,13 +1683,18 @@ function openSubtaskPopup(taskId, idx){
   const it = items[idx];
   if (!it) return;
   subtaskContext = { taskId, idx };
+  const isRange = !!it.dateEnd;
   document.getElementById("subtaskModal").innerHTML = `
     <h2>Détail de la sous-tâche</h2>
     ${fieldRow("Nom", `<input type="text" id="st-text" value="${escapeHtml(it.text||"")}">`)}
-    <div class="field-row">
-      ${fieldRow("Date", `<input type="date" id="st-date" value="${it.date||""}">`)}
-      ${fieldRow("État", `<label style="display:flex;align-items:center;gap:6px;margin-top:9px;"><input type="checkbox" id="st-done" ${it.done?"checked":""}> Terminée</label>`)}
+    <div class="field">
+      <label style="display:flex;align-items:center;gap:6px;font-weight:400;"><input type="checkbox" id="st-period" ${isRange?"checked":""}> Période (du... au...) plutôt qu'une date unique</label>
     </div>
+    <div class="field-row">
+      ${fieldRow("Date" + (isRange?" de début":""), `<input type="date" id="st-date" value="${it.date||""}">`)}
+      ${fieldRow("Date de fin", `<input type="date" id="st-date-end" value="${it.dateEnd||""}" ${isRange?"":"disabled"}>`)}
+    </div>
+    ${fieldRow("État", `<label style="display:flex;align-items:center;gap:6px;"><input type="checkbox" id="st-done" ${it.done?"checked":""}> Terminée</label>`)}
     <p style="font-size:11px;color:var(--muted);margin-top:4px;">Tâche parente : ${escapeHtml(t.Description||"(sans titre)")}</p>
     <div class="modal-footer">
       <button class="btn secondary" id="st-close">Fermer</button>
@@ -1661,6 +1703,11 @@ function openSubtaskPopup(taskId, idx){
   openOverlay("subtaskOverlay");
   document.getElementById("st-close").onclick = () => closeOverlay("subtaskOverlay");
   document.getElementById("st-save").onclick = saveSubtaskPopup;
+  document.getElementById("st-period").addEventListener("change", e => {
+    const endInput = document.getElementById("st-date-end");
+    endInput.disabled = !e.target.checked;
+    if (e.target.checked && !endInput.value) endInput.value = document.getElementById("st-date").value;
+  });
 }
 async function saveSubtaskPopup(){
   if (!subtaskContext) return;
@@ -1669,10 +1716,12 @@ async function saveSubtaskPopup(){
   if (!t) return;
   const items = parseChecklist(t.Checklist);
   if (!items[idx]) return;
+  const isPeriod = document.getElementById("st-period").checked;
   items[idx] = {
     ...items[idx],
     text: document.getElementById("st-text").value.trim(),
     date: document.getElementById("st-date").value,
+    dateEnd: isPeriod ? document.getElementById("st-date-end").value : "",
     done: document.getElementById("st-done").checked,
   };
   const newChecklist = JSON.stringify(items);
@@ -1687,11 +1736,16 @@ function pfSubtasksHtml(raw){
   const now = new Date();
   return `<div class="pf-subtasks">${items.map(it => {
     const d = it.date ? new Date(it.date+"T00:00:00") : null;
-    const overdue = d && !it.done && d < now;
+    const dEnd = it.dateEnd ? new Date(it.dateEnd+"T00:00:00") : null;
+    const refDate = dEnd || d;
+    const overdue = refDate && !it.done && refDate < now;
+    let label = "";
+    if (d && dEnd && dEnd.getTime()!==d.getTime()) label = `${fmtDateShort(d)} → ${fmtDateShort(dEnd)}`;
+    else if (d) label = fmtDateShort(d);
     return `<div class="pf-subtask${it.done?" done":""}">
       <span class="pf-subtask-check">${it.done?"✅":"▫️"}</span>
       <span class="pf-subtask-text">${escapeHtml(it.text||"")}</span>
-      ${d ? `<span class="pf-subtask-date${overdue?" overdue":""}">${fmtDateShort(d)}</span>` : ""}
+      ${label ? `<span class="pf-subtask-date${overdue?" overdue":""}">${label}</span>` : ""}
     </div>`;
   }).join("")}</div>`;
 }
