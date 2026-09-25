@@ -283,6 +283,31 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .sp-seg:last-child{border-right:none;}
 .sp-today{position:absolute;top:-3px;bottom:-3px;width:2px;background:#e05a7a;}
 
+/* Jalons clés & points d'attention */
+.jal-wrap{background:#1b2233;border-radius:12px;padding:18px 16px 14px;color:#e8ecf5;}
+.jal-title{font-size:11.5px;font-weight:800;letter-spacing:.06em;color:#9fb0d9;margin-bottom:14px;display:flex;align-items:center;gap:6px;}
+.jal-timeline{position:relative;height:64px;margin:0 6px 6px;}
+.jal-axis{position:absolute;left:0;right:0;top:32px;height:2px;background:#333f5c;border-radius:2px;}
+.jal-empty{font-size:12px;color:#7c8bb0;padding:10px 2px 4px;}
+.jal-marker{position:absolute;top:32px;transform:translate(-50%,-50%);width:13px;height:13px;border-radius:50%;border:2.5px solid #1b2233;box-shadow:0 0 0 2px currentColor;cursor:pointer;z-index:2;}
+.jal-marker:hover{transform:translate(-50%,-50%) scale(1.25);}
+.jal-marker.past{opacity:.55;}
+.jal-tag{position:absolute;top:-40px;transform:translateX(-50%);min-width:64px;max-width:120px;text-align:center;font-size:10px;line-height:1.25;pointer-events:none;}
+.jal-tag .jal-month{display:block;font-weight:800;color:#cfd8ee;font-size:10.5px;}
+.jal-tag .jal-desc{display:block;color:#8fa0c9;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.jal-tag.below{top:40px;}
+.jal-months{position:absolute;left:0;right:0;top:38px;display:flex;justify-content:space-between;font-size:9.5px;color:#5c6b91;pointer-events:none;}
+.jal-attn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin-top:16px;}
+.jal-card{border-radius:10px;padding:10px 12px;font-size:12px;line-height:1.4;position:relative;background:rgba(255,255,255,.06);border-left:4px solid;}
+.jal-card.warn{border-color:#e0625f;} .jal-card.info{border-color:#4f9eff;} .jal-card.ok{border-color:#3ad19a;} .jal-card.manual{border-color:#e8a34d;}
+.jal-card-head{display:flex;align-items:center;gap:6px;font-weight:700;font-size:11px;margin-bottom:3px;color:#cfd8ee;}
+.jal-card-body{color:#aab6d6;outline:none;min-height:16px;}
+.jal-card-body:focus{background:rgba(255,255,255,.08);border-radius:4px;}
+.jal-card-del{position:absolute;top:6px;right:7px;background:none;border:none;color:#7c8bb0;cursor:pointer;font-size:11px;padding:2px 4px;}
+.jal-card-del:hover{color:#e0625f;}
+.jal-add-card{border:1.5px dashed #3a4568;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#7c8bb0;font-size:12px;cursor:pointer;min-height:52px;}
+.jal-add-card:hover{color:#cfd8ee;border-color:#5c6b91;}
+
 @media print{
   #toolbar,.sub-toolbar,#confetti-canvas{display:none !important;}
   #app,.view{overflow:visible !important;height:auto !important;}
@@ -424,6 +449,7 @@ const REQUIRED_COLUMNS = [
   { name:"Recurrence", title:"Récurrence", type:"Choice", optional:true },
   { name:"DateDebut", title:"Date de début", type:"Date", optional:true },
   { name:"Couleur", title:"Couleur (frise)", type:"Text", optional:true },
+  { name:"JalonCle", title:"Jalon clé", type:"Bool", optional:true },
 ];
 const PRIORITY_COLORS = {
   Urgent:{bg:"#ffd3d3",badge:"#c0392b"}, Haute:{bg:"#ffe3bd",badge:"#d9822b"},
@@ -468,6 +494,7 @@ const DASHBOARD_MODULES = {
   chargeParMois:     { label: "Analyse & synthèse — Charge par mois", full:true },
   syntheseParProjet: { label: "Synthèse par projet", full:true },
   deadlines:         { label: "Échéances", full:true },
+  jalonsAttention:   { label: "Jalons clés & points d'attention", full:true },
 };
 const defaultDashboardLayout = () => Object.keys(DASHBOARD_MODULES).map(id => ({ id, visible:true }));
 const defaultTaskTemplates = () => [];
@@ -601,14 +628,16 @@ const columnsStore = makeLocalStore("kanban_columns_fallback");
 const dashboardStore = makeLocalStore("kanban_dashboard_layout_fallback");
 const whiteboardStore = makeLocalStore("kanban_whiteboard_fallback");
 const templatesStore = makeLocalStore("kanban_templates_fallback");
+const attentionStore = makeLocalStore("kanban_attention_fallback");
 function saveColumnsConfig(cfg){ columnsStore.save(cfg); if (gristAvailable){ try{ grist.setOption("kanbanColumns", cfg); }catch(e){ console.error(e); } } }
 function saveDashboardLayout(cfg){ dashboardStore.save(cfg); if (gristAvailable){ try{ grist.setOption("dashboardLayout", cfg); }catch(e){ console.error(e); } } }
 function saveWhiteboardData(data){ whiteboardStore.save(data); if (gristAvailable){ try{ grist.setOption("whiteboardData", data); }catch(e){ console.error(e); } } }
 function saveTemplates(list){ templatesStore.save(list); if (gristAvailable){ try{ grist.setOption("taskTemplates", list); }catch(e){ console.error(e); } } }
+function saveManualAttention(list){ attentionStore.save(list); if (gristAvailable){ try{ grist.setOption("manualAttention", list); }catch(e){ console.error(e); } } }
 
 /* ===== ÉTAT (store observable) ===== */
 const state = {
-  records:[], columnsConfig:null, dashboardLayout:null, taskTemplates:null, collapsed:new Set(), editingId:null,
+  records:[], columnsConfig:null, dashboardLayout:null, taskTemplates:null, manualAttention:null, collapsed:new Set(), editingId:null,
   filters:{ search:"", assignee:"", priorite:"", type:"" },
   sortBy:"default", groupBy:"statut",
 };
@@ -623,6 +652,7 @@ function setColumnsConfig(cfg){
 }
 function setDashboardLayout(cfg){ state.dashboardLayout = cfg; notify(); }
 function setTaskTemplates(list){ state.taskTemplates = list; notify(); }
+function setManualAttention(list){ state.manualAttention = list; notify(); }
 function patchRecordLocally(id, fields){ Object.assign(state.records.find(r=>r.id===id) || {}, fields); }
 function filteredRecords(){
   const f = state.filters;
@@ -1137,6 +1167,7 @@ function initBulkBar(){
 
 /* -- Popup détail tâche (utilisée depuis Kanban, Calendrier et Tableau de bord) -- */
 let modalChecklist = [];
+let modalColorAuto = true;
 let modalMultiSelects = {};
 function checklistItemsHtml(items){
   return `<div id="checklist-items">${items.map((it,i) => {
@@ -1284,9 +1315,12 @@ function openTaskModal(id){
       ${fieldRow("Récurrence", `<select id="m-recurrence">${recOpts}</select>`)}
     </div>
     ${fieldRow("Couleur sur la frise (Portefeuille)", `<div style="display:flex;gap:8px;align-items:center;">
-      <input type="color" id="m-couleur" value="${t.Couleur || "#4f7cff"}" data-auto="${t.Couleur ? "0" : "1"}" style="width:44px;height:32px;padding:2px;">
+      <input type="color" id="m-couleur" value="${t.Couleur || "#4f7cff"}" style="width:44px;height:32px;padding:2px;">
       <button type="button" class="btn secondary" id="m-couleur-reset">↺ Couleur automatique (projet)</button>
     </div>`)}
+    ${fieldRow("", `<label style="display:flex;align-items:center;gap:7px;font-size:12.5px;cursor:pointer;">
+      <input type="checkbox" id="m-jalon" ${t.JalonCle?"checked":""}> 🚩 Jalon clé (affiché sur la frise des jalons du tableau de bord)
+    </label>`)}
     <div class="field-row">
       ${fieldRow("Assigné à", checkboxDropdownHtml("m-assigne", peopleList))}
       ${fieldRow("Responsable", checkboxDropdownHtml("m-resp", peopleList))}
@@ -1318,8 +1352,9 @@ function openTaskModal(id){
   document.getElementById("m-duplicate").onclick = () => duplicateTaskModal(id);
   document.getElementById("m-save-template").onclick = () => saveAsTemplate(id);
   const colorInput = document.getElementById("m-couleur");
-  colorInput.addEventListener("input", () => { colorInput.dataset.auto = "0"; });
-  document.getElementById("m-couleur-reset").onclick = () => { colorInput.dataset.auto = "1"; colorInput.value = "#4f7cff"; };
+  modalColorAuto = !t.Couleur;
+  ["input","change"].forEach(evt => colorInput.addEventListener(evt, () => { modalColorAuto = false; }));
+  document.getElementById("m-couleur-reset").onclick = () => { modalColorAuto = true; colorInput.value = "#4f7cff"; };
 }
 function closeTaskModal(){ closeOverlay("taskOverlay"); state.editingId = null; }
 
@@ -1417,7 +1452,8 @@ async function saveTaskModal(){
     Responsable: encodeChoiceList(modalMultiSelects["m-resp"] || []),
     Notes: val("m-notes"),
     Checklist: JSON.stringify(modalChecklist.filter(it => it.text.trim() !== "")),
-    Couleur: document.getElementById("m-couleur").dataset.auto === "1" ? "" : document.getElementById("m-couleur").value,
+    Couleur: modalColorAuto ? "" : document.getElementById("m-couleur").value,
+    JalonCle: document.getElementById("m-jalon").checked,
     Historique: historique,
   };
   await writeToGrist(() => updateTaskFields(id, fields), "Modifications non enregistrées dans Grist.");
@@ -2351,6 +2387,60 @@ function computeDashboardStats(records){
   const avgProcessingDays = doneDurations.length ? doneDurations.reduce((a,b)=>a+b,0)/doneDurations.length : null;
   return { total: records.length, done, doing, overdue, byStatut, byPriorite, byPerson, laneByStatut, avgProcessingDays };
 }
+function computeMilestones(records){
+  const year = new Date().getFullYear();
+  return records
+    .filter(r => r.JalonCle)
+    .map(r => ({ task:r, date: gristDateToJS(r.DateDebut) || gristDateToJS(r.Deadline) }))
+    .filter(m => m.date && m.date.getFullYear() === year)
+    .sort((a,b) => a.date - b.date);
+}
+function computeAttentionInsights(records, stats){
+  const insights = [];
+  const now = new Date();
+  const laneByStatut = stats.laneByStatut || {};
+  const milestones = computeMilestones(records);
+  const overdueMilestones = milestones.filter(m => {
+    const cat = laneByStatut[m.task.Statut]?.dashCategory;
+    return cat !== "done" && cat !== "cancelled" && m.date < now;
+  });
+  const soonMilestones = milestones.filter(m => {
+    const cat = laneByStatut[m.task.Statut]?.dashCategory;
+    return cat !== "done" && cat !== "cancelled" && m.date >= now && (m.date-now) <= 14*86400000;
+  });
+  if (overdueMilestones.length){
+    insights.push({ type:"warn", icon:"🔴", title:"Jalon(s) en retard",
+      text:`${overdueMilestones.length} jalon${overdueMilestones.length>1?"s":""} clé${overdueMilestones.length>1?"s":""} dépassé${overdueMilestones.length>1?"s":""} : ${overdueMilestones.slice(0,2).map(m=>m.task.Description||"(sans titre)").join(", ")}${overdueMilestones.length>2?"…":""}` });
+  } else if (soonMilestones.length){
+    insights.push({ type:"warn", icon:"🟠", title:"Jalon(s) imminent(s)",
+      text:`${soonMilestones.length} jalon${soonMilestones.length>1?"s":""} clé${soonMilestones.length>1?"s":""} dans les 14 prochains jours.` });
+  }
+  if (stats.overdue > 0){
+    insights.push({ type:"warn", icon:"⏰", title:"Tâches en retard",
+      text:`${stats.overdue} tâche${stats.overdue>1?"s":""} en retard sur l'ensemble du tableau.` });
+  }
+  const monthsFull = ["janvier","février","mars","avril","mai","juin","juillet","août","septembre","octobre","novembre","décembre"];
+  const year = now.getFullYear();
+  const counts = Array(12).fill(0);
+  records.forEach(r => { const d = gristDateToJS(r.Deadline); if (d && d.getFullYear()===year) counts[d.getMonth()]++; });
+  const total = counts.reduce((a,b)=>a+b,0);
+  const avg = total / 12;
+  const peak = Math.max(...counts);
+  const peakIdx = counts.indexOf(peak);
+  if (peak > 0 && avg > 0 && peak > avg*1.5){
+    insights.push({ type:"info", icon:"📈", title:"Charge élevée",
+      text:`${peak} échéance${peak>1?"s":""} concentrée${peak>1?"s":""} en ${monthsFull[peakIdx]}, au-dessus de la moyenne (${avg.toFixed(1)}/mois).` });
+  }
+  if (!milestones.length){
+    insights.push({ type:"info", icon:"🚩", title:"Aucun jalon défini",
+      text:`Cochez « Jalon clé » sur une tâche pour la faire apparaître sur la frise ci-dessus.` });
+  }
+  if (!insights.some(i => i.type==="warn")){
+    insights.push({ type:"ok", icon:"✅", title:"Aucun point de vigilance",
+      text:`Aucun retard ni surcharge détecté pour le moment.` });
+  }
+  return insights.slice(0,3);
+}
 function computeEvolutionData(){
   const weeks = 8, now = new Date();
   const buckets = [];
@@ -2502,6 +2592,50 @@ function renderModule(id){
       </div>`;
     }).join("");
   }
+  if (id === "jalonsAttention"){
+    const records = filteredRecords();
+    const milestones = computeMilestones(records);
+    const now = new Date();
+    const year = now.getFullYear();
+    const yearStart = new Date(year,0,1).getTime(), yearEnd = new Date(year,11,31,23,59,59).getTime();
+    const monthsShort = ["Jan","Fév","Mar","Avr","Mai","Juin","Juil","Août","Sep","Oct","Nov","Déc"];
+    const markersHtml = milestones.length ? milestones.map((m,i) => {
+      const pct = Math.min(100, Math.max(0, (m.date.getTime()-yearStart)/(yearEnd-yearStart)*100));
+      const color = m.task.Couleur || "#4f9eff";
+      const below = i%2===1;
+      return `<div class="jal-marker${m.date<now?" past":""}" style="left:${pct}%;color:${color};" data-cal-task="${m.task.id}" title="${escapeHtml(m.task.Description||"")}">
+        <div class="jal-tag${below?" below":""}"><span class="jal-month">${monthsShort[m.date.getMonth()]}</span><span class="jal-desc">${escapeHtml(m.task.Description||"(sans titre)")}</span></div>
+      </div>`;
+    }).join("") : `<div class="jal-empty">Aucun jalon clé pour ${year}. Cochez « 🚩 Jalon clé » dans la fiche d'une tâche pour l'afficher ici.</div>`;
+    const stats = computeDashboardStats(records);
+    const insights = computeAttentionInsights(records, stats);
+    const manual = state.manualAttention || [];
+    const autoCardsHtml = insights.map(ins => `
+      <div class="jal-card ${ins.type}">
+        <div class="jal-card-head"><span>${ins.icon}</span><span>${escapeHtml(ins.title)}</span></div>
+        <div class="jal-card-body">${escapeHtml(ins.text)}</div>
+      </div>`).join("");
+    const manualCardsHtml = manual.map(m => `
+      <div class="jal-card manual">
+        <button type="button" class="jal-card-del" data-attn-del="${m.id}" title="Supprimer">✕</button>
+        <div class="jal-card-head"><span>📝</span><span>Note</span></div>
+        <div class="jal-card-body" contenteditable="true" data-attn-body="${m.id}">${escapeHtml(m.text||"")}</div>
+      </div>`).join("");
+    return `<div class="jal-wrap">
+      <div class="jal-title">📅 JALONS CLÉS ${year}</div>
+      <div class="jal-timeline">
+        <div class="jal-axis"></div>
+        ${markersHtml}
+        <div class="jal-months">${monthsShort.map(m=>`<span>${m}</span>`).join("")}</div>
+      </div>
+      <div class="jal-title" style="margin-top:22px;">⚠️ POINTS D'ATTENTION</div>
+      <div class="jal-attn-grid">
+        ${autoCardsHtml}
+        ${manualCardsHtml}
+        <div class="jal-add-card" data-attn-add="1">➕ Ajouter une note</div>
+      </div>
+    </div>`;
+  }
   return "";
 }
 function renderDashboard(){
@@ -2520,6 +2654,32 @@ function initDashboard(){
     if (t) return openTaskModal(Number(t.dataset.calTask));
     const sp = e.target.closest("[data-pf-proj-link]");
     if (sp){ pfFilter = new Set([sp.dataset.pfProjLink]); switchTab("table"); }
+    const add = e.target.closest("[data-attn-add]");
+    if (add){
+      const item = { id:cid(), text:"Nouvelle note…" };
+      const list = [...(state.manualAttention||[]), item];
+      setManualAttention(list); saveManualAttention(list);
+      requestAnimationFrame(() => {
+        const body = document.querySelector(`[data-attn-body="${item.id}"]`);
+        if (body){ body.focus(); document.execCommand("selectAll", false, null); }
+      });
+      return;
+    }
+    const del = e.target.closest("[data-attn-del]");
+    if (del) return armDoubleClickConfirm(del, () => {
+      const list = (state.manualAttention||[]).filter(m => m.id !== del.dataset.attnDel);
+      setManualAttention(list); saveManualAttention(list);
+    }, "✓", 2500);
+  });
+  document.getElementById("dashboardGrid").addEventListener("focusout", e => {
+    const body = e.target.closest("[data-attn-body]");
+    if (!body) return;
+    const id = body.dataset.attnBody, text = body.textContent.trim();
+    const list = (state.manualAttention||[]).map(m => m.id===id ? { ...m, text } : m);
+    setManualAttention(list); saveManualAttention(list);
+  });
+  document.getElementById("dashboardGrid").addEventListener("keydown", e => {
+    if (e.key === "Enter" && e.target.closest("[data-attn-body]")){ e.preventDefault(); e.target.blur(); }
   });
   document.getElementById("btnDashExport").onclick = exportCsv;
   document.getElementById("btnDashPrint").onclick = () => window.print();
@@ -2631,12 +2791,14 @@ initGrist({
     loadWhiteboardData(options.whiteboardData);
     setDashboardLayout(options.dashboardLayout || dashboardStore.load() || defaultDashboardLayout());
     setTaskTemplates(options.taskTemplates || templatesStore.load() || defaultTaskTemplates());
+    setManualAttention(options.manualAttention || attentionStore.load() || []);
   },
   onUnavailable: () => {
     setColumnsConfig(columnsStore.load() || defaultColumnsConfig());
     loadWhiteboardData(null);
     setDashboardLayout(dashboardStore.load() || defaultDashboardLayout());
     setTaskTemplates(templatesStore.load() || defaultTaskTemplates());
+    setManualAttention(attentionStore.load() || []);
     setRecords([]);
   },
 });
