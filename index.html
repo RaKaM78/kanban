@@ -67,7 +67,7 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .stat-label{font-size:10px;color:var(--muted);margin-top:1px;white-space:nowrap;}
 /* Portefeuille projets : frise 12 mois + Kanban fusionné */
 #pfMain{padding:14px;display:flex;flex-direction:column;gap:16px;}
-.pf-timeline{background:var(--surface);border-radius:12px;box-shadow:var(--shadow);overflow-x:hidden;overflow-y:auto;max-height:55vh;}
+.pf-timeline{background:var(--surface);border-radius:12px;box-shadow:var(--shadow);overflow-x:hidden;overflow-y:auto;max-height:55vh;position:relative;}
 .pf-head{display:flex;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:2;background:var(--surface);}
 .pf-head-lbl{min-width:200px;max-width:200px;padding:8px 12px;font-weight:700;font-size:12px;color:var(--muted);flex:none;}
 .pf-months-wrap{position:relative;flex:1;}
@@ -201,6 +201,13 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .cbdd-item input{width:auto;flex:none;}
 .cbdd-add{display:flex;gap:6px;margin-top:6px;padding-top:6px;border-top:1px solid #eee;}
 .cbdd-add input{flex:1;padding:5px 6px;border:1px solid #ddd;border-radius:6px;font-size:12px;}
+.checklist-item-row3{display:flex;align-items:center;gap:2px;}
+.checklist-item-row3 .cbdd{flex:1;max-width:220px;}
+.checklist-item-row3 .cbdd-trigger{padding:3px 7px;font-size:11px;}
+.blocked-banner{background:#fdecea;color:#a53328;border:1px solid #f3b9b2;border-radius:8px;padding:8px 10px;font-size:12.5px;font-weight:600;margin-bottom:10px;}
+:root[data-theme="dark"] .blocked-banner{background:#3a201d;color:#f0a89f;border-color:#5c2e28;}
+.card-blocked-badge{display:inline-flex;align-items:center;gap:3px;background:#fdecea;color:#a53328;border-radius:5px;padding:1px 6px;font-size:10.5px;font-weight:700;}
+:root[data-theme="dark"] .card-blocked-badge{background:#3a201d;color:#f0a89f;}
 .lane-config-row{display:flex;align-items:center;gap:6px;padding:6px;border:1px solid #eee;border-radius:8px;margin-bottom:6px;flex-wrap:wrap;}
 .lane-config-row input[type=text]{flex:1;min-width:70px;padding:5px 6px;border:1px solid #ddd;border-radius:6px;font-size:12px;}
 .lane-config-row input[type=color]{width:30px;height:26px;border:none;padding:0;background:none;}
@@ -286,17 +293,16 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 /* Jalons clés & points d'attention */
 .jal-wrap{background:#1b2233;border-radius:12px;padding:18px 16px 14px;color:#e8ecf5;}
 .jal-title{font-size:11.5px;font-weight:800;letter-spacing:.06em;color:#9fb0d9;margin-bottom:14px;display:flex;align-items:center;gap:6px;}
-.jal-timeline{position:relative;height:64px;margin:0 6px 6px;}
-.jal-axis{position:absolute;left:0;right:0;top:32px;height:2px;background:#333f5c;border-radius:2px;}
+.jal-timeline{position:relative;margin:0 6px 10px;}
+.jal-axis{position:absolute;left:0;right:0;height:2px;background:#333f5c;border-radius:2px;}
 .jal-empty{font-size:12px;color:#7c8bb0;padding:10px 2px 4px;}
-.jal-marker{position:absolute;top:32px;transform:translate(-50%,-50%);width:13px;height:13px;border-radius:50%;border:2.5px solid #1b2233;box-shadow:0 0 0 2px currentColor;cursor:pointer;z-index:2;}
-.jal-marker:hover{transform:translate(-50%,-50%) scale(1.25);}
-.jal-marker.past{opacity:.55;}
-.jal-tag{position:absolute;top:-40px;transform:translateX(-50%);min-width:64px;max-width:120px;text-align:center;font-size:10px;line-height:1.25;pointer-events:none;}
-.jal-tag .jal-month{display:block;font-weight:800;color:#cfd8ee;font-size:10.5px;}
-.jal-tag .jal-desc{display:block;color:#8fa0c9;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.jal-tag.below{top:40px;}
-.jal-months{position:absolute;left:0;right:0;top:38px;display:flex;justify-content:space-between;font-size:9.5px;color:#5c6b91;pointer-events:none;}
+.jal-marker{position:absolute;transform:translate(-50%,-50%);width:12px;height:12px;border-radius:50%;border:2.5px solid #1b2233;box-shadow:0 0 0 2px currentColor;cursor:pointer;z-index:3;background:#1b2233;}
+.jal-marker:hover{transform:translate(-50%,-50%) scale(1.3);}
+.jal-marker.past{opacity:.6;}
+.jal-tag{position:absolute;transform:translateX(-50%);width:104px;text-align:center;font-size:10px;line-height:1.3;pointer-events:none;z-index:2;}
+.jal-tag .jal-month{display:block;font-weight:800;font-size:10.5px;}
+.jal-tag .jal-desc{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;color:#9fadd1;}
+.jal-months{position:absolute;left:0;right:0;display:flex;justify-content:space-between;font-size:9.5px;color:#5c6b91;pointer-events:none;padding:0 2px;}
 .jal-attn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin-top:16px;}
 .jal-card{border-radius:10px;padding:10px 12px;font-size:12px;line-height:1.4;position:relative;background:rgba(255,255,255,.06);border-left:4px solid;}
 .jal-card.warn{border-color:#e0625f;} .jal-card.info{border-color:#4f9eff;} .jal-card.ok{border-color:#3ad19a;} .jal-card.manual{border-color:#e8a34d;}
@@ -308,12 +314,44 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .jal-add-card{border:1.5px dashed #3a4568;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#7c8bb0;font-size:12px;cursor:pointer;min-height:52px;}
 .jal-add-card:hover{color:#cfd8ee;border-color:#5c6b91;}
 
+#printHeader{display:none;}
 @media print{
-  #toolbar,.sub-toolbar,#confetti-canvas{display:none !important;}
+  @page{ margin:14mm 12mm; }
+  *{ -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; color-adjust:exact !important; }
+  #toolbar,.sub-toolbar,#confetti-canvas,#globalFilters,#globalStats{display:none !important;}
   #app,.view{overflow:visible !important;height:auto !important;}
-  #dashboardGrid{display:block !important;}
-  .dash-module{page-break-inside:avoid;margin-bottom:14px;box-shadow:none;border:1px solid #ddd;}
-  body{overflow:visible !important;}
+  body{overflow:visible !important;background:#fff !important;}
+
+  /* En-tête du rapport */
+  #printHeader{display:flex !important;align-items:flex-end;justify-content:space-between;gap:16px;margin:0 0 18px;padding-bottom:12px;border-bottom:2.5px solid #1b2233;}
+  #printHeader h1{font-size:21px;margin:0;letter-spacing:.1px;color:#1b2233;}
+  #printHeader .print-meta{font-size:10.5px;color:#666;text-align:right;line-height:1.5;white-space:pre-line;}
+
+  /* Grille 2 colonnes façon rapport, modules pleine largeur en dessous */
+  /* CSS Grid casse la pagination d'impression sur certains moteurs (première page
+     laissée vide) : on repasse en flux normal, un module par ligne, pour une
+     pagination fiable quel que soit le navigateur. */
+  #dashboardGrid{display:block !important;padding:0 !important;}
+  .dash-module{page-break-inside:avoid;break-inside:avoid;box-shadow:none !important;border:1px solid #e2e4ea;border-radius:9px;padding:13px 14px;background:#fff !important;margin:0 0 12px;}
+  .dash-module h3{font-size:10.5px;text-transform:uppercase;letter-spacing:.05em;font-weight:800;color:#555;margin:0 0 10px;padding-bottom:7px;border-bottom:1px solid #eee;}
+
+  .kpi-card{background:#f6f7f9 !important;border:1px solid #edeef2;}
+  .cm-legend,.jal-attn-grid,.donut-legend{break-inside:avoid;}
+  .sp-card{break-inside:avoid;background:#fff !important;}
+
+  /* Module Jalons : version claire imprimable au lieu du fond sombre */
+  .jal-wrap{background:#fff !important;color:#1b2233 !important;border:1px solid #e2e4ea;padding:16px 14px 12px;}
+  .jal-title{color:#555 !important;font-size:10.5px;}
+  .jal-axis{background:#d8dae2 !important;}
+  .jal-months{color:#8a8f9c !important;}
+  .jal-marker{border-color:#fff !important;box-shadow:0 0 0 1.5px currentColor, 0 0 0 3px #fff;}
+  .jal-tag .jal-month{color:#1b2233 !important;}
+  .jal-tag .jal-desc{color:#666 !important;}
+  .jal-empty{color:#888 !important;}
+  .jal-card{background:#f6f7f9 !important;border-left-width:4px;}
+  .jal-card-head{color:#1b2233 !important;}
+  .jal-card-body{color:#555 !important;}
+  .jal-add-card{display:none !important;}
 }
 </style>
 </head>
@@ -336,6 +374,13 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
     <button class="icon-btn" id="btnThemeToggle" title="Basculer mode sombre/clair" aria-label="Basculer mode sombre/clair">🌙</button>
     <button class="icon-btn" id="btnGlobalExportCsv" title="Exporter en CSV" aria-label="Exporter en CSV">⬇️</button>
   </div>
+  <div class="sub-toolbar" id="globalFilters">
+    <input type="search" id="fSearch" placeholder="🔍 Rechercher…" aria-label="Rechercher une tâche">
+    <select id="fAssignee" aria-label="Filtrer par assigné"><option value="">Assigné à : tous</option></select>
+    <select id="fPriorite" aria-label="Filtrer par priorité"><option value="">Priorité : toutes</option></select>
+    <select id="fType" aria-label="Filtrer par type"><option value="">Type : tous</option></select>
+    <button class="icon-btn" id="fClear" title="Réinitialiser les filtres" aria-label="Réinitialiser les filtres">✕</button>
+  </div>
   <div id="globalStats" class="sub-toolbar"></div>
 
   <!-- Onglet Tableau de bord -->
@@ -345,15 +390,12 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
       <button class="btn secondary" id="btnDashPrint">🖨️ Imprimer / PDF</button>
       <button class="btn secondary" id="btnDashConfig">⚙️ Personnaliser</button>
     </div>
+    <div id="printHeader"><h1>🗂️ Gestion de Projet — Tableau de bord</h1><div class="print-meta"></div></div>
     <div id="dashboardGrid"></div>
   </div>
 
   <div id="view-kanban" class="view">
     <div class="sub-toolbar">
-      <input type="search" id="fSearch" placeholder="🔍 Rechercher…" aria-label="Rechercher une tâche">
-      <select id="fAssignee" aria-label="Filtrer par assigné"><option value="">Assigné à : tous</option></select>
-      <select id="fPriorite" aria-label="Filtrer par priorité"><option value="">Priorité : toutes</option></select>
-      <select id="fType" aria-label="Filtrer par type"><option value="">Type : tous</option></select>
       <select id="fSortBy" aria-label="Trier par"><option value="default">Trier : Par défaut</option><option value="priorite">Trier : Priorité</option><option value="deadline">Trier : Deadline</option></select>
       <select id="fGroupBy" aria-label="Grouper par"><option value="statut">Grouper : Statut</option><option value="priorite">Grouper : Priorité</option><option value="type">Grouper : Type</option></select>
       <button class="btn secondary" id="btnToggleView" title="Basculer vue colonnes / liste">📱</button>
@@ -450,6 +492,8 @@ const REQUIRED_COLUMNS = [
   { name:"DateDebut", title:"Date de début", type:"Date", optional:true },
   { name:"Couleur", title:"Couleur (frise)", type:"Text", optional:true },
   { name:"JalonCle", title:"Jalon clé", type:"Bool", optional:true },
+  { name:"Dependances", title:"Dépend de (IDs, JSON)", type:"Text", optional:true },
+  { name:"Estimation", title:"Estimation (heures)", type:"Numeric", optional:true },
 ];
 const PRIORITY_COLORS = {
   Urgent:{bg:"#ffd3d3",badge:"#c0392b"}, Haute:{bg:"#ffe3bd",badge:"#d9822b"},
@@ -515,6 +559,31 @@ const seededRotation = id => {
 };
 const parseChecklist = raw => { try{ const a = JSON.parse(raw||"[]"); return Array.isArray(a) ? a : []; }catch{ return []; } };
 const checklistProgress = raw => { const items = parseChecklist(raw); return items.length ? { done: items.filter(i=>i.done).length, total: items.length } : null; };
+const parseDeps = raw => { try{ const a = JSON.parse(raw||"[]"); return Array.isArray(a) ? a.map(Number).filter(n=>!isNaN(n)) : []; }catch{ return []; } };
+// Tâches "prédécesseurs" d'une tâche donnée, encore non terminées (donc bloquantes).
+function blockingTasksOf(t){
+  const deps = parseDeps(t.Dependances);
+  if (!deps.length) return [];
+  return deps.map(id => state.records.find(r => r.id === id)).filter(Boolean).filter(p => {
+    const lane = (state.columnsConfig||[]).find(l => l.statut === p.Statut);
+    return lane?.dashCategory !== "done" && lane?.dashCategory !== "cancelled";
+  });
+}
+const isTaskBlocked = t => blockingTasksOf(t).length > 0;
+// Compare l'état "done" des sous-tâches avant/après édition (par position + texte identique,
+// approximation suffisante puisque les ajouts/suppressions dans la même session ne sont pas
+// tracés finement) pour journaliser les cochages/décochages dans l'historique de la tâche.
+function checklistDoneDiffLines(before, after){
+  const lines = [];
+  const n = Math.min(before.length, after.length);
+  for (let i = 0; i < n; i++){
+    const b = before[i], a = after[i];
+    if (b && a && b.text === a.text && !!b.done !== !!a.done && a.text.trim() !== ""){
+      lines.push(`${fmtDateTime(new Date())} : Sous-tâche « ${a.text} » ${a.done ? "cochée ✅" : "décochée ⬜"}`);
+    }
+  }
+  return lines;
+}
 function addInterval(date, recurrence){
   const d = new Date(date);
   if (recurrence === "daily") d.setDate(d.getDate()+1);
@@ -805,9 +874,23 @@ function initFiltersBar(){
   document.getElementById("fType").addEventListener("change", e => { state.filters.type = e.target.value; notify(); });
   document.getElementById("fSortBy").addEventListener("change", e => { state.sortBy = e.target.value; notify(); });
   document.getElementById("fGroupBy").addEventListener("change", e => { state.groupBy = e.target.value; notify(); });
+  document.getElementById("fClear").addEventListener("click", () => {
+    state.filters = { search:"", assignee:"", priorite:"", type:"" };
+    document.getElementById("fSearch").value = "";
+    document.getElementById("fAssignee").value = "";
+    document.getElementById("fPriorite").value = "";
+    document.getElementById("fType").value = "";
+    notify();
+  });
 }
 
-/* -- Badge "en retard" dans la barre du haut -- */
+/* -- Alertes : retards, échéances proches, tâches bloquées, jalons imminents -- */
+const ALERT_KIND = {
+  overdue:   { icon:"⏰", label:"En retard" },
+  soon:      { icon:"🟠", label:"Échéance proche" },
+  blocked:   { icon:"🔒", label:"Bloquée" },
+  milestone: { icon:"🚩", label:"Jalon proche" },
+};
 function getOverdueTasks(){
   const now = new Date();
   return state.records.filter(r => {
@@ -817,17 +900,40 @@ function getOverdueTasks(){
     return d && d < now;
   }).sort((a,b) => gristDateToJS(a.Deadline) - gristDateToJS(b.Deadline));
 }
+function getAlertItems(){
+  if (!state.columnsConfig) return [];
+  const now = new Date();
+  const soonLimit = new Date(now.getTime() + 3*86400000);
+  const milestoneLimit = new Date(now.getTime() + 14*86400000);
+  const items = [];
+  state.records.forEach(r => {
+    const lane = state.columnsConfig.find(l => l.statut === r.Statut);
+    const active = lane?.dashCategory !== "done" && lane?.dashCategory !== "cancelled";
+    if (!active) return;
+    const d = gristDateToJS(r.Deadline);
+    if (d && d < now) items.push({ type:"overdue", task:r, date:d });
+    else if (d && d <= soonLimit) items.push({ type:"soon", task:r, date:d });
+    if (isTaskBlocked(r)) items.push({ type:"blocked", task:r, date:null });
+  });
+  computeMilestones(state.records).forEach(m => {
+    const lane = state.columnsConfig.find(l => l.statut === m.task.Statut);
+    const active = lane?.dashCategory !== "done" && lane?.dashCategory !== "cancelled";
+    if (active && m.date <= milestoneLimit) items.push({ type:"milestone", task:m.task, date:m.date });
+  });
+  const order = { overdue:0, blocked:1, milestone:2, soon:3 };
+  return items.sort((a,b) => (order[a.type]-order[b.type]) || ((a.date?.getTime()||0)-(b.date?.getTime()||0)));
+}
 function refreshAlertsBadge(){
-  const list = state.columnsConfig ? getOverdueTasks() : [];
+  const list = getAlertItems();
   const badge = document.getElementById("alertsBadge");
   badge.textContent = list.length || "";
   badge.classList.toggle("hidden", !list.length);
 }
 function renderAlertsPanel(){
-  const list = getOverdueTasks();
+  const list = getAlertItems();
   document.getElementById("alertsPanel").innerHTML = `
     <div class="alerts-header">🔔 Alertes</div>
-    ${list.length ? list.map(t => `<div class="alerts-item" data-alert-task="${t.id}"><span>⚠️ ${escapeHtml(t.Description||"(sans titre)")}</span><span class="alerts-date">${fmtDate(gristDateToJS(t.Deadline))}</span></div>`).join("") : `<div class="alerts-empty">Aucune alerte</div>`}
+    ${list.length ? list.map(a => `<div class="alerts-item" data-alert-task="${a.task.id}"><span>${ALERT_KIND[a.type].icon} ${escapeHtml(a.task.Description||"(sans titre)")} <em style="font-style:normal;color:var(--muted);font-size:10.5px;">— ${ALERT_KIND[a.type].label}</em></span><span class="alerts-date">${a.date?fmtDate(a.date):""}</span></div>`).join("") : `<div class="alerts-empty">Aucune alerte</div>`}
   `;
 }
 function initAlerts(){
@@ -912,7 +1018,6 @@ function toggleSelectMode(){
 }
 
 function renderBoard(){
-  refreshFilterOptions();
   refreshOverdueBadge();
   const board = document.getElementById("board");
   if (!state.columnsConfig){ board.innerHTML = '<p style="padding:20px;color:#888">Chargement…</p>'; return; }
@@ -957,6 +1062,7 @@ function renderCard(t, lane){
   const assignees = decodeChoiceList(t.AssigneA);
   const cl = checklistProgress(t.Checklist);
   const selected = selectedTaskIds.has(t.id);
+  const blocking = blockingTasksOf(t);
   return `
     <div class="card${selectMode?" select-mode-card":""}" tabindex="0" role="button" aria-label="Tâche : ${escapeHtml(t.Description||"sans titre")}" draggable="${selectMode?"false":"true"}" data-id="${t.id}" style="background:${pStyle.bg};border-left-color:${lane.color};transform:rotate(${seededRotation(t.id).toFixed(2)}deg)">
       ${selectMode ? `<input type="checkbox" class="card-select-box" data-select-task="${t.id}" ${selected?"checked":""} aria-label="Sélectionner cette tâche">` : `<button class="card-delete-btn" data-delete-task="${t.id}" title="Supprimer (cliquer deux fois)" aria-label="Supprimer la tâche">✕</button>`}
@@ -965,6 +1071,7 @@ function renderCard(t, lane){
         ${t.Type ? `<span class="chip">${escapeHtml(t.Type)}</span>` : ""}
         ${cl ? `<span class="chip">✅ ${cl.done}/${cl.total}</span>` : ""}
         ${t.Recurrence && t.Recurrence !== "none" ? `<span class="chip">🔁</span>` : ""}
+        ${blocking.length ? `<span class="card-blocked-badge" title="Bloquée par : ${escapeHtml(blocking.map(p=>p.Description||"?").join(", "))}">🔒 Bloquée</span>` : ""}
       </div>
       <div class="card-desc" contenteditable="true" data-field="Description" data-id="${t.id}">${escapeHtml(t.Description||"")}</div>
       ${assignees.length ? `<div class="card-meta-row">${assignees.map(a=>`<span class="chip">👤 ${escapeHtml(a)}</span>`).join("")}</div>` : ""}
@@ -1123,6 +1230,9 @@ function initBoardEvents(){
         notify();
       });
       maybeSpawnRecurrence(rec, lane.dashCategory);
+      if (wasDifferent && lane.dashCategory === "doing" && isTaskBlocked(rec)){
+        showToast(`⚠️ « ${rec.Description||"Cette tâche"} » est bloquée par une dépendance non terminée.`);
+      }
     }
     notify();
     if (wasDifferent && !lane.groupField) launchEffect(lane, innerWidth/2, innerHeight/2);
@@ -1167,17 +1277,45 @@ function initBulkBar(){
 
 /* -- Popup détail tâche (utilisée depuis Kanban, Calendrier et Tableau de bord) -- */
 let modalChecklist = [];
+let modalChecklistOriginal = [];
 let modalColorAuto = true;
 let modalMultiSelects = {};
+let modalPeopleList = [];
+let modalDeps = [];
+// Dropdown générique à cases à cocher, réutilisé pour Assigné à / Responsable (avec ajout de
+// nouveaux noms) et pour les assignés de sous-tâches (sans ajout, ddId dynamique "sub-<i>").
+function checkboxDropdownHtml(ddId, values, { allowAdd=true } = {}){
+  const current = modalMultiSelects[ddId] || [];
+  return `<div class="cbdd">
+    <button type="button" class="cbdd-trigger" data-cbdd-toggle="${ddId}">
+      <span class="cbdd-trigger-text">${current.length ? current.map(escapeHtml).join(", ") : "Sélectionner…"}</span>
+      <span class="cbdd-arrow">▾</span>
+    </button>
+    <div class="cbdd-panel hidden" id="${ddId}-panel">
+      <div class="cbdd-list">
+        ${values.map(v => `<label class="cbdd-item"><input type="checkbox" data-cbdd-check="${ddId}" value="${escapeHtml(v)}" ${current.includes(v)?"checked":""}><span>${escapeHtml(v)}</span></label>`).join("") || `<p style="font-size:11.5px;color:var(--muted);padding:4px 6px;">Aucun nom pour l'instant.</p>`}
+      </div>
+      ${allowAdd ? `<div class="cbdd-add">
+        <input type="text" id="${ddId}-new" placeholder="Nouveau nom…">
+        <button type="button" class="icon-btn" data-add-person="${ddId}" title="Ajouter">➕</button>
+      </div>` : ""}
+    </div>
+  </div>`;
+}
 function checklistItemsHtml(items){
   return `<div id="checklist-items">${items.map((it,i) => {
     const isRange = !!it.dateEnd;
+    const ddId = "sub-"+i;
+    modalMultiSelects[ddId] = it.assignees = it.assignees || [];
     return `
     <div class="checklist-item" data-idx="${i}">
       <div class="checklist-item-row1">
         <input type="checkbox" data-chk="done" ${it.done?"checked":""}>
         <input type="text" data-chk="text" value="${escapeHtml(it.text||"")}" placeholder="Sous-tâche…">
         <button type="button" class="icon-btn" data-chk="del">✕</button>
+      </div>
+      <div class="checklist-item-row3" style="padding-left:22px;margin-top:4px;">
+        <span style="font-size:10.5px;color:var(--muted);margin-right:4px;">👤</span>${checkboxDropdownHtml(ddId, modalPeopleList, { allowAdd:false })}
       </div>
       <div class="checklist-item-row2">
         <label class="chk-period-toggle"><input type="checkbox" data-chk="period-toggle" ${isRange?"checked":""}> Période</label>
@@ -1239,7 +1377,16 @@ function initTaskModalEvents(){
     const periodToggle = e.target.closest('[data-chk="period-toggle"]');
     if (periodToggle){
       const idx = Number(periodToggle.closest(".checklist-item").dataset.idx);
-      modalChecklist[idx].dateEnd = periodToggle.checked ? (modalChecklist[idx].date || "") : "";
+      const item = modalChecklist[idx];
+      if (periodToggle.checked){
+        // Une date de fin vide ferait recalculer isRange à false au prochain rendu
+        // (checkbox "Période" qui semble ne pas rester cochée) : on garantit toujours
+        // une dateEnd non vide, quitte à la faire démarrer sur la date de début.
+        if (!item.date) item.date = toDateInputValue(new Date());
+        item.dateEnd = item.date;
+      } else {
+        item.dateEnd = "";
+      }
       refreshChecklistUI();
       return;
     }
@@ -1250,6 +1397,14 @@ function initTaskModalEvents(){
       if (cb.checked){ if (!arr.includes(val)) arr.push(val); }
       else { const i = arr.indexOf(val); if (i>-1) arr.splice(i,1); }
       updateCbddTrigger(ddId);
+    }
+    const depCb = e.target.closest("[data-deps-check]");
+    if (depCb){
+      const depId = Number(depCb.value);
+      if (depCb.checked){ if (!modalDeps.includes(depId)) modalDeps.push(depId); }
+      else { const i = modalDeps.indexOf(depId); if (i>-1) modalDeps.splice(i,1); }
+      const trigger = document.querySelector(`[data-cbdd-toggle="deps"] .cbdd-trigger-text`);
+      if (trigger) trigger.textContent = modalDeps.length ? modalDeps.map(did => state.records.find(r=>r.id===did)?.Description || "?").join(", ") : "Sélectionner…";
     }
   });
 }
@@ -1264,6 +1419,7 @@ function openTaskModal(id){
   if (!t) return;
   state.editingId = id;
   modalChecklist = parseChecklist(t.Checklist);
+  modalChecklistOriginal = JSON.parse(JSON.stringify(modalChecklist));
   const statutOptions = [...new Set(state.columnsConfig.map(l => l.statut))];
   const priorities = Object.keys(PRIORITY_COLORS).filter(k => k !== "__default");
   const opts = (values, current) => values.map(v => `<option value="${escapeHtml(v)}" ${v===current?"selected":""}>${escapeHtml(v)}</option>`).join("");
@@ -1280,27 +1436,15 @@ function openTaskModal(id){
   currentAssignees.concat(currentResp).forEach(p => peopleSet.add(p));
   const peopleList = [...peopleSet].sort((a,b) => a.localeCompare(b,"fr"));
   modalMultiSelects = { "m-assigne": [...currentAssignees], "m-resp": [...currentResp] };
-  const checkboxDropdownHtml = (ddId, values) => {
-    const current = modalMultiSelects[ddId];
-    return `<div class="cbdd">
-      <button type="button" class="cbdd-trigger" data-cbdd-toggle="${ddId}">
-        <span class="cbdd-trigger-text">${current.length ? current.map(escapeHtml).join(", ") : "Sélectionner…"}</span>
-        <span class="cbdd-arrow">▾</span>
-      </button>
-      <div class="cbdd-panel hidden" id="${ddId}-panel">
-        <div class="cbdd-list">
-          ${values.map(v => `<label class="cbdd-item"><input type="checkbox" data-cbdd-check="${ddId}" value="${escapeHtml(v)}" ${current.includes(v)?"checked":""}><span>${escapeHtml(v)}</span></label>`).join("") || `<p style="font-size:11.5px;color:var(--muted);padding:4px 6px;">Aucun nom pour l'instant.</p>`}
-        </div>
-        <div class="cbdd-add">
-          <input type="text" id="${ddId}-new" placeholder="Nouveau nom…">
-          <button type="button" class="icon-btn" data-add-person="${ddId}" title="Ajouter">➕</button>
-        </div>
-      </div>
-    </div>`;
-  };
+  modalPeopleList = peopleList;
+  modalDeps = parseDeps(t.Dependances);
+  const otherTasks = state.records.filter(r => r.id !== id).sort((a,b) => (a.Description||"").localeCompare(b.Description||"","fr"));
+  const depsLabel = () => modalDeps.length ? modalDeps.map(did => state.records.find(r=>r.id===did)?.Description || "?").join(", ") : "Sélectionner…";
+  const blocking = blockingTasksOf(t);
 
   document.getElementById("taskModal").innerHTML = `
     <h2>Détail de la tâche</h2>
+    ${blocking.length ? `<div class="blocked-banner">⛔ Bloquée par : ${blocking.map(p=>escapeHtml(p.Description||"(sans titre)")).join(", ")}</div>` : ""}
     ${fieldRow("Description", `<textarea id="m-desc">${escapeHtml(t.Description||"")}</textarea>`)}
     <div class="field-row">
       ${fieldRow("Priorité", `<select id="m-priorite">${opts(priorities, t.Priorite)}</select>`)}
@@ -1314,6 +1458,7 @@ function openTaskModal(id){
       ${fieldRow("Type", `<select id="m-type"><option value="">—</option>${opts(typeOptions, t.Type)}</select>`)}
       ${fieldRow("Récurrence", `<select id="m-recurrence">${recOpts}</select>`)}
     </div>
+    ${fieldRow("Estimation de charge (heures)", `<input type="number" id="m-estimation" min="0" step="0.5" placeholder="ex : 4" value="${t.Estimation!=null && t.Estimation!=="" ? t.Estimation : ""}" style="max-width:120px;">`)}
     ${fieldRow("Couleur sur la frise (Portefeuille)", `<div style="display:flex;gap:8px;align-items:center;">
       <input type="color" id="m-couleur" value="${t.Couleur || "#4f7cff"}" style="width:44px;height:32px;padding:2px;">
       <button type="button" class="btn secondary" id="m-couleur-reset">↺ Couleur automatique (projet)</button>
@@ -1325,6 +1470,17 @@ function openTaskModal(id){
       ${fieldRow("Assigné à", checkboxDropdownHtml("m-assigne", peopleList))}
       ${fieldRow("Responsable", checkboxDropdownHtml("m-resp", peopleList))}
     </div>
+    ${fieldRow("Dépend de (bloquée + décalée tant que non terminée)", `<div class="cbdd">
+      <button type="button" class="cbdd-trigger" data-cbdd-toggle="deps">
+        <span class="cbdd-trigger-text">${escapeHtml(depsLabel())}</span>
+        <span class="cbdd-arrow">▾</span>
+      </button>
+      <div class="cbdd-panel hidden" id="deps-panel">
+        <div class="cbdd-list">
+          ${otherTasks.map(r => `<label class="cbdd-item"><input type="checkbox" data-deps-check value="${r.id}" ${modalDeps.includes(r.id)?"checked":""}><span>${escapeHtml(r.Description||"(sans titre)")}</span></label>`).join("") || `<p style="font-size:11.5px;color:var(--muted);padding:4px 6px;">Aucune autre tâche.</p>`}
+        </div>
+      </div>
+    </div>`)}
     ${fieldRow("Notes", `<textarea id="m-notes">${escapeHtml(t.Notes||"")}</textarea>`)}
     <div class="field">
       <label>Sous-tâches</label>
@@ -1439,21 +1595,25 @@ async function saveTaskModal(){
   const newStatut = document.getElementById("m-statut").value;
   const laneForNewStatut = state.columnsConfig.find(l => l.statut === newStatut);
   const wasDifferentStatut = t && t.Statut !== newStatut;
-  const historique = wasDifferentStatut
+  let historique = wasDifferentStatut
     ? (t.Historique ? t.Historique+"\n" : "") + `${fmtDateTime(new Date())} : ${t.Statut || "—"} → ${newStatut}`
     : (t.Historique || "");
+  const checklistLines = checklistDoneDiffLines(modalChecklistOriginal, modalChecklist);
+  if (checklistLines.length) historique = (historique ? historique+"\n" : "") + checklistLines.join("\n");
 
   const fields = {
     Description: val("m-desc"), Priorite: document.getElementById("m-priorite").value, Statut: newStatut,
     Deadline: jsDateToGristEpoch(document.getElementById("m-deadline").value),
     DateDebut: jsDateToGristEpoch(document.getElementById("m-datedebut").value),
     Type: document.getElementById("m-type").value, Recurrence: document.getElementById("m-recurrence").value,
+    Estimation: document.getElementById("m-estimation").value === "" ? null : Number(document.getElementById("m-estimation").value),
     AssigneA: encodeChoiceList(modalMultiSelects["m-assigne"] || []),
     Responsable: encodeChoiceList(modalMultiSelects["m-resp"] || []),
     Notes: val("m-notes"),
     Checklist: JSON.stringify(modalChecklist.filter(it => it.text.trim() !== "")),
     Couleur: modalColorAuto ? "" : document.getElementById("m-couleur").value,
     JalonCle: document.getElementById("m-jalon").checked,
+    Dependances: JSON.stringify(modalDeps),
     Historique: historique,
   };
   await writeToGrist(() => updateTaskFields(id, fields), "Modifications non enregistrées dans Grist.");
@@ -1463,6 +1623,35 @@ async function saveTaskModal(){
   if (wasDifferentStatut){
     launchEffect(laneForNewStatut, innerWidth/2, innerHeight/2);
     maybeSpawnRecurrence(state.records.find(r => r.id === id), laneForNewStatut?.dashCategory);
+  }
+  await cascadeDependencyShift(id);
+}
+
+// Si la deadline d'une tâche est repoussée, décale automatiquement les tâches qui en
+// dépendent et qui commenceraient avant qu'elle ne soit terminée (report en cascade,
+// sur un seul niveau : les dépendances des tâches décalées ne sont pas re-propagées).
+async function cascadeDependencyShift(taskId){
+  const t = state.records.find(r => r.id === taskId);
+  if (!t) return;
+  const predEnd = gristDateToJS(t.Deadline) || gristDateToJS(t.DateDebut);
+  if (!predEnd) return;
+  const dependents = state.records.filter(r => r.id !== taskId && parseDeps(r.Dependances).includes(taskId));
+  const shifted = [];
+  for (const d of dependents){
+    const dStart = gristDateToJS(d.DateDebut);
+    if (!dStart || dStart >= predEnd) continue;
+    const shiftMs = predEnd.getTime() - dStart.getTime() + 86400000; // +1 jour de marge
+    const newStart = new Date(dStart.getTime() + shiftMs);
+    const dFields = { DateDebut: Math.floor(newStart.getTime()/1000) };
+    const dDeadline = gristDateToJS(d.Deadline);
+    if (dDeadline) dFields.Deadline = Math.floor((dDeadline.getTime() + shiftMs)/1000);
+    await writeToGrist(() => updateTaskFields(d.id, dFields), "Décalage automatique non enregistré dans Grist.");
+    patchRecordLocally(d.id, dFields);
+    shifted.push(d.Description || "(sans titre)");
+  }
+  if (shifted.length){
+    notify();
+    showToast(`🔗 Décalée${shifted.length>1?"s":""} automatiquement suite au report de « ${t.Description||"cette tâche"} » : ${shifted.join(", ")}`);
   }
 }
 
@@ -1698,11 +1887,11 @@ function pfRenderTaskRow(task, project, base){
         const ps = pfPos(start, base), pe = pfPos(end, base);
         const l = Math.max(0,ps), rr = Math.min(1,pe);
         if (rr <= l) return "";
-        return `<div class="pf-subtask-range ${doneCls} ${overdueCls}" data-subtask-task="${r.id}" data-subtask-idx="${idx}" style="left:${l*100}%;width:${Math.max((rr-l)*100,1)}%;--c:${color};" title="${escapeHtml(it.text||"")} — ${fmtDateShort(start)} → ${fmtDateShort(end)}${it.done?" (terminée)":""}"></div>`;
+        return `<div class="pf-subtask-range ${doneCls} ${overdueCls}" data-subtask-task="${r.id}" data-subtask-idx="${idx}" style="left:${l*100}%;width:${Math.max((rr-l)*100,1)}%;--c:${color};" title="${escapeHtml(it.text||"")} — ${fmtDateShort(start)} → ${fmtDateShort(end)}${it.done?" (terminée)":""}${it.assignees&&it.assignees.length?" · 👤 "+escapeHtml(it.assignees.join(", ")):""}"></div>`;
       }
       const pfr = pfPos(d1, base);
       if (pfr<0 || pfr>1) return "";
-      return `<div class="pf-subtask-block ${doneCls} ${overdueCls}" data-subtask-task="${r.id}" data-subtask-idx="${idx}" style="left:${pfr*100}%;--c:${color};" title="${escapeHtml(it.text||"")} — ${fmtDateShort(d1)}${it.done?" (terminée)":""}"></div>`;
+      return `<div class="pf-subtask-block ${doneCls} ${overdueCls}" data-subtask-task="${r.id}" data-subtask-idx="${idx}" style="left:${pfr*100}%;--c:${color};" title="${escapeHtml(it.text||"")} — ${fmtDateShort(d1)}${it.done?" (terminée)":""}${it.assignees&&it.assignees.length?" · 👤 "+escapeHtml(it.assignees.join(", ")):""}"></div>`;
     }).join("");
   return `<div class="pf-row pf-task-row" data-id="${r.id}">
     <div class="pf-lbl pf-task-lbl"><span class="pf-task-name">↳ ${escapeHtml(r.Description||"(sans titre)")}</span></div>
@@ -1741,8 +1930,12 @@ function openSubtaskPopup(taskId, idx){
   document.getElementById("st-save").onclick = saveSubtaskPopup;
   document.getElementById("st-period").addEventListener("change", e => {
     const endInput = document.getElementById("st-date-end");
+    const startInput = document.getElementById("st-date");
     endInput.disabled = !e.target.checked;
-    if (e.target.checked && !endInput.value) endInput.value = document.getElementById("st-date").value;
+    if (e.target.checked){
+      if (!startInput.value) startInput.value = toDateInputValue(new Date());
+      if (!endInput.value) endInput.value = startInput.value;
+    }
   });
 }
 async function saveSubtaskPopup(){
@@ -1752,6 +1945,7 @@ async function saveSubtaskPopup(){
   if (!t) return;
   const items = parseChecklist(t.Checklist);
   if (!items[idx]) return;
+  const wasDone = !!items[idx].done;
   const isPeriod = document.getElementById("st-period").checked;
   items[idx] = {
     ...items[idx],
@@ -1761,8 +1955,13 @@ async function saveSubtaskPopup(){
     done: document.getElementById("st-done").checked,
   };
   const newChecklist = JSON.stringify(items);
-  await writeToGrist(() => updateTaskFields(taskId, { Checklist: newChecklist }), "Sous-tâche non enregistrée dans Grist.");
-  patchRecordLocally(taskId, { Checklist: newChecklist });
+  const fields = { Checklist: newChecklist };
+  if (wasDone !== items[idx].done && items[idx].text.trim() !== ""){
+    const line = `${fmtDateTime(new Date())} : Sous-tâche « ${items[idx].text} » ${items[idx].done ? "cochée ✅" : "décochée ⬜"}`;
+    fields.Historique = (t.Historique ? t.Historique+"\n" : "") + line;
+  }
+  await writeToGrist(() => updateTaskFields(taskId, fields), "Sous-tâche non enregistrée dans Grist.");
+  patchRecordLocally(taskId, fields);
   closeOverlay("subtaskOverlay");
   notify();
 }
@@ -1831,6 +2030,57 @@ function renderPortfolio(){
     : "";
 
   main.innerHTML = totalTasks ? (pfRenderTimeline(projects, base) + pfRenderBoard(projects)) : `<p style="padding:20px;color:#888;">Aucune tâche.</p>`;
+  requestAnimationFrame(pfDrawDependencyArrows);
+}
+// Flèches de dépendance entre tâches liées, dessinées par-dessus la frise (seulement entre
+// deux tâches dont le projet est actuellement déplié, puisque ce sont les seules dont la
+// barre est visible dans le DOM).
+function pfDrawDependencyArrows(){
+  const wrap = document.querySelector(".pf-timeline");
+  if (!wrap) return;
+  const old = wrap.querySelector("#pf-deps-svg");
+  if (old) old.remove();
+  const rows = [...wrap.querySelectorAll(".pf-task-row[data-id]")];
+  if (!rows.length) return;
+  const rowById = new Map(rows.map(row => [Number(row.dataset.id), row]));
+  const wrapRect = wrap.getBoundingClientRect();
+  const barOf = row => row.querySelector(".pf-bar-task, .pf-single-marker");
+  const lines = [];
+  rows.forEach(row => {
+    const id = Number(row.dataset.id);
+    const t = state.records.find(r => r.id === id);
+    if (!t) return;
+    const deps = parseDeps(t.Dependances);
+    if (!deps.length) return;
+    const depBar = barOf(row);
+    if (!depBar) return;
+    const depRect = depBar.getBoundingClientRect();
+    const depX = depRect.left - wrapRect.left + wrap.scrollLeft;
+    const depY = depRect.top - wrapRect.top + wrap.scrollTop + depRect.height/2;
+    deps.forEach(pid => {
+      const predRow = rowById.get(pid);
+      if (!predRow) return;
+      const predBar = barOf(predRow);
+      if (!predBar) return;
+      const predRect = predBar.getBoundingClientRect();
+      const predX = predRect.right - wrapRect.left + wrap.scrollLeft;
+      const predY = predRect.top - wrapRect.top + wrap.scrollTop + predRect.height/2;
+      lines.push({ x1:predX, y1:predY, x2:depX, y2:depY });
+    });
+  });
+  if (!lines.length) return;
+  const svgNS = "http://www.w3.org/2000/svg";
+  const svg = document.createElementNS(svgNS, "svg");
+  svg.id = "pf-deps-svg";
+  svg.setAttribute("width", wrap.clientWidth);
+  svg.setAttribute("height", wrap.scrollHeight);
+  svg.style.cssText = "position:absolute;top:0;left:0;pointer-events:none;z-index:5;overflow:visible;";
+  svg.innerHTML = `<defs><marker id="pf-arrowhead" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="#c0567a"/></marker></defs>` +
+    lines.map(l => {
+      const midX = (l.x1+l.x2)/2;
+      return `<path d="M${l.x1},${l.y1} C${midX},${l.y1} ${midX},${l.y2} ${l.x2},${l.y2}" fill="none" stroke="#c0567a" stroke-width="1.6" stroke-dasharray="4 3" marker-end="url(#pf-arrowhead)" opacity="0.85"/>`;
+    }).join("");
+  wrap.appendChild(svg);
 }
 function pfToggleProject(name){ pfFilter.has(name) ? pfFilter.delete(name) : pfFilter.add(name); renderPortfolio(); }
 async function pfMoveCard(id, statut){
@@ -2529,14 +2779,23 @@ function renderModule(id){
     const year = new Date().getFullYear();
     const now = new Date();
     const monthsFull = ["Jan","Fév","Mar","Avr","Mai","Juin","Juil","Août","Sep","Oct","Nov","Déc"];
-    const counts = Array(12).fill(0);
-    filteredRecords().forEach(r => {
+    const hours = Array(12).fill(0), counts = Array(12).fill(0);
+    let withoutEstimation = 0;
+    const records = filteredRecords();
+    const hasAnyEstimation = records.some(r => r.Estimation != null && r.Estimation !== "");
+    records.forEach(r => {
       const d = gristDateToJS(r.Deadline);
-      if (d && d.getFullYear() === year) counts[d.getMonth()]++;
+      if (!d || d.getFullYear() !== year) return;
+      counts[d.getMonth()]++;
+      const est = Number(r.Estimation);
+      if (r.Estimation != null && r.Estimation !== "" && !isNaN(est)) hours[d.getMonth()] += est;
+      else withoutEstimation++;
     });
-    const max = Math.max(1, ...counts);
-    const peakIdx = counts.indexOf(max);
-    const bars = counts.map((c,i) => {
+    const unit = hasAnyEstimation ? "h" : "";
+    const values = hasAnyEstimation ? hours : counts;
+    const max = Math.max(1, ...values);
+    const peakIdx = values.indexOf(max);
+    const bars = values.map((c,i) => {
       const pct = c/max;
       let color = "#7fa8e0"; // Faible
       if (c>0 && i===peakIdx) color = "#e8a34d"; // Pic de charge
@@ -2544,7 +2803,8 @@ function renderModule(id){
       else if (pct >= 0.4) color = "#4f7cff"; // Modérée
       const h = c ? Math.max(6, Math.round(pct*100)) : 2;
       const isCurrent = year===now.getFullYear() && i===now.getMonth();
-      return `<div class="cm-bar-wrap"><div class="cm-value">${c}</div><div class="cm-bar" style="height:${h}%;background:${color};"></div><div class="cm-label${isCurrent?" current":""}">${monthsFull[i]}</div></div>`;
+      const label = hasAnyEstimation ? (Number.isInteger(c)?c:c.toFixed(1))+unit : String(c);
+      return `<div class="cm-bar-wrap"><div class="cm-value">${label}</div><div class="cm-bar" style="height:${h}%;background:${color};"></div><div class="cm-label${isCurrent?" current":""}">${monthsFull[i]}</div></div>`;
     }).join("");
     return `<div class="cm-chart">${bars}</div>
       <div class="cm-legend">
@@ -2552,7 +2812,8 @@ function renderModule(id){
         <span><i style="background:#4f7cff"></i>Modérée (40-70%)</span>
         <span><i style="background:#e0625f"></i>Élevée (&gt;70%)</span>
         <span><i style="background:#e8a34d"></i>Pic de charge</span>
-      </div>`;
+      </div>
+      ${hasAnyEstimation ? (withoutEstimation ? `<p style="font-size:10.5px;color:var(--muted);margin-top:6px;">Charge en heures estimées. ${withoutEstimation} tâche${withoutEstimation>1?"s":""} sans estimation non comptabilisée${withoutEstimation>1?"s":""}.</p>` : `<p style="font-size:10.5px;color:var(--muted);margin-top:6px;">Charge en heures estimées (champ Estimation).</p>`) : `<p style="font-size:10.5px;color:var(--muted);margin-top:6px;">Aucune estimation renseignée — affichage par nombre de tâches. Renseignez le champ « Estimation » sur vos tâches pour voir la charge en heures.</p>`}`;
   }
   if (id === "syntheseParProjet"){
     const groups = {};
@@ -2599,14 +2860,38 @@ function renderModule(id){
     const year = now.getFullYear();
     const yearStart = new Date(year,0,1).getTime(), yearEnd = new Date(year,11,31,23,59,59).getTime();
     const monthsShort = ["Jan","Fév","Mar","Avr","Mai","Juin","Juil","Août","Sep","Oct","Nov","Déc"];
-    const markersHtml = milestones.length ? milestones.map((m,i) => {
-      const pct = Math.min(100, Math.max(0, (m.date.getTime()-yearStart)/(yearEnd-yearStart)*100));
+    // Évite les chevauchements d'étiquettes : place chaque jalon sur la première "voie"
+    // libre (au-dessus puis en dessous de l'axe, en s'éloignant par paliers) parmi celles
+    // dont le dernier jalon placé est assez loin horizontalement.
+    const MIN_GAP_PCT = 11;
+    const withPct = milestones.map(m => ({ m, pct: Math.min(100, Math.max(0, (m.date.getTime()-yearStart)/(yearEnd-yearStart)*100)) }));
+    const laneLast = [];
+    const placed = withPct.map(({m,pct}) => {
+      let lane = 0;
+      while (laneLast[lane] !== undefined && (pct - laneLast[lane]) < MIN_GAP_PCT) lane++;
+      laneLast[lane] = pct;
+      return { m, pct, lane };
+    });
+    const TIER_GAP = 32, BASE_GAP = 22;
+    const tierOf = lane => Math.floor(lane/2);
+    const maxTierAbove = Math.max(0, ...placed.filter(p=>p.lane%2===0).map(p=>tierOf(p.lane)));
+    const maxTierBelow = Math.max(0, ...placed.filter(p=>p.lane%2===1).map(p=>tierOf(p.lane)));
+    const axisY = BASE_GAP + maxTierAbove*TIER_GAP + 14;
+    const timelineH = axisY + maxTierBelow*TIER_GAP + BASE_GAP + 30;
+    const markersHtml = placed.length ? placed.map(({m,pct,lane}) => {
       const color = m.task.Couleur || "#4f9eff";
-      const below = i%2===1;
-      return `<div class="jal-marker${m.date<now?" past":""}" style="left:${pct}%;color:${color};" data-cal-task="${m.task.id}" title="${escapeHtml(m.task.Description||"")}">
-        <div class="jal-tag${below?" below":""}"><span class="jal-month">${monthsShort[m.date.getMonth()]}</span><span class="jal-desc">${escapeHtml(m.task.Description||"(sans titre)")}</span></div>
+      const above = lane%2===0;
+      const tagTop = above ? axisY - BASE_GAP - tierOf(lane)*TIER_GAP : axisY + BASE_GAP + tierOf(lane)*TIER_GAP;
+      return `<div class="jal-marker${m.date<now?" past":""}" style="left:${pct}%;top:${axisY}px;color:${color};" data-cal-task="${m.task.id}" title="${escapeHtml(m.task.Description||"")}"></div>
+      <div class="jal-tag${above?"":" below"}" style="left:${pct}%;top:${tagTop}px;">
+        <span class="jal-month" style="color:${color};">${monthsShort[m.date.getMonth()]}</span><span class="jal-desc">${escapeHtml(m.task.Description||"(sans titre)")}</span>
       </div>`;
-    }).join("") : `<div class="jal-empty">Aucun jalon clé pour ${year}. Cochez « 🚩 Jalon clé » dans la fiche d'une tâche pour l'afficher ici.</div>`;
+    }).join("") : "";
+    const timelineHtml = placed.length ? `<div class="jal-timeline" style="height:${timelineH}px;">
+        <div class="jal-axis" style="top:${axisY}px;"></div>
+        ${markersHtml}
+        <div class="jal-months" style="top:${axisY+16}px;">${monthsShort.map(m=>`<span>${m}</span>`).join("")}</div>
+      </div>` : `<div class="jal-empty">Aucun jalon clé pour ${year}. Cochez « 🚩 Jalon clé » dans la fiche d'une tâche pour l'afficher ici.</div>`;
     const stats = computeDashboardStats(records);
     const insights = computeAttentionInsights(records, stats);
     const manual = state.manualAttention || [];
@@ -2623,11 +2908,7 @@ function renderModule(id){
       </div>`).join("");
     return `<div class="jal-wrap">
       <div class="jal-title">📅 JALONS CLÉS ${year}</div>
-      <div class="jal-timeline">
-        <div class="jal-axis"></div>
-        ${markersHtml}
-        <div class="jal-months">${monthsShort.map(m=>`<span>${m}</span>`).join("")}</div>
-      </div>
+      ${timelineHtml}
       <div class="jal-title" style="margin-top:22px;">⚠️ POINTS D'ATTENTION</div>
       <div class="jal-attn-grid">
         ${autoCardsHtml}
@@ -2682,7 +2963,18 @@ function initDashboard(){
     if (e.key === "Enter" && e.target.closest("[data-attn-body]")){ e.preventDefault(); e.target.blur(); }
   });
   document.getElementById("btnDashExport").onclick = exportCsv;
-  document.getElementById("btnDashPrint").onclick = () => window.print();
+  document.getElementById("btnDashPrint").onclick = () => {
+    const f = state.filters || {};
+    const activeFilters = [
+      f.search ? `recherche : "${f.search}"` : "",
+      f.assignee ? `assigné à : ${f.assignee}` : "",
+      f.priorite ? `priorité : ${f.priorite}` : "",
+      f.type ? `type : ${f.type}` : "",
+    ].filter(Boolean);
+    document.querySelector("#printHeader .print-meta").textContent =
+      `Généré le ${fmtDateTime(new Date())}\n` + (activeFilters.length ? `Filtres actifs : ${activeFilters.join(", ")}` : "Aucun filtre actif");
+    window.print();
+  };
   document.getElementById("btnDashConfig").onclick = openDashConfigModal;
 }
 
@@ -2735,6 +3027,7 @@ function renderTab(tab){
   else if (tab === "calendar") renderCalendar();
   else if (tab === "whiteboard"){ wbResizeCanvas(); renderWbOverlay(); }
   else if (tab === "dashboard") renderDashboard();
+  refreshFilterOptions();
   refreshOverdueBadge();
   renderGlobalStats();
 }
