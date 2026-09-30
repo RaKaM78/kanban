@@ -291,28 +291,39 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
 .sp-today{position:absolute;top:-3px;bottom:-3px;width:2px;background:#e05a7a;}
 
 /* Jalons clés & points d'attention */
-.jal-wrap{background:#1b2233;border-radius:12px;padding:18px 16px 14px;color:#e8ecf5;}
-.jal-title{font-size:11.5px;font-weight:800;letter-spacing:.06em;color:#9fb0d9;margin-bottom:14px;display:flex;align-items:center;gap:6px;}
-.jal-timeline{position:relative;margin:0 6px 10px;}
-.jal-axis{position:absolute;left:0;right:0;height:2px;background:#333f5c;border-radius:2px;}
-.jal-empty{font-size:12px;color:#7c8bb0;padding:10px 2px 4px;}
-.jal-marker{position:absolute;transform:translate(-50%,-50%);width:12px;height:12px;border-radius:50%;border:2.5px solid #1b2233;box-shadow:0 0 0 2px currentColor;cursor:pointer;z-index:3;background:#1b2233;}
-.jal-marker:hover{transform:translate(-50%,-50%) scale(1.3);}
-.jal-marker.past{opacity:.6;}
-.jal-tag{position:absolute;transform:translateX(-50%);width:104px;text-align:center;font-size:10px;line-height:1.3;pointer-events:none;z-index:2;}
-.jal-tag .jal-month{display:block;font-weight:800;font-size:10.5px;}
-.jal-tag .jal-desc{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;color:#9fadd1;}
-.jal-months{position:absolute;left:0;right:0;display:flex;justify-content:space-between;font-size:9.5px;color:#5c6b91;pointer-events:none;padding:0 2px;}
-.jal-attn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:10px;margin-top:16px;}
-.jal-card{border-radius:10px;padding:10px 12px;font-size:12px;line-height:1.4;position:relative;background:rgba(255,255,255,.06);border-left:4px solid;}
-.jal-card.warn{border-color:#e0625f;} .jal-card.info{border-color:#4f9eff;} .jal-card.ok{border-color:#3ad19a;} .jal-card.manual{border-color:#e8a34d;}
-.jal-card-head{display:flex;align-items:center;gap:6px;font-weight:700;font-size:11px;margin-bottom:3px;color:#cfd8ee;}
-.jal-card-body{color:#aab6d6;outline:none;min-height:16px;}
-.jal-card-body:focus{background:rgba(255,255,255,.08);border-radius:4px;}
-.jal-card-del{position:absolute;top:6px;right:7px;background:none;border:none;color:#7c8bb0;cursor:pointer;font-size:11px;padding:2px 4px;}
+.jal-wrap{padding:2px 0 0;color:var(--ink);}
+.jal-title{font-size:10px;font-weight:800;letter-spacing:.07em;text-transform:uppercase;color:#9aa3b2;margin:0 0 12px;display:flex;align-items:center;gap:6px;}
+.jal-empty{font-size:12px;color:var(--muted);padding:10px 2px 4px;}
+/* Axe horizontal : vue d'ensemble rapide de l'année */
+.jal-hero{position:relative;height:44px;margin:0 4px 18px;}
+.jal-hero-line{position:absolute;left:0;right:0;top:50%;height:2px;background:#e8eaef;border-radius:2px;}
+.jal-hero-dot{position:absolute;top:50%;width:11px;height:11px;border-radius:50%;transform:translate(-50%,-50%);border:2.5px solid #fff;box-shadow:0 0 0 2px currentColor;cursor:pointer;z-index:2;}
+.jal-hero-dot:hover{transform:translate(-50%,-50%) scale(1.3);}
+.jal-hero-dot.done,.jal-hero-dot.cancelled{opacity:.5;}
+.jal-hero-months{position:absolute;left:0;right:0;top:calc(50% + 13px);display:flex;justify-content:space-between;font-size:9px;color:#aab1bd;pointer-events:none;}
+/* Frise verticale : détail lisible, un jalon par ligne */
+.jal-vlist{position:relative;padding-left:2px;}
+.jal-vline{position:absolute;left:10px;top:6px;bottom:6px;width:2px;background:#e8eaef;}
+.jal-vrow{display:flex;gap:14px;align-items:center;padding:6px 0;position:relative;}
+.jal-vdot{width:20px;height:20px;border-radius:50%;background:#fff;flex:none;box-sizing:border-box;z-index:1;cursor:pointer;}
+.jal-vcard{flex:1;display:flex;justify-content:space-between;align-items:center;gap:10px;background:#f7f8fa;border-radius:9px;padding:8px 13px;cursor:pointer;min-width:0;}
+.jal-vcard:hover{background:#eef0f4;}
+.jal-vname{font-weight:600;font-size:12.5px;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.jal-vsub{font-size:10.5px;color:var(--muted);margin-top:1px;}
+.jal-vdate-wrap{text-align:right;flex:none;}
+.jal-vdate{font-size:12px;font-weight:700;white-space:nowrap;}
+.jal-vtag{font-size:9.5px;white-space:nowrap;margin-top:1px;}
+/* Points d'attention : chips clairs, avec notes manuelles éditables */
+.jal-attn-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px;margin-top:16px;}
+.jal-card{border-radius:10px;padding:10px 12px;font-size:12px;line-height:1.4;position:relative;background:#f7f8fa;border-left:3px solid;}
+.jal-card.warn{border-color:#e0625f;background:#fdf2f1;} .jal-card.info{border-color:#4f9eff;background:#eef2ff;} .jal-card.ok{border-color:#3ad19a;background:#eefaf4;} .jal-card.manual{border-color:#e8a34d;background:#fef6ec;}
+.jal-card-head{display:flex;align-items:center;gap:6px;font-weight:700;font-size:11px;margin-bottom:3px;color:var(--ink);}
+.jal-card-body{color:#555;outline:none;min-height:16px;}
+.jal-card-body:focus{background:rgba(0,0,0,.05);border-radius:4px;}
+.jal-card-del{position:absolute;top:6px;right:7px;background:none;border:none;color:#aab1bd;cursor:pointer;font-size:11px;padding:2px 4px;}
 .jal-card-del:hover{color:#e0625f;}
-.jal-add-card{border:1.5px dashed #3a4568;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#7c8bb0;font-size:12px;cursor:pointer;min-height:52px;}
-.jal-add-card:hover{color:#cfd8ee;border-color:#5c6b91;}
+.jal-add-card{border:1.5px dashed #d8dae2;border-radius:10px;display:flex;align-items:center;justify-content:center;color:#aab1bd;font-size:12px;cursor:pointer;min-height:52px;}
+.jal-add-card:hover{color:#6b7280;border-color:#aab1bd;}
 
 #printHeader{display:none;}
 @media print{
@@ -339,14 +350,13 @@ body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(
   .cm-legend,.jal-attn-grid,.donut-legend{break-inside:avoid;}
   .sp-card{break-inside:avoid;background:#fff !important;}
 
-  /* Module Jalons : version claire imprimable au lieu du fond sombre */
-  .jal-wrap{background:#fff !important;color:#1b2233 !important;border:1px solid #e2e4ea;padding:16px 14px 12px;}
+  /* Module Jalons : déjà en thème clair à l'écran, quelques ajustements pour l'impression */
   .jal-title{color:#555 !important;font-size:10.5px;}
-  .jal-axis{background:#d8dae2 !important;}
-  .jal-months{color:#8a8f9c !important;}
-  .jal-marker{border-color:#fff !important;box-shadow:0 0 0 1.5px currentColor, 0 0 0 3px #fff;}
-  .jal-tag .jal-month{color:#1b2233 !important;}
-  .jal-tag .jal-desc{color:#666 !important;}
+  .jal-hero-line,.jal-vline{background:#d8dae2 !important;}
+  .jal-hero-months{color:#8a8f9c !important;}
+  .jal-hero-dot{box-shadow:0 0 0 1.5px currentColor, 0 0 0 3px #fff;}
+  .jal-vcard{background:#f6f7f9 !important;break-inside:avoid;}
+  .jal-vlist{break-inside:avoid;}
   .jal-empty{color:#888 !important;}
   .jal-card{background:#f6f7f9 !important;border-left-width:4px;}
   .jal-card-head{color:#1b2233 !important;}
@@ -523,12 +533,33 @@ const defaultColumnsConfig = () => [
   { id:cid(), label:"Terminé",    statut:"Terminé",    color:"#3a9d4c", sortByDeadline:false, effect:"confetti", collapsedByDefault:false, dashCategory:"done" },
   { id:cid(), label:"Annulé",     statut:"Annulé",     color:"#b3261e", sortByDeadline:false, effect:"none",     collapsedByDefault:true,  dashCategory:"cancelled" },
 ];
-// Compatibilité avec les configs déjà enregistrées (ancien champ booléen `confetti`, absence de `dashCategory`)
-const normalizeColumnsConfig = cfg => cfg.map(l => ({
-  ...l,
-  effect: l.effect ?? (l.confetti ? "confetti" : "none"),
-  dashCategory: l.dashCategory ?? "todo",
-}));
+// Devine une catégorie de tableau de bord plausible à partir du libellé d'une colonne
+// (utilisé uniquement en réparation d'une config ancienne, voir ci-dessous).
+const guessDashCategory = label => {
+  const l = (label||"").toLowerCase();
+  if (/(termin|fini|complet|done|clos|livr)/.test(l)) return "done";
+  if (/(annul|reject|abandon|cancel)/.test(l)) return "cancelled";
+  if (/(cours|progress|review|relecture|valid)/.test(l)) return "doing";
+  return "todo";
+};
+// Compatibilité avec les configs déjà enregistrées (ancien champ booléen `confetti`, absence de
+// `dashCategory`). Une config enregistrée avant l'ajout de ce champ n'a jamais eu l'occasion
+// d'être réglée : le filet de sécurité `?? "todo"` faisait alors atterrir TOUTES les colonnes
+// (y compris "Terminé"/"Annulé") sur "todo", ce qui cassait silencieusement tout ce qui dépend
+// de la catégorie (blocage des dépendances, confettis, alertes, KPIs "terminé"...). Si on
+// détecte ce cas (toutes les colonnes à "todo"), on redéduit une catégorie plausible à partir
+// du libellé de chaque colonne plutôt que de laisser ce filet de sécurité s'appliquer partout.
+const normalizeColumnsConfig = cfg => {
+  const withDefaults = cfg.map(l => ({
+    ...l,
+    effect: l.effect ?? (l.confetti ? "confetti" : "none"),
+    dashCategory: l.dashCategory ?? "todo",
+  }));
+  const looksNeverConfigured = withDefaults.length > 1 && withDefaults.every(l => l.dashCategory === "todo");
+  return looksNeverConfigured
+    ? withDefaults.map(l => ({ ...l, dashCategory: guessDashCategory(l.label || l.statut) }))
+    : withDefaults;
+};
 const DASHBOARD_MODULES = {
   kpis:              { label: "Indicateurs clés" },
   donutStatut:       { label: "Répartition par statut" },
@@ -715,8 +746,14 @@ const subscribe = fn => listeners.push(fn);
 const notify = () => listeners.forEach(fn => fn());
 function setRecords(records){ state.records = records; notify(); }
 function setColumnsConfig(cfg){
-  state.columnsConfig = normalizeColumnsConfig(cfg);
+  const normalized = normalizeColumnsConfig(cfg);
+  state.columnsConfig = normalized;
   state.columnsConfig.forEach(c => c.collapsedByDefault && state.collapsed.add(c.id));
+  // Si la normalisation a dû réparer une config ancienne (catégories toutes sur "todo"),
+  // on réenregistre tout de suite le résultat pour ne pas avoir à re-deviner à chaque
+  // chargement et pour que l'écran de configuration des colonnes affiche les bonnes valeurs.
+  const wasRepaired = JSON.stringify(cfg.map(c=>c.dashCategory)) !== JSON.stringify(normalized.map(c=>c.dashCategory));
+  if (wasRepaired) saveColumnsConfig(normalized);
   notify();
 }
 function setDashboardLayout(cfg){ state.dashboardLayout = cfg; notify(); }
@@ -1219,6 +1256,17 @@ function initBoardEvents(){
       writeToGrist(() => updateTaskFields(id, fields), "Déplacement non enregistré dans Grist.");
       Object.assign(rec, fields);
     } else {
+      // Une tâche bloquée (dépendance prédécesseure non terminée) ne peut pas être
+      // démarrée ni terminée : le déplacement est refusé et la carte reste dans sa
+      // colonne d'origine, avec un toast expliquant pourquoi.
+      const targetProgresses = lane.dashCategory === "doing" || lane.dashCategory === "done";
+      if (wasDifferent && targetProgresses && isTaskBlocked(rec)){
+        const blockers = blockingTasksOf(rec).map(b => b.Description || "(sans titre)").join(", ");
+        showToast(`🔒 « ${rec.Description||"Cette tâche"} » est bloquée par : ${blockers}. Terminez d'abord la ou les tâche(s) prédécesseure(s) avant de la déplacer vers « ${lane.label} ».`);
+        notify();
+        dragFromLaneId = null;
+        return;
+      }
       const maxOrder = state.records.filter(r => r.Statut === lane.statut).reduce((m,r) => Math.max(m, r.Ordre||0), 0);
       const histLine = `${fmtDateTime(new Date())} : ${rec.Statut || "—"} → ${lane.statut}`;
       const fields = { Statut: lane.statut, Ordre: maxOrder+10, Historique: (rec.Historique ? rec.Historique+"\n" : "")+histLine };
@@ -1230,9 +1278,6 @@ function initBoardEvents(){
         notify();
       });
       maybeSpawnRecurrence(rec, lane.dashCategory);
-      if (wasDifferent && lane.dashCategory === "doing" && isTaskBlocked(rec)){
-        showToast(`⚠️ « ${rec.Description||"Cette tâche"} » est bloquée par une dépendance non terminée.`);
-      }
     }
     notify();
     if (wasDifferent && !lane.groupField) launchEffect(lane, innerWidth/2, innerHeight/2);
@@ -1592,9 +1637,24 @@ function saveAsTemplate(id){
 async function saveTaskModal(){
   const id = state.editingId, t = state.records.find(r => r.id === id);
   const val = sel => document.getElementById(sel).value.trim();
-  const newStatut = document.getElementById("m-statut").value;
-  const laneForNewStatut = state.columnsConfig.find(l => l.statut === newStatut);
-  const wasDifferentStatut = t && t.Statut !== newStatut;
+  let newStatut = document.getElementById("m-statut").value;
+  let laneForNewStatut = state.columnsConfig.find(l => l.statut === newStatut);
+  let wasDifferentStatut = t && t.Statut !== newStatut;
+  // Une tâche bloquée (dépendance prédécesseure non terminée) ne peut pas non plus
+  // passer "En cours"/"Terminé" depuis la fiche — mêmes règles que le glisser-déposer
+  // du Kanban. On se base sur les dépendances telles qu'elles viennent d'être éditées
+  // dans cette fiche (modalDeps), pas seulement sur celles déjà enregistrées.
+  if (wasDifferentStatut && laneForNewStatut && (laneForNewStatut.dashCategory === "doing" || laneForNewStatut.dashCategory === "done")){
+    const blockers = blockingTasksOf({ ...t, Dependances: JSON.stringify(modalDeps) });
+    if (blockers.length){
+      showToast(`🔒 « ${t.Description||"Cette tâche"} » est bloquée par : ${blockers.map(b=>b.Description||"(sans titre)").join(", ")}. Le statut n'a pas été changé vers « ${laneForNewStatut.label} », le reste de la fiche a bien été enregistré.`);
+      newStatut = t.Statut;
+      laneForNewStatut = state.columnsConfig.find(l => l.statut === newStatut);
+      wasDifferentStatut = false;
+      const sel = document.getElementById("m-statut");
+      if (sel) sel.value = newStatut;
+    }
+  }
   let historique = wasDifferentStatut
     ? (t.Historique ? t.Historique+"\n" : "") + `${fmtDateTime(new Date())} : ${t.Statut || "—"} → ${newStatut}`
     : (t.Historique || "");
@@ -2261,16 +2321,19 @@ function initCalendar(){
     if (day){ e.preventDefault(); day.classList.add("drag-over"); }
   });
   grid.addEventListener("dragleave", e => e.target.closest("[data-drop-date]")?.classList.remove("drag-over"));
-  grid.addEventListener("drop", e => {
+  grid.addEventListener("drop", async e => {
     const day = e.target.closest("[data-drop-date]");
     if (!day) return;
     e.preventDefault();
     day.classList.remove("drag-over");
     const id = Number(e.dataTransfer.getData("text/plain"));
     const epoch = jsDateToGristEpoch(day.dataset.dropDate);
-    writeToGrist(() => updateTaskFields(id, { Deadline: epoch }), "Deadline non enregistrée dans Grist.");
+    await writeToGrist(() => updateTaskFields(id, { Deadline: epoch }), "Deadline non enregistrée dans Grist.");
     patchRecordLocally(id, { Deadline: epoch });
     notify();
+    // Un report de date depuis le calendrier doit aussi décaler les tâches qui
+    // dépendent de celle-ci, comme depuis la fiche de la tâche.
+    await cascadeDependencyShift(id);
   });
 }
 
@@ -2860,39 +2923,52 @@ function renderModule(id){
     const year = now.getFullYear();
     const yearStart = new Date(year,0,1).getTime(), yearEnd = new Date(year,11,31,23,59,59).getTime();
     const monthsShort = ["Jan","Fév","Mar","Avr","Mai","Juin","Juil","Août","Sep","Oct","Nov","Déc"];
-    // Évite les chevauchements d'étiquettes : place chaque jalon sur la première "voie"
-    // libre (au-dessus puis en dessous de l'axe, en s'éloignant par paliers) parmi celles
-    // dont le dernier jalon placé est assez loin horizontalement.
-    const MIN_GAP_PCT = 11;
-    const withPct = milestones.map(m => ({ m, pct: Math.min(100, Math.max(0, (m.date.getTime()-yearStart)/(yearEnd-yearStart)*100)) }));
-    const laneLast = [];
-    const placed = withPct.map(({m,pct}) => {
-      let lane = 0;
-      while (laneLast[lane] !== undefined && (pct - laneLast[lane]) < MIN_GAP_PCT) lane++;
-      laneLast[lane] = pct;
-      return { m, pct, lane };
-    });
-    const TIER_GAP = 32, BASE_GAP = 22;
-    const tierOf = lane => Math.floor(lane/2);
-    const maxTierAbove = Math.max(0, ...placed.filter(p=>p.lane%2===0).map(p=>tierOf(p.lane)));
-    const maxTierBelow = Math.max(0, ...placed.filter(p=>p.lane%2===1).map(p=>tierOf(p.lane)));
-    const axisY = BASE_GAP + maxTierAbove*TIER_GAP + 14;
-    const timelineH = axisY + maxTierBelow*TIER_GAP + BASE_GAP + 30;
-    const markersHtml = placed.length ? placed.map(({m,pct,lane}) => {
-      const color = m.task.Couleur || "#4f9eff";
-      const above = lane%2===0;
-      const tagTop = above ? axisY - BASE_GAP - tierOf(lane)*TIER_GAP : axisY + BASE_GAP + tierOf(lane)*TIER_GAP;
-      return `<div class="jal-marker${m.date<now?" past":""}" style="left:${pct}%;top:${axisY}px;color:${color};" data-cal-task="${m.task.id}" title="${escapeHtml(m.task.Description||"")}"></div>
-      <div class="jal-tag${above?"":" below"}" style="left:${pct}%;top:${tagTop}px;">
-        <span class="jal-month" style="color:${color};">${monthsShort[m.date.getMonth()]}</span><span class="jal-desc">${escapeHtml(m.task.Description||"(sans titre)")}</span>
-      </div>`;
-    }).join("") : "";
-    const timelineHtml = placed.length ? `<div class="jal-timeline" style="height:${timelineH}px;">
-        <div class="jal-axis" style="top:${axisY}px;"></div>
-        ${markersHtml}
-        <div class="jal-months" style="top:${axisY+16}px;">${monthsShort.map(m=>`<span>${m}</span>`).join("")}</div>
-      </div>` : `<div class="jal-empty">Aucun jalon clé pour ${year}. Cochez « 🚩 Jalon clé » dans la fiche d'une tâche pour l'afficher ici.</div>`;
+    const monthsLong = ["janv.","févr.","mars","avr.","mai","juin","juil.","août","sept.","oct.","nov.","déc."];
     const stats = computeDashboardStats(records);
+    const laneByStatut = stats.laneByStatut || {};
+    // Statut visuel du jalon : couleur + libellé, basés sur l'échéance et l'avancement
+    // de la tâche plutôt que sur une couleur arbitraire — plus lisible qu'avant.
+    const milestoneStatus = m => {
+      const cat = laneByStatut[m.task.Statut]?.dashCategory;
+      if (cat === "done") return { cls:"done", label:"terminé", color:"#3ad19a" };
+      if (cat === "cancelled") return { cls:"cancelled", label:"annulé", color:"#9aa3b2" };
+      if (m.date < now) return { cls:"late", label:"en retard", color:"#e0625f" };
+      if ((m.date-now) <= 14*86400000) return { cls:"soon", label:"bientôt", color:"#e8a34d" };
+      return { cls:"upcoming", label:"à venir", color:"#4f7cff" };
+    };
+    // Axe horizontal du haut : simples points de repère colorés sur la ligne de l'année,
+    // pour une vue d'ensemble en un coup d'œil (jamais de texte superposé ici).
+    const heroDotsHtml = milestones.map(m => {
+      const pct = Math.min(100, Math.max(0, (m.date.getTime()-yearStart)/(yearEnd-yearStart)*100));
+      const st = milestoneStatus(m);
+      return `<div class="jal-hero-dot ${st.cls}" style="left:${pct}%;color:${st.color};" data-cal-task="${m.task.id}" title="${escapeHtml(m.task.Description||"")} — ${fmtDate(m.date)}"></div>`;
+    }).join("");
+    const heroHtml = milestones.length ? `<div class="jal-hero">
+        <div class="jal-hero-line"></div>
+        ${heroDotsHtml}
+        <div class="jal-hero-months">${monthsShort.map(m=>`<span>${m}</span>`).join("")}</div>
+      </div>` : "";
+    // Frise verticale : le détail de chaque jalon sur sa propre ligne — aucun
+    // chevauchement possible, quel que soit le nombre de jalons proches dans le temps.
+    const vrowsHtml = milestones.map(m => {
+      const st = milestoneStatus(m);
+      const sub = m.task.Type || "";
+      return `<div class="jal-vrow">
+        <div class="jal-vdot" style="border:2.5px solid ${st.color};"></div>
+        <div class="jal-vcard" data-cal-task="${m.task.id}">
+          <div style="min-width:0;">
+            <div class="jal-vname">${escapeHtml(m.task.Description||"(sans titre)")}</div>
+            ${sub ? `<div class="jal-vsub">${escapeHtml(sub)}</div>` : ""}
+          </div>
+          <div class="jal-vdate-wrap">
+            <div class="jal-vdate" style="color:${st.color};">${m.date.getDate()} ${monthsLong[m.date.getMonth()]}</div>
+            <div class="jal-vtag" style="color:${st.color};">${st.label}</div>
+          </div>
+        </div>
+      </div>`;
+    }).join("");
+    const vlistHtml = milestones.length ? `<div class="jal-vlist"><div class="jal-vline"></div>${vrowsHtml}</div>` : "";
+    const timelineHtml = milestones.length ? `${heroHtml}${vlistHtml}` : `<div class="jal-empty">Aucun jalon clé pour ${year}. Cochez « 🚩 Jalon clé » dans la fiche d'une tâche pour l'afficher ici.</div>`;
     const insights = computeAttentionInsights(records, stats);
     const manual = state.manualAttention || [];
     const autoCardsHtml = insights.map(ins => `
