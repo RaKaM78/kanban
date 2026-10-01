@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Kadmos — Gestion de Projet</title>
+<title>Khronos — Gestion de Projet</title>
 <script src="https://docs.getgrist.com/grist-plugin-api.js"></script>
 <style>
 :root {
@@ -2110,7 +2110,7 @@ body {
 <body>
 <div id="app">
   <div id="toolbar">
-    <h1 title="Kadmos — fondateur légendaire de Thèbes dans la mythologie grecque, bâtisseur de cité et inventeur de l'alphabet.">🏛️ Kadmos <span class="app-subtitle">Gestion de Projet</span> <span class="app-signature">— Fait par Kad</span></h1>
+    <h1 title="Khronos — divinité primordiale du temps dans la mythologie grecque.">⏳ Khronos <span class="app-subtitle">Gestion de Projet</span> <span class="app-signature">— Fait par Kad</span></h1>
     <div id="tabBar" role="tablist">
       <button class="tab-btn" data-tab="dashboard" role="tab">📊 Tableau de bord</button>
       <button class="tab-btn active" data-tab="kanban" role="tab" aria-selected="true">🗂️ Kanban</button>
@@ -4242,7 +4242,7 @@ function openHelpModal() {
   document.getElementById("helpModal").innerHTML = `
     <h2>❓ Aide</h2>
     <p style="font-size:11.5px;color:var(--muted);margin:-8px 0 4px;">Raccourcis et fonctionnalités moins évidentes au premier coup d'œil.</p>
-    <p style="font-size:10.5px;color:var(--muted);margin:0 0 14px;font-style:italic;">🏛️ Pourquoi « Kadmos » ? Dans la mythologie grecque, Kadmos est le fondateur légendaire de Thèbes : bâtisseur de cité et inventeur de l'alphabet — un bâtisseur qui structure, comme cet outil.</p>
+    <p style="font-size:10.5px;color:var(--muted);margin:0 0 14px;font-style:italic;">⏳ Pourquoi « Khronos » ? Dans la mythologie grecque, Khronos est la divinité primordiale du temps — un nom qui parle de lui-même pour un outil organisé autour des dates, des échéances et de la charge dans le temps.</p>
     <div class="field">
       <label>Raccourcis clavier</label>
       ${HELP_SHORTCUTS.map(
@@ -4263,7 +4263,7 @@ function openHelpModal() {
           </div>`,
       ).join("")}
     </div>
-    <div class="modal-footer"><span style="font-size:10.5px;color:var(--muted);">Kadmos — Gestion de Projet — Fait par Kad</span><button class="btn secondary" id="help-close">Fermer</button></div>`;
+    <div class="modal-footer"><span style="font-size:10.5px;color:var(--muted);">Khronos — Gestion de Projet — Fait par Kad</span><button class="btn secondary" id="help-close">Fermer</button></div>`;
   document.getElementById("help-close").onclick = () => closeOverlay("helpOverlay");
   openOverlay("helpOverlay");
 }
