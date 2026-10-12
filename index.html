@@ -21,7 +21,7 @@
 #fAssignee,
 #fPriorite,
 #fType {
-  color: #000000;
+  color: var(--ink);
 }
 :root[data-theme="dark"] {
   --bg: #181a1f;
@@ -37,13 +37,10 @@
 :root[data-theme="dark"] .card {
   box-shadow: var(--shadow);
 }
-:root[data-theme="dark"] .modal,
-:root[data-theme="dark"] #wbCanvasWrap,
-:root[data-theme="dark"] .kpi-card,
-:root[data-theme="dark"] .dash-module {
-  background: var(--surface);
-  color: var(--ink);
-}
+/* .modal, #wbCanvasWrap, .kpi-card, .dash-module, #toolbar, .sub-toolbar, .lane-count,
+   .cal-day, .stat-card, .alerts-panel, .cbdd-trigger, .cbdd-panel: no dark-mode override
+   needed below — their base rules now use var(--surface)/var(--border) directly and pick
+   up var(--ink) from the <body> cascade, so they already repaint correctly in dark mode. */
 :root[data-theme="dark"] .field textarea,
 :root[data-theme="dark"] .field input,
 :root[data-theme="dark"] .field select,
@@ -54,47 +51,15 @@
   color: var(--ink);
   border-color: var(--border);
 }
-:root[data-theme="dark"] #fSearch,
-:root[data-theme="dark"] #fAssignee,
-:root[data-theme="dark"] #fPriorite,
-:root[data-theme="dark"] #fType {
-  color: var(--ink);
-}
-:root[data-theme="dark"] #toolbar,
-:root[data-theme="dark"] .sub-toolbar {
-  background: var(--surface);
-  border-color: var(--border);
-}
 :root[data-theme="dark"] .btn.secondary {
   background: #2c2f3a;
   color: var(--ink);
 }
-:root[data-theme="dark"] .lane-count,
-:root[data-theme="dark"] #wbCanvasWrap {
-  background: var(--surface);
-}
-:root[data-theme="dark"] .cal-day {
-  background: var(--surface);
-  color: var(--ink);
-}
-:root[data-theme="dark"] .stat-card {
-  background: var(--surface);
-}
 :root[data-theme="dark"] .pf-row:hover .pf-lbl {
   background: rgba(255, 255, 255, 0.04);
 }
-:root[data-theme="dark"] .alerts-panel {
-  background: var(--surface);
-  color: var(--ink);
-}
 :root[data-theme="dark"] .alerts-item:hover {
   background: #2c2f3a;
-}
-:root[data-theme="dark"] .cbdd-trigger,
-:root[data-theme="dark"] .cbdd-panel {
-  background: var(--surface);
-  color: var(--ink);
-  border-color: var(--border);
 }
 :root[data-theme="dark"] .cbdd-item:hover {
   background: #2c2f3a;
@@ -134,13 +99,13 @@ body {
   align-items: center;
   gap: 10px;
   padding: 8px 12px;
-  background: #fff;
-  border-bottom: 1px solid #d7dae0;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
 }
 #toolbar h1 {
   font-size: 15px;
   margin: 0;
-  color: #333;
+  color: var(--ink);
   font-weight: 600;
 }
 #toolbar .app-subtitle {
@@ -174,8 +139,13 @@ body {
   border-radius: 8px;
   font-size: 12.5px;
   cursor: pointer;
-  color: #555;
+  color: var(--muted);
   font-weight: 500;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+.tab-btn:hover:not(.active) {
+  background: rgba(127, 127, 127, 0.14);
+  color: var(--ink);
 }
 .tab-btn.active {
   background: var(--accent);
@@ -183,7 +153,7 @@ body {
 }
 #syncIndicator {
   font-size: 11px;
-  color: #888;
+  color: var(--muted);
 }
 #syncIndicator.hidden {
   display: none;
@@ -214,7 +184,7 @@ body {
   width: 280px;
   max-height: 320px;
   overflow-y: auto;
-  background: #fff;
+  background: var(--surface);
   border-radius: 10px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   z-index: 60;
@@ -264,6 +234,10 @@ body {
   font-weight: 500;
   white-space: nowrap;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+  transition: filter 0.12s ease, background 0.12s ease;
+}
+.btn:hover {
+  filter: brightness(0.94);
 }
 .btn.secondary {
   background: #eceff3;
@@ -298,8 +272,8 @@ body {
   align-items: center;
   gap: 8px;
   padding: 7px 12px;
-  background: #fff;
-  border-bottom: 1px solid #d7dae0;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
 }
 .sub-toolbar input[type="search"],
 .sub-toolbar select {
@@ -325,7 +299,7 @@ body {
   overflow-x: auto;
 }
 .stat-card {
-  background: #fff;
+  background: var(--surface);
   border-radius: 10px;
   padding: 6px 14px;
   text-align: center;
@@ -836,12 +810,12 @@ body {
   margin: 6px 0;
 }
 .lane-count {
-  background: #fff;
+  background: var(--surface);
   border-radius: 999px;
   font-size: 11px;
   padding: 1px 7px;
   font-weight: 700;
-  color: #444;
+  color: var(--ink);
 }
 .lane-collapse-btn {
   background: none;
@@ -1003,7 +977,7 @@ body {
   display: none;
 }
 .modal {
-  background: #fff;
+  background: var(--surface);
   border-radius: 12px;
   width: 520px;
   max-width: 92vw;
@@ -1166,9 +1140,9 @@ body {
   width: 100%;
   text-align: left;
   padding: 7px 8px;
-  border: 1px solid #d7dae0;
+  border: 1px solid var(--border);
   border-radius: 7px;
-  background: #fff;
+  background: var(--surface);
   font-size: 13px;
   font-family: inherit;
   cursor: pointer;
@@ -1194,8 +1168,8 @@ body {
   left: 0;
   right: 0;
   margin-top: 4px;
-  background: #fff;
-  border: 1px solid #d7dae0;
+  background: var(--surface);
+  border: 1px solid var(--border);
   border-radius: 8px;
   box-shadow: 0 6px 18px rgba(0, 0, 0, 0.18);
   z-index: 20;
@@ -1320,8 +1294,14 @@ body {
   border: none;
   cursor: pointer;
   font-size: 15px;
-  color: #666;
+  color: var(--muted);
   padding: 2px 5px;
+  border-radius: 6px;
+  transition: background 0.12s ease, color 0.12s ease;
+}
+.icon-btn:hover {
+  background: rgba(127, 127, 127, 0.14);
+  color: var(--ink);
 }
 .warning-banner {
   background: #fff4e5;
@@ -1381,7 +1361,7 @@ body {
   gap: 4px;
 }
 .cal-day {
-  background: #fff;
+  background: var(--surface);
   border-radius: 8px;
   min-height: 74px;
   padding: 4px;
@@ -1448,7 +1428,7 @@ body {
 #wbCanvasWrap {
   flex: 1;
   position: relative;
-  background: #fff;
+  background: var(--surface);
   overflow: auto;
 }
 #wbZoomLayer {
@@ -1568,7 +1548,7 @@ body {
   align-content: start;
 }
 .dash-module {
-  background: #fff;
+  background: var(--surface);
   border-radius: 12px;
   padding: 14px;
   box-shadow: var(--shadow);
@@ -3172,6 +3152,7 @@ function toggleSelectMode() {
   renderBoard();
 }
 
+/* --- Kanban : rendu du tableau, cartes, stats globales, drag & drop, sélection multiple --- */
 function renderBoard() {
   refreshOverdueBadge();
   const board = document.getElementById("board");
@@ -3586,6 +3567,7 @@ function checklistItemsHtml(items) {
 function refreshChecklistUI() {
   document.getElementById("checklist-items").outerHTML = checklistItemsHtml(modalChecklist);
 }
+/* --- Fiche tâche (modale) : ouverture/édition/fermeture, checklist, sauvegarde auto --- */
 function initTaskModalEvents() {
   const modal = document.getElementById("taskModal");
   // Clic sur le fond assombri (hors de la modale elle-même) = tentative de fermeture.
@@ -4268,6 +4250,7 @@ function openHelpModal() {
   openOverlay("helpOverlay");
 }
 
+/* --- Modèles de tâches --- */
 function openTemplatesModal() {
   renderTemplatesModal();
   openOverlay("templatesOverlay");
@@ -4321,6 +4304,7 @@ function renderTemplatesModal() {
 
 /* -- Popup configuration des colonnes -- */
 let settingsWorkingCopy = [];
+/* --- Réglages (colonnes, effets, préférences) --- */
 function openSettingsModal() {
   settingsWorkingCopy = state.columnsConfig.map((l) => ({ ...l }));
   renderSettingsModal();
@@ -6020,7 +6004,11 @@ function renderDonutSVG(segments, size = 130, thickness = 20) {
 }
 function renderModule(id) {
   const stats = computeDashboardStats();
-  if (id === "kpis") {
+  // Un « module » = une carte du tableau de bord. Chaque entrée construit son propre
+  // balisage (HTML/SVG) à partir de `stats` (et de ses propres calculs locaux) ; les clés
+  // correspondent aux id de DASHBOARD_MODULES (config des cartes activables, voir plus haut).
+  const renderers = {
+    kpis() {
     return `<div class="kpi-grid">
       <div class="kpi-card"><div class="kpi-value">${stats.total}</div><div class="kpi-label">Total</div></div>
       <div class="kpi-card"><div class="kpi-value">${stats.doing}</div><div class="kpi-label">En cours</div></div>
@@ -6028,8 +6016,8 @@ function renderModule(id) {
       <div class="kpi-card"><div class="kpi-value" style="${stats.overdue ? "color:#c0392b" : ""}">${stats.overdue}</div><div class="kpi-label">En retard</div></div>
       <div class="kpi-card"><div class="kpi-value">${stats.avgProcessingDays != null ? stats.avgProcessingDays.toFixed(1) : "—"}</div><div class="kpi-label">⏱️ Jours moy.</div></div>
     </div>`;
-  }
-  if (id === "donutStatut") {
+    },
+    donutStatut() {
     const entries = Object.entries(stats.byStatut);
     if (!entries.length) return `<p style="font-size:12px;color:var(--muted);">Aucune donnée.</p>`;
     const segments = entries.map(([statut, count]) => ({
@@ -6038,8 +6026,8 @@ function renderModule(id) {
       label: statut,
     }));
     return `<div class="donut-wrap">${renderDonutSVG(segments)}<div class="donut-legend">${segments.map((s) => `<div><span class="donut-legend-dot" style="background:${s.color}"></span>${escapeHtml(s.label)} (${s.value})</div>`).join("")}</div></div>`;
-  }
-  if (id === "barsPriorite") {
+    },
+    barsPriorite() {
     const priorities = Object.keys(PRIORITY_COLORS).filter((k) => k !== "__default");
     const max = Math.max(1, ...priorities.map((p) => stats.byPriorite[p] || 0));
     return priorities
@@ -6052,8 +6040,8 @@ function renderModule(id) {
       </div>`;
       })
       .join("");
-  }
-  if (id === "teamLoad") {
+    },
+    teamLoad() {
     const names = Object.keys(stats.byPerson).sort((a, b) => a.localeCompare(b, "fr"));
     if (!names.length)
       return `<p style="font-size:12px;color:var(--muted);">Aucune tâche assignée.</p>`;
@@ -6061,8 +6049,8 @@ function renderModule(id) {
       <tr style="text-align:left;color:var(--muted);"><th style="padding:4px 0;">Personne</th><th>Total</th><th>En cours</th></tr>
       ${names.map((n) => `<tr><td style="padding:4px 0;">${escapeHtml(n)}</td><td>${stats.byPerson[n].total}</td><td>${stats.byPerson[n].doing}</td></tr>`).join("")}
     </table>`;
-  }
-  if (id === "evolution") {
+    },
+    evolution() {
     const data = computeEvolutionData();
     const max = Math.max(1, ...data.map((b) => Math.max(b.created, b.completed)));
     const w = 320,
@@ -6081,8 +6069,8 @@ function renderModule(id) {
       <span><span style="display:inline-block;width:8px;height:8px;background:#4f7cff;border-radius:50%;margin-right:4px;"></span>Créées</span>
       <span><span style="display:inline-block;width:8px;height:8px;background:#3a9d4c;border-radius:50%;margin-right:4px;"></span>Terminées</span>
     </div>`;
-  }
-  if (id === "chargeParMois") {
+    },
+    chargeParMois() {
     const year = new Date().getFullYear();
     const now = new Date();
     const monthsFull = [
@@ -6144,8 +6132,8 @@ function renderModule(id) {
         <span><i style="background:#e8a34d"></i>Pic de charge</span>
       </div>
       ${hasAnyEstimation ? (withoutEstimation ? `<p style="font-size:10.5px;color:var(--muted);margin-top:6px;">Charge en heures estimées. ${withoutEstimation} tâche${withoutEstimation > 1 ? "s" : ""} sans estimation non comptabilisée${withoutEstimation > 1 ? "s" : ""}.</p>` : `<p style="font-size:10.5px;color:var(--muted);margin-top:6px;">Charge en heures estimées (champ Estimation).</p>`) : `<p style="font-size:10.5px;color:var(--muted);margin-top:6px;">Aucune estimation renseignée — affichage par nombre de tâches. Renseignez le champ « Estimation » sur vos tâches pour voir la charge en heures.</p>`}`;
-  }
-  if (id === "syntheseParProjet") {
+    },
+    syntheseParProjet() {
     const groups = {};
     filteredRecords().forEach((r) => {
       (groups[r.Type || "Sans type"] = groups[r.Type || "Sans type"] || []).push(r);
@@ -6207,8 +6195,8 @@ function renderModule(id) {
       })
       .join("");
     return `<div class="sp-grid">${cards}</div>`;
-  }
-  if (id === "deadlines") {
+    },
+    deadlines() {
     const withDeadline = filteredRecords()
       .filter((r) => r.Deadline)
       .sort((a, b) => gristDateToJS(a.Deadline) - gristDateToJS(b.Deadline));
@@ -6225,8 +6213,8 @@ function renderModule(id) {
       </div>`;
       })
       .join("");
-  }
-  if (id === "jalonsAttention") {
+    },
+    jalonsAttention() {
     const records = filteredRecords();
     const milestones = computeMilestones(records);
     const now = new Date();
@@ -6350,8 +6338,8 @@ function renderModule(id) {
         <div class="jal-add-card" data-attn-add="1">➕ Ajouter une note</div>
       </div>
     </div>`;
-  }
-  if (id === "activiteQuotidienne") {
+    },
+    activiteQuotidienne() {
     const records = filteredRecords();
     const now = new Date();
     const start = new Date(now.getFullYear(), now.getMonth() - 11, 1);
@@ -6399,8 +6387,8 @@ function renderModule(id) {
     return `<div style="overflow-x:auto;"><svg width="${svgW}" height="${svgH}" viewBox="0 0 ${svgW} ${svgH}" style="display:block;min-width:${svgW}px;">${labelsHtml}${cellsHtml}</svg></div>
       <div class="cm-legend" style="align-items:center;"><span style="font-size:12.5px;">Faible</span>${ramp.map((c) => `<i style="background:${c}"></i>`).join("")}<span style="font-size:12.5px;">Élevée</span></div>
       <p class="dash-caption">Une case = un jour, couleur = nombre de tâches modifiées ce jour-là (champ « Dernière mise à jour »).</p>`;
-  }
-  if (id === "reseauDependances") {
+    },
+    reseauDependances() {
     const records = filteredRecords();
     const nodesMap = new Map();
     const edges = [];
@@ -6470,8 +6458,8 @@ function renderModule(id) {
       ${edgesHtml}${nodesHtml}
     </svg>
     <p class="dash-caption">${caption} Couleur = statut (voir ⚙️ Colonnes). ${nodes.length} tâche${nodes.length > 1 ? "s" : ""} impliquée${nodes.length > 1 ? "s" : ""}, ${edges.length} dépendance${edges.length > 1 ? "s" : ""}.</p>`;
-  }
-  if (id === "sunburstTypeStatut") {
+    },
+    sunburstTypeStatut() {
     const records = filteredRecords();
     const { typeNames, byType } = computeTypeStatusBreakdown(records, stats.laneByStatut);
     if (!typeNames.length) return `<p style="font-size:12px;color:var(--muted);">Aucune tâche.</p>`;
@@ -6503,8 +6491,8 @@ function renderModule(id) {
       .join("");
     return `<div class="donut-wrap">${svg}<div class="donut-legend">${legend}</div></div>
       <p class="dash-caption">Anneau intérieur : répartition par type. Anneau extérieur : statut au sein de chaque type (plus opaque = moins avancé).</p>`;
-  }
-  if (id === "treemapChargeProjet") {
+    },
+    treemapChargeProjet() {
     const records = filteredRecords();
     const { typeNames, byType } = computeTypeStatusBreakdown(records, stats.laneByStatut);
     if (!typeNames.length) return `<p style="font-size:12.5px;color:var(--muted);">Aucune tâche.</p>`;
@@ -6543,8 +6531,8 @@ function renderModule(id) {
     return `<svg width="100%" height="auto" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid meet" style="display:block;max-height:280px;">${cellsHtml}</svg>
       <div class="donut-legend" style="flex-direction:row;flex-wrap:wrap;gap:14px;margin-top:10px;">${legend}</div>
       <p class="dash-caption">Largeur = part des tâches par type. Hauteur de chaque bande = part des statuts au sein du type.</p>`;
-  }
-  if (id === "paretoRetards") {
+    },
+    paretoRetards() {
     const records = filteredRecords();
     const now = new Date();
     const byType = {};
@@ -6595,8 +6583,8 @@ function renderModule(id) {
     </svg>
     <div class="cm-legend"><span><i style="background:var(--accent)"></i>Tâches en retard</span><span><i style="background:#c9552e"></i>Cumul (%)</span></div>
     <p class="dash-caption">Regroupement par « Type » (le champ le plus proche d'un projet ici) — il n'existe pas de champ « cause du retard » dans vos données.</p>`;
-  }
-  if (id === "sankeyStatuts") {
+    },
+    sankeyStatuts() {
     const records = filteredRecords();
     const flowCounts = new Map();
     records.forEach((r) => {
@@ -6688,8 +6676,8 @@ function renderModule(id) {
       ${linksHtml}${leftNodesHtml}${rightNodesHtml}
     </svg>
     <p class="dash-caption">D'après l'historique complet des changements de statut (colonne « Historique »). Les 10 flux les plus fréquents — l'épaisseur d'un ruban est proportionnelle au nombre de transitions.</p>`;
-  }
-  if (id === "fluxCumule") {
+    },
+    fluxCumule() {
     const records = filteredRecords();
     const tasksWithHist = [];
     let anyParsed = false;
@@ -6773,8 +6761,10 @@ function renderModule(id) {
     </svg>
     <div class="cm-legend"><span><i style="background:#2a78d6"></i>À faire</span><span><i style="background:#eb6834"></i>En cours</span><span><i style="background:#1baf7a"></i>Terminé</span></div>
     <p class="dash-caption">Reconstitué à partir de l'historique des changements de statut, semaine par semaine (12 dernières semaines).</p>`;
-  }
-  return "";
+    },
+  };
+  const renderer = renderers[id];
+  return renderer ? renderer() : "";
 }
 function renderDashboard() {
   const grid = document.getElementById("dashboardGrid");
